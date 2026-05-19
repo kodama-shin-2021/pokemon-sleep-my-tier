@@ -71,6 +71,12 @@ button:active {
   margin: 6px 0 0;
   color: var(--muted);
   font-size: 14px;
+  line-height: 1.7;
+}
+
+.app-header a {
+  color: var(--accent);
+  font-weight: 700;
 }
 
 .header-actions {

@@ -234,11 +234,12 @@ function renderTiers() {
       saveState();
       render();
     });
-    const descriptionInput = document.createElement("input");
+    const descriptionInput = document.createElement("textarea");
     descriptionInput.className = "tier-description-input";
     descriptionInput.value = tier.description || "";
     descriptionInput.ariaLabel = "Tier説明";
     descriptionInput.placeholder = "説明";
+    descriptionInput.rows = 2;
     descriptionInput.addEventListener("input", () => {
       tier.description = descriptionInput.value;
       saveState();

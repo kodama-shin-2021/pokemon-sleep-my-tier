@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ポケスリ My厳選Tier</title>
+    <link rel="stylesheet" href="styles.css?v=20260519-4" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div>
+          <h1>ポケスリ マイ厳選Tier</h1>
+          <p>自分の厳選優先度を端末に保存できます</p>
+        </div>
+        <div class="header-actions">
+          <button id="exportButton" class="primary-button" type="button">画像保存</button>
+          <button id="addTierButton" type="button">Tier追加</button>
+          <button id="resetButton" class="danger-button" type="button">リセット</button>
+        </div>
+      </header>
+
+      <div class="tier-filter-bar">
+        <input id="searchInput" type="search" placeholder="ポケモン検索" autocomplete="off" />
+        <div class="filter-row" aria-label="得意カテゴリ">
+          <button class="filter-chip active" type="button" data-specialty="all">すべて</button>
+          <button class="filter-chip" type="button" data-specialty="きのみ">きのみ</button>
+          <button class="filter-chip" type="button" data-specialty="食材">食材</button>
+          <button class="filter-chip" type="button" data-specialty="スキル">スキル</button>
+          <button class="filter-chip" type="button" data-specialty="オール">オール</button>
+        </div>
+        <select id="typeFilter" aria-label="タイプで絞り込み">
+          <option value="all">全タイプ</option>
+        </select>
+      </div>
+
+      <main class="workspace">
+        <div class="board-column">
+          <section class="tier-panel unfinished-panel" aria-label="厳選未完了">
+            <div class="section-title-row">
+              <h2>厳選管理表</h2>
+            </div>
+            <div id="tierBoard" class="tier-board"></div>
+          </section>
+
+          <aside class="pokemon-panel" aria-label="未配置ポケモン">
+            <div class="panel-head">
+              <div>
+                <h2>未配置</h2>
+                <span id="poolCount"></span>
+              </div>
+            </div>
+            <div id="pokemonPool" class="pokemon-grid"></div>
+          </aside>
+        </div>
+
+        <aside class="status-column" aria-label="整理済みポケモン">
+          <section class="compact-panel compromise-panel" aria-label="妥協個体あり">
+            <div class="panel-head">
+              <div>
+                <h2>妥協個体あり</h2>
+                <span id="compromiseCount"></span>
+              </div>
+            </div>
+            <div id="compromisePool" class="compact-board"></div>
+          </section>
+
+          <section class="compact-panel finished-panel" aria-label="厳選完了ポケモン">
+            <div class="panel-head">
+              <div>
+                <h2>厳選完了</h2>
+                <span id="finishedCount"></span>
+              </div>
+            </div>
+            <div id="finishedPool" class="compact-board"></div>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <dialog id="moveDialog">
+      <form method="dialog">
+        <div class="dialog-title-row">
+          <h2 id="dialogPokemonName"></h2>
+          <button id="detailButton" class="detail-link" type="button">詳細</button>
+        </div>
+        <div id="moveTargets" class="move-targets"></div>
+        <button value="cancel" type="submit">閉じる</button>
+      </form>
+    </dialog>
+
+    <script src="app.js?v=20260519-3"></script>
+  </body>
+</html>

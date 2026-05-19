@@ -119,6 +119,11 @@ button:active {
   line-height: 1.8;
 }
 
+.content-page a {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .content-page p + p {
   margin-top: 10px;
 }

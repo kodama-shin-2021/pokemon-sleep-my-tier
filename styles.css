@@ -24,11 +24,15 @@ body {
 }
 
 button,
-input {
+input,
+.button-link {
   font: inherit;
 }
 
-button {
+button,
+.button-link {
+  display: inline-grid;
+  place-items: center;
   min-height: 42px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -36,6 +40,7 @@ button {
   color: var(--ink);
   font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
 }
 
 button:active {
@@ -87,6 +92,61 @@ button:active {
 
 .danger-button {
   color: var(--danger);
+}
+
+.content-page {
+  display: grid;
+  gap: 16px;
+  max-width: 860px;
+}
+
+.content-page section {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.content-page h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.content-page p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.content-page p + p {
+  margin-top: 10px;
+}
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding: 18px 0 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.site-footer a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-footer p {
+  margin: 0;
 }
 
 .workspace {

@@ -1,5 +1,5 @@
 const STORAGE_KEY = "pokesuri-tier-maker-state";
-const STORAGE_SCHEMA_VERSION = 2;
+const STORAGE_SCHEMA_VERSION = 3;
 const LEGACY_STORAGE_KEYS = [
   "pokesuri-tier-maker-state-v4",
   "pokesuri-tier-maker-state-v3",
@@ -148,6 +148,7 @@ const searchInput = document.querySelector("#searchInput");
 const typeFilter = document.querySelector("#typeFilter");
 const moveDialog = document.querySelector("#moveDialog");
 const moveTargets = document.querySelector("#moveTargets");
+const pokemonInfoFields = document.querySelector("#pokemonInfoFields");
 const dialogPokemonName = document.querySelector("#dialogPokemonName");
 const detailButton = document.querySelector("#detailButton");
 let activeSpecialty = "all";
@@ -470,6 +471,7 @@ function openMoveDialog(pokemonId, currentTierId = null) {
   const pokemon = getPokemon(pokemonId);
   dialogPokemonName.textContent = pokemon.name;
   moveTargets.innerHTML = "";
+  renderPokemonInfoFields(pokemon);
   state.tiers.forEach(tier => {
     const button = document.createElement("button");
     button.type = "button";
@@ -534,6 +536,41 @@ function openMoveDialog(pokemonId, currentTierId = null) {
   });
   moveTargets.append(poolButton);
   moveDialog.showModal();
+}
+
+function renderPokemonInfoFields(pokemon) {
+  pokemonInfoFields.innerHTML = "";
+  const detail = getPokemonDetail(pokemon.id);
+  [
+    ["mainSkill", "メインスキル", "例: エナジーチャージS"],
+    ["ingredients", "食材構成", "例: ミルク / カカオ / カカオ"],
+    ["baseGauge", "種ポケモンのゲージ", "例: 5"],
+  ].forEach(([key, labelText, placeholder]) => {
+    const label = document.createElement("label");
+    const span = document.createElement("span");
+    span.textContent = labelText;
+    const input = document.createElement(key === "ingredients" ? "textarea" : "input");
+    input.value = detail[key] || "";
+    input.placeholder = placeholder;
+    if (key === "ingredients") input.rows = 2;
+    input.addEventListener("input", () => {
+      updatePokemonDetail(pokemon.id, key, input.value);
+    });
+    label.append(span, input);
+    pokemonInfoFields.append(label);
+  });
+}
+
+function getPokemonDetail(pokemonId) {
+  return state.pokemonDetails[pokemonId] || {};
+}
+
+function updatePokemonDetail(pokemonId, key, value) {
+  state.pokemonDetails[pokemonId] = {
+    ...getPokemonDetail(pokemonId),
+    [key]: value.trim(),
+  };
+  saveState();
 }
 
 function appendStatusMoveButtons(pokemonId, status, label) {
@@ -837,6 +874,7 @@ function createDefaultState() {
     tiers: clone(defaultTiers),
     compromiseTiers: clone(defaultCompromiseTiers),
     finishedTiers: clone(defaultFinishedTiers),
+    pokemonDetails: {},
   };
 }
 
@@ -852,6 +890,7 @@ function serializeState(value) {
     tiers: normalizeTiers(value.tiers),
     compromiseTiers: normalizeStatusTiers(value, "compromise"),
     finishedTiers: normalizeFinishedTiers(value),
+    pokemonDetails: normalizePokemonDetails(value.pokemonDetails),
   };
 }
 
@@ -862,7 +901,25 @@ function migrateState(parsed) {
     tiers: normalizeTiers(parsed.tiers),
     compromiseTiers: normalizeStatusTiers(parsed, "compromise"),
     finishedTiers: normalizeFinishedTiers(parsed),
+    pokemonDetails: normalizePokemonDetails(parsed.pokemonDetails),
   };
+}
+
+function normalizePokemonDetails(detailsValue) {
+  const knownIds = getKnownPokemonIds();
+  if (!detailsValue || typeof detailsValue !== "object") return {};
+  return Object.fromEntries(
+    Object.entries(detailsValue)
+      .filter(([id]) => knownIds.has(id))
+      .map(([id, detail]) => [
+        id,
+        {
+          mainSkill: String(detail?.mainSkill || ""),
+          ingredients: String(detail?.ingredients || ""),
+          baseGauge: String(detail?.baseGauge || ""),
+        },
+      ]),
+  );
 }
 
 function normalizeTiers(tiers) {

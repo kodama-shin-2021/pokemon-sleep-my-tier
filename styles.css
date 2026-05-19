@@ -503,7 +503,7 @@ button:active {
 }
 
 dialog {
-  width: min(360px, calc(100% - 24px));
+  width: min(460px, calc(100% - 24px));
   border: 0;
   border-radius: 8px;
   padding: 0;
@@ -541,6 +541,38 @@ dialog h2 {
   font-size: 12px;
   font-weight: 700;
   text-decoration: underline;
+}
+
+.pokemon-info-fields {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfd;
+}
+
+.pokemon-info-fields label {
+  display: grid;
+  gap: 5px;
+}
+
+.pokemon-info-fields span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.pokemon-info-fields input,
+.pokemon-info-fields textarea {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 7px 9px;
+  background: var(--surface);
+  color: var(--ink);
+  resize: vertical;
 }
 
 .move-targets {

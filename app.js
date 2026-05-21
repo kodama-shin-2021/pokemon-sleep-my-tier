@@ -134,1040 +134,1598 @@ const defaultCompromiseTiers = defaultTiers.map(tier => ({
 const defaultCompromiseTierByName = new Map(defaultCompromiseTiers.map(tier => [tier.name, tier]));
 const pokemonDetailData = {
     "venusaur": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "あまいミツ",
-        "あんみんトマト",
-        "ほっこりポテト"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "あまいミツ",
+            "あんみんトマト",
+            "ほっこりポテト"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔"
+        ]
     },
     "charizard": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "マメミート",
-        "あったかジンジャー",
-        "げきからハーブ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "マメミート",
+            "あったかジンジャー",
+            "げきからハーブ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟"
+        ]
     },
     "butterfree": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "あまいミツ",
-        "あんみんトマト",
-        "ワカクサ大豆"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "あまいミツ",
+            "あんみんトマト",
+            "ワカクサ大豆"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ゴールド旧発電所"
+        ]
     },
     "raticate": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "とくせんリンゴ",
-        "ワカクサ大豆",
-        "マメミート"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "とくせんリンゴ",
+            "ワカクサ大豆",
+            "マメミート"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原"
+        ]
     },
     "arbok": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "マメミート",
-        "とくせんエッグ",
-        "げきからハーブ"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "マメミート",
+            "とくせんエッグ",
+            "げきからハーブ"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "pikachu-halloween": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "とくせんリンゴ",
-        "とくせんエッグ",
-        "あったかジンジャー"
-      ],
-      "baseGauge": "7"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "とくせんリンゴ",
+            "とくせんエッグ",
+            "あったかジンジャー"
+        ],
+        "baseGauge": "7",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "pikachu-holiday": {
-      "mainSkill": "ゆめのかけらゲットS",
-      "ingredients": [
-        "とくせんリンゴ",
-        "とくせんエッグ",
-        "あったかジンジャー"
-      ],
-      "baseGauge": "7"
+        "mainSkill": "ゆめのかけらゲットS",
+        "ingredients": [
+            "とくせんリンゴ",
+            "とくせんエッグ",
+            "あったかジンジャー"
+        ],
+        "baseGauge": "7",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "raichu": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "とくせんリンゴ",
-        "とくせんエッグ",
-        "あったかジンジャー"
-      ],
-      "baseGauge": "7"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "とくせんリンゴ",
+            "とくせんエッグ",
+            "あったかジンジャー"
+        ],
+        "baseGauge": "7",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔"
+        ]
     },
     "clefable": {
-      "mainSkill": "ゆびをふる",
-      "ingredients": [
-        "とくせんリンゴ",
-        "あまいミツ",
-        "ワカクサ大豆"
-      ],
-      "baseGauge": "7"
+        "mainSkill": "ゆびをふる",
+        "ingredients": [
+            "とくせんリンゴ",
+            "あまいミツ",
+            "ワカクサ大豆"
+        ],
+        "baseGauge": "7",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "wigglytuff": {
-      "mainSkill": "げんきオールS",
-      "ingredients": [
-        "あまいミツ",
-        "ピュアなオイル",
-        "リラックスカカオ"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "げんきオールS",
+        "ingredients": [
+            "あまいミツ",
+            "ピュアなオイル",
+            "リラックスカカオ"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ラピスラズリ湖畔"
+        ]
     },
     "dugtrio": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "あんみんトマト",
-        "ふといながねぎ",
-        "ワカクサ大豆"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "あんみんトマト",
+            "ふといながねぎ",
+            "ワカクサ大豆"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ゴールド旧発電所"
+        ]
     },
     "persian": {
-      "mainSkill": "ゆめのかけらゲットS",
-      "ingredients": [
-        "モーモーミルク",
-        "マメミート"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "ゆめのかけらゲットS",
+        "ingredients": [
+            "モーモーミルク",
+            "マメミート"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔"
+        ]
     },
     "golduck": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "リラックスカカオ",
-        "とくせんリンゴ",
-        "マメミート"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "リラックスカカオ",
+            "とくせんリンゴ",
+            "マメミート"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "primeape": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "マメミート",
-        "あじわいキノコ",
-        "あまいミツ"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "マメミート",
+            "あじわいキノコ",
+            "あまいミツ"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "arcanine": {
-      "mainSkill": "おてつだいサポートS",
-      "ingredients": [
-        "げきからハーブ",
-        "マメミート",
-        "モーモーミルク"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "おてつだいサポートS",
+        "ingredients": [
+            "げきからハーブ",
+            "マメミート",
+            "モーモーミルク"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟"
+        ]
     },
     "victreebel": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "あんみんトマト",
-        "ほっこりポテト",
-        "ふといながねぎ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "あんみんトマト",
+            "ほっこりポテト",
+            "ふといながねぎ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "golem": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "ワカクサ大豆",
-        "あじわいキノコ",
-        "ほっこりポテト"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "ワカクサ大豆",
+            "あじわいキノコ",
+            "ほっこりポテト"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ゴールド旧発電所"
+        ]
     },
     "slowbro": {
-      "mainSkill": "げんきエールS",
-      "ingredients": [
-        "リラックスカカオ",
-        "おいしいシッポ",
-        "あんみんトマト"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "げんきエールS",
+        "ingredients": [
+            "リラックスカカオ",
+            "おいしいシッポ",
+            "あんみんトマト"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "farfetchd": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "ふといながねぎ",
-        "マメミート",
-        "あったかジンジャー"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "ふといながねぎ",
+            "マメミート",
+            "あったかジンジャー"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ゴールド旧発電所"
+        ]
     },
     "dodrio": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "ワカクサ大豆",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "ワカクサ大豆",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔"
+        ]
     },
     "gengar": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "げきからハーブ",
-        "あじわいキノコ",
-        "ピュアなオイル"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "げきからハーブ",
+            "あじわいキノコ",
+            "ピュアなオイル"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ゴールド旧発電所"
+        ]
     },
     "onix": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "あんみんトマト",
-        "マメミート",
-        "ほっこりポテト"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "あんみんトマト",
+            "マメミート",
+            "ほっこりポテト"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "トープ洞窟",
+            "ワカクサ本島"
+        ]
     },
     "marowak": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "あったかジンジャー",
-        "リラックスカカオ"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "あったかジンジャー",
+            "リラックスカカオ"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ウノハナ雪原"
+        ]
     },
     "kangaskhan": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "あったかジンジャー",
-        "ほっこりポテト",
-        "ワカクサ大豆"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "あったかジンジャー",
+            "ほっこりポテト",
+            "ワカクサ大豆"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜"
+        ]
     },
     "mr-mime": {
-      "mainSkill": "ものまね(スキルコピー)",
-      "ingredients": [
-        "あんみんトマト",
-        "ほっこりポテト",
-        "ふといながねぎ"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "ものまね(スキルコピー)",
+        "ingredients": [
+            "あんみんトマト",
+            "ほっこりポテト",
+            "ふといながねぎ"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "シアンの砂浜",
+            "ゴールド旧発電所"
+        ]
     },
     "pinsir": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "あまいミツ",
-        "とくせんリンゴ",
-        "マメミート"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "あまいミツ",
+            "とくせんリンゴ",
+            "マメミート"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜"
+        ]
     },
     "eevee-holiday": {
-      "mainSkill": "ゆめのかけらゲットS",
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "ゆめのかけらゲットS",
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "eevee-halloween": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "vaporeon": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "jolteon": {
-      "mainSkill": "おてつだいサポートS",
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "おてつだいサポートS",
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "flareon": {
-      "mainSkill": "料理パワーアップS",
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "料理パワーアップS",
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "dragonite": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "げきからハーブ",
-        "ワカクサコーン",
-        "ピュアなオイル"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "げきからハーブ",
+            "ワカクサコーン",
+            "ピュアなオイル"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔"
+        ]
     },
     "meganium": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "リラックスカカオ",
-        "あまいミツ",
-        "ふといながねぎ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "リラックスカカオ",
+            "あまいミツ",
+            "ふといながねぎ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ラピスラズリ湖畔"
+        ]
     },
     "typhlosion": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "あったかジンジャー",
-        "げきからハーブ",
-        "ピュアなオイル"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "あったかジンジャー",
+            "げきからハーブ",
+            "ピュアなオイル"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟"
+        ]
     },
     "feraligatr": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "マメミート",
-        "ピュアなオイル"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "マメミート",
+            "ピュアなオイル"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜"
+        ]
     },
     "xatu": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "とくせんエッグ",
-        "リラックスカカオ",
-        "とくせんリンゴ"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "とくせんエッグ",
+            "リラックスカカオ",
+            "とくせんリンゴ"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔"
+        ]
     },
     "ampharos": {
-      "mainSkill": "エナジーチャージM",
-      "ingredients": [
-        "げきからハーブ",
-        "とくせんエッグ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージM",
+        "ingredients": [
+            "げきからハーブ",
+            "とくせんエッグ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原",
+            "ゴールド旧発電所"
+        ]
     },
     "sudowoodo": {
-      "mainSkill": "エナジーチャージM",
-      "ingredients": [
-        "あんみんトマト",
-        "ワカクサ大豆",
-        "あじわいキノコ"
-      ],
-      "baseGauge": "7"
+        "mainSkill": "エナジーチャージM",
+        "ingredients": [
+            "あんみんトマト",
+            "ワカクサ大豆",
+            "あじわいキノコ"
+        ],
+        "baseGauge": "7",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜"
+        ]
     },
     "espeon": {
-      "mainSkill": "エナジーチャージM",
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージM",
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "umbreon": {
-      "mainSkill": "つきのひかり(げんきチャージS)",
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "つきのひかり(げんきチャージS)",
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "slowking": {
-      "mainSkill": "げんきエールS",
-      "ingredients": [
-        "リラックスカカオ",
-        "おいしいシッポ",
-        "あんみんトマト"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "げんきエールS",
+        "ingredients": [
+            "リラックスカカオ",
+            "おいしいシッポ",
+            "あんみんトマト"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "wobbuffet": {
-      "mainSkill": "げんきエールS",
-      "ingredients": [
-        "とくせんリンゴ",
-        "あじわいキノコ",
-        "ピュアなオイル"
-      ],
-      "baseGauge": "7"
+        "mainSkill": "げんきエールS",
+        "ingredients": [
+            "とくせんリンゴ",
+            "あじわいキノコ",
+            "ピュアなオイル"
+        ],
+        "baseGauge": "7",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "steelix": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "あんみんトマト",
-        "マメミート",
-        "ほっこりポテト"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "あんみんトマト",
+            "マメミート",
+            "ほっこりポテト"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "トープ洞窟",
+            "ワカクサ本島"
+        ]
     },
     "shuckle": {
-      "mainSkill": "きのみジュース(げんきオールS)",
-      "ingredients": [
-        "ピュアなオイル",
-        "めざましコーヒー",
-        "あまいミツ"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "きのみジュース(げんきオールS)",
+        "ingredients": [
+            "ピュアなオイル",
+            "めざましコーヒー",
+            "あまいミツ"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟"
+        ]
     },
     "heracross": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "あまいミツ",
-        "あじわいキノコ",
-        "マメミート"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "あまいミツ",
+            "あじわいキノコ",
+            "マメミート"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜"
+        ]
     },
     "weavile": {
-      "mainSkill": "料理チャンスS",
-      "ingredients": [
-        "マメミート",
-        "とくせんエッグ",
-        "ワカクサ大豆"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "料理チャンスS",
+        "ingredients": [
+            "マメミート",
+            "とくせんエッグ",
+            "ワカクサ大豆"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原"
+        ]
     },
     "delibird": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "とくせんエッグ",
-        "とくせんリンゴ",
-        "リラックスカカオ"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "とくせんエッグ",
+            "とくせんリンゴ",
+            "リラックスカカオ"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原"
+        ]
     },
     "houndoom": {
-      "mainSkill": "エナジーチャージM",
-      "ingredients": [
-        "げきからハーブ",
-        "あったかジンジャー",
-        "ふといながねぎ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージM",
+        "ingredients": [
+            "げきからハーブ",
+            "あったかジンジャー",
+            "ふといながねぎ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟"
+        ]
     },
     "raikou": {
-      "mainSkill": "おてつだいブースト(でんき)",
-      "ingredients": [
-        "マメミート",
-        "げきからハーブ",
-        "ふといながねぎ"
-      ],
-      "baseGauge": "30"
+        "mainSkill": "おてつだいブースト(でんき)",
+        "ingredients": [
+            "マメミート",
+            "げきからハーブ",
+            "ふといながねぎ"
+        ],
+        "baseGauge": "30",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "entei": {
-      "mainSkill": "おてつだいブースト(ほのお)",
-      "ingredients": [
-        "ピュアなオイル",
-        "あんみんトマト",
-        "あじわいキノコ"
-      ],
-      "baseGauge": "30"
+        "mainSkill": "おてつだいブースト(ほのお)",
+        "ingredients": [
+            "ピュアなオイル",
+            "あんみんトマト",
+            "あじわいキノコ"
+        ],
+        "baseGauge": "30",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟"
+        ]
     },
     "suicune": {
-      "mainSkill": "おてつだいブースト(みず)",
-      "ingredients": [
-        "とくせんリンゴ",
-        "ピュアなオイル",
-        "ワカクサコーン"
-      ],
-      "baseGauge": "30"
+        "mainSkill": "おてつだいブースト(みず)",
+        "ingredients": [
+            "とくせんリンゴ",
+            "ピュアなオイル",
+            "ワカクサコーン"
+        ],
+        "baseGauge": "30",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ラピスラズリ湖畔"
+        ]
     },
     "spheal-holiday": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "ピュアなオイル",
-        "マメミート",
-        "あったかジンジャー"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "ピュアなオイル",
+            "マメミート",
+            "あったかジンジャー"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原"
+        ]
     },
     "sceptile": {
-      "mainSkill": "きのみバースト",
-      "ingredients": [
-        "とくせんエッグ",
-        "めざましコーヒー",
-        "ふといながねぎ"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "きのみバースト",
+        "ingredients": [
+            "とくせんエッグ",
+            "めざましコーヒー",
+            "ふといながねぎ"
+        ],
+        "baseGauge": "20",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "blaziken": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "あじわいキノコ",
-        "ワカクサ大豆",
-        "ピュアなオイル"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "あじわいキノコ",
+            "ワカクサ大豆",
+            "ピュアなオイル"
+        ],
+        "baseGauge": "20",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ラピスラズリ湖畔"
+        ]
     },
     "swampert": {
-      "mainSkill": "料理チャンスS",
-      "ingredients": [
-        "ワカクサコーン",
-        "モーモーミルク",
-        "あじわいキノコ"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "料理チャンスS",
+        "ingredients": [
+            "ワカクサコーン",
+            "モーモーミルク",
+            "あじわいキノコ"
+        ],
+        "baseGauge": "20",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟"
+        ]
     },
     "slaking": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "あんみんトマト",
-        "あまいミツ",
-        "とくせんリンゴ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "あんみんトマト",
+            "あまいミツ",
+            "とくせんリンゴ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原"
+        ]
     },
     "aggron": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "マメミート",
-        "めざましコーヒー",
-        "ワカクサ大豆"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "マメミート",
+            "めざましコーヒー",
+            "ワカクサ大豆"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "plusle": {
-      "mainSkill": "プラス(食材ゲットS)",
-      "ingredients": [
-        "めざましコーヒー",
-        "ふといながねぎ",
-        "モーモーミルク"
-      ],
-      "baseGauge": "10"
+        "mainSkill": "プラス(食材ゲットS)",
+        "ingredients": [
+            "めざましコーヒー",
+            "ふといながねぎ",
+            "モーモーミルク"
+        ],
+        "baseGauge": "10",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "swalot": {
-      "mainSkill": "ゆめのかけらゲットS",
-      "ingredients": [
-        "ワカクサ大豆",
-        "あじわいキノコ",
-        "あまいミツ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "ゆめのかけらゲットS",
+        "ingredients": [
+            "ワカクサ大豆",
+            "あじわいキノコ",
+            "あまいミツ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原"
+        ]
     },
     "minun": {
-      "mainSkill": "マイナス(料理パワーアップS)",
-      "ingredients": [
-        "あまいミツ",
-        "とくせんエッグ",
-        "モーモーミルク"
-      ],
-      "baseGauge": "10"
+        "mainSkill": "マイナス(料理パワーアップS)",
+        "ingredients": [
+            "あまいミツ",
+            "とくせんエッグ",
+            "モーモーミルク"
+        ],
+        "baseGauge": "10",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "flygon": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "つやつやアボカド",
-        "げきからハーブ",
-        "ワカクサ大豆"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "つやつやアボカド",
+            "げきからハーブ",
+            "ワカクサ大豆"
+        ],
+        "baseGauge": "20",
+        "fields": [
+            "トープ洞窟"
+        ]
     },
     "altaria": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "とくせんエッグ",
-        "ワカクサ大豆",
-        "とくせんリンゴ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "とくせんエッグ",
+            "ワカクサ大豆",
+            "とくせんリンゴ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "banette": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "ピュアなオイル",
-        "あったかジンジャー",
-        "あじわいキノコ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "ピュアなオイル",
+            "あったかジンジャー",
+            "あじわいキノコ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ゴールド旧発電所"
+        ]
     },
     "absol": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "リラックスカカオ",
-        "あじわいキノコ",
-        "とくせんリンゴ"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "リラックスカカオ",
+            "あじわいキノコ",
+            "とくせんリンゴ"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原"
+        ]
     },
     "walrein": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "ピュアなオイル",
-        "マメミート",
-        "あったかジンジャー"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "ピュアなオイル",
+            "マメミート",
+            "あったかジンジャー"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原"
+        ]
     },
     "salamence": {
-      "mainSkill": "料理パワーアップS",
-      "ingredients": [
-        "ほっこりポテト",
-        "あったかジンジャー",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "料理パワーアップS",
+        "ingredients": [
+            "ほっこりポテト",
+            "あったかジンジャー",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": []
     },
     "luxray": {
-      "mainSkill": "料理パワーアップS",
-      "ingredients": [
-        "あんみんトマト",
-        "ピュアなオイル",
-        "めざましコーヒー"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "料理パワーアップS",
+        "ingredients": [
+            "あんみんトマト",
+            "ピュアなオイル",
+            "めざましコーヒー"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "drifblim": {
-      "mainSkill": "たくわえる(エナジーチャージS)",
-      "ingredients": [
-        "ワカクサコーン",
-        "ピュアなオイル",
-        "ほっこりポテト"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "たくわえる(エナジーチャージS)",
+        "ingredients": [
+            "ワカクサコーン",
+            "ピュアなオイル",
+            "ほっこりポテト"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "honchkrow": {
-      "mainSkill": "きょううん(食材セレクトS)",
-      "ingredients": [
-        "めざましコーヒー",
-        "ワカクサ大豆",
-        "げきからハーブ"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "きょううん(食材セレクトS)",
+        "ingredients": [
+            "めざましコーヒー",
+            "ワカクサ大豆",
+            "げきからハーブ"
+        ],
+        "baseGauge": "20",
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原",
+            "ゴールド旧発電所"
+        ]
     },
     "spiritomb": {
-      "mainSkill": "おてつだいサポートS",
-      "ingredients": [
-        "あじわいキノコ",
-        "ずっしりカボチャ",
-        "ふといながねぎ"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "おてつだいサポートS",
+        "ingredients": [
+            "あじわいキノコ",
+            "ずっしりカボチャ",
+            "ふといながねぎ"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "lucario": {
-      "mainSkill": "ゆめのかけらゲットS",
-      "ingredients": [
-        "ピュアなオイル",
-        "ほっこりポテト",
-        "とくせんエッグ"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "ゆめのかけらゲットS",
+        "ingredients": [
+            "ピュアなオイル",
+            "ほっこりポテト",
+            "とくせんエッグ"
+        ],
+        "baseGauge": "20",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "toxicroak": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "ピュアなオイル",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "ピュアなオイル",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原"
+        ]
     },
     "abomasnow": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "あんみんトマト",
-        "とくせんエッグ",
-        "あじわいキノコ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "あんみんトマト",
+            "とくせんエッグ",
+            "あじわいキノコ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原"
+        ]
     },
     "magnezone": {
-      "mainSkill": "料理パワーアップS",
-      "ingredients": [
-        "ピュアなオイル",
-        "げきからハーブ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "料理パワーアップS",
+        "ingredients": [
+            "ピュアなオイル",
+            "げきからハーブ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "togekiss": {
-      "mainSkill": "ゆびをふる",
-      "ingredients": [
-        "とくせんエッグ",
-        "あったかジンジャー",
-        "リラックスカカオ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "ゆびをふる",
+        "ingredients": [
+            "とくせんエッグ",
+            "あったかジンジャー",
+            "リラックスカカオ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "gallade": {
-      "mainSkill": "おてつだいサポートS",
-      "ingredients": [
-        "とくせんリンゴ",
-        "ワカクサコーン",
-        "ふといながねぎ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "おてつだいサポートS",
+        "ingredients": [
+            "とくせんリンゴ",
+            "ワカクサコーン",
+            "ふといながねぎ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔"
+        ]
     },
     "cresselia": {
-      "mainSkill": "みかづきのいのり(げんきオールS)",
-      "ingredients": [
-        "あったかジンジャー",
-        "リラックスカカオ",
-        "あんみんトマト"
-      ],
-      "baseGauge": "30"
+        "mainSkill": "みかづきのいのり(げんきオールS)",
+        "ingredients": [
+            "あったかジンジャー",
+            "リラックスカカオ",
+            "あんみんトマト"
+        ],
+        "baseGauge": "30",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ゴールド旧発電所",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔"
+        ]
     },
     "darkrai": {
-      "mainSkill": "ナイトメア(エナジーチャージM)",
-      "ingredients": [
-        "マメミート"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "ナイトメア(エナジーチャージM)",
+        "ingredients": [
+            "マメミート"
+        ],
+        "baseGauge": "20",
+        "fields": []
     },
     "musharna": {
-      "mainSkill": "ゆめのかけらゲットS",
-      "ingredients": [
-        "モーモーミルク",
-        "あまいミツ",
-        "めざましコーヒー"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "ゆめのかけらゲットS",
+        "ingredients": [
+            "モーモーミルク",
+            "あまいミツ",
+            "めざましコーヒー"
+        ],
+        "baseGauge": "20",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "crustle": {
-      "mainSkill": "食材セレクトS",
-      "ingredients": [
-        "つやつやアボカド",
-        "ほっこりポテト",
-        "ピュアなオイル"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "食材セレクトS",
+        "ingredients": [
+            "つやつやアボカド",
+            "ほっこりポテト",
+            "ピュアなオイル"
+        ],
+        "baseGauge": "5",
+        "fields": []
     },
     "braviary": {
-      "mainSkill": "きのみバースト",
-      "ingredients": [
-        "マメミート",
-        "ワカクサコーン",
-        "めざましコーヒー"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "きのみバースト",
+        "ingredients": [
+            "マメミート",
+            "ワカクサコーン",
+            "めざましコーヒー"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原"
+        ]
     },
     "sylveon": {
-      "mainSkill": "げんきオールS",
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "げんきオールS",
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "dedenne": {
-      "mainSkill": "料理チャンスS",
-      "ingredients": [
-        "とくせんリンゴ",
-        "リラックスカカオ",
-        "ワカクサコーン"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "料理チャンスS",
+        "ingredients": [
+            "とくせんリンゴ",
+            "リラックスカカオ",
+            "ワカクサコーン"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "gourgeist": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "ずっしりカボチャ",
-        "ワカクサ大豆",
-        "ほっこりポテト"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "ずっしりカボチャ",
+            "ワカクサ大豆",
+            "ほっこりポテト"
+        ],
+        "baseGauge": "20",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "vikavolt": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "めざましコーヒー",
-        "あじわいキノコ",
-        "あまいミツ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "めざましコーヒー",
+            "あじわいキノコ",
+            "あまいミツ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "bewear": {
-      "mainSkill": "エナジーチャージS",
-      "ingredients": [
-        "ワカクサコーン",
-        "マメミート",
-        "とくせんエッグ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージS",
+        "ingredients": [
+            "ワカクサコーン",
+            "マメミート",
+            "とくせんエッグ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔"
+        ]
     },
     "comfey": {
-      "mainSkill": "げんきエールS",
-      "ingredients": [
-        "ワカクサコーン",
-        "あったかジンジャー",
-        "リラックスカカオ"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "げんきエールS",
+        "ingredients": [
+            "ワカクサコーン",
+            "あったかジンジャー",
+            "リラックスカカオ"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ラピスラズリ湖畔"
+        ]
     },
     "mimikyu": {
-      "mainSkill": "ばけのかわ(きのみバースト)",
-      "ingredients": [
-        "とくせんリンゴ",
-        "めざましコーヒー",
-        "あじわいキノコ"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "ばけのかわ(きのみバースト)",
+        "ingredients": [
+            "とくせんリンゴ",
+            "めざましコーヒー",
+            "あじわいキノコ"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "cramorant": {
-      "mainSkill": "料理チャンスS",
-      "ingredients": [
-        "ピュアなオイル",
-        "ほっこりポテト",
-        "とくせんエッグ"
-      ],
-      "baseGauge": "16"
+        "mainSkill": "料理チャンスS",
+        "ingredients": [
+            "ピュアなオイル",
+            "ほっこりポテト",
+            "とくせんエッグ"
+        ],
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原"
+        ]
     },
     "toxtricity-low": {
-      "mainSkill": "マイナス(料理パワーアップS)",
-      "ingredients": [
-        "モーモーミルク",
-        "とくせんリンゴ",
-        "ふといながねぎ"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "マイナス(料理パワーアップS)",
+        "ingredients": [
+            "モーモーミルク",
+            "とくせんリンゴ",
+            "ふといながねぎ"
+        ],
+        "baseGauge": "20",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "toxtricity-amped": {
-      "mainSkill": "プラス(食材ゲットS)",
-      "ingredients": [
-        "モーモーミルク",
-        "とくせんリンゴ",
-        "ふといながねぎ"
-      ],
-      "baseGauge": "20"
+        "mainSkill": "プラス(食材ゲットS)",
+        "ingredients": [
+            "モーモーミルク",
+            "とくせんリンゴ",
+            "ふといながねぎ"
+        ],
+        "baseGauge": "20",
+        "fields": [
+            "ワカクサ本島",
+            "ゴールド旧発電所"
+        ]
     },
     "meowscarada": {
-      "mainSkill": "料理パワーアップS",
-      "ingredients": [
-        "ほっこりポテト",
-        "モーモーミルク",
-        "あったかジンジャー"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "料理パワーアップS",
+        "ingredients": [
+            "ほっこりポテト",
+            "モーモーミルク",
+            "あったかジンジャー"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "skeledirge": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "とくせんリンゴ",
-        "マメミート",
-        "げきからハーブ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "とくせんリンゴ",
+            "マメミート",
+            "げきからハーブ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ゴールド旧発電所"
+        ]
     },
     "quaquaval": {
-      "mainSkill": "エナジーチャージM",
-      "ingredients": [
-        "ワカクサ大豆",
-        "ふといながねぎ",
-        "ピュアなオイル"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "エナジーチャージM",
+        "ingredients": [
+            "ワカクサ大豆",
+            "ふといながねぎ",
+            "ピュアなオイル"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "pawmot": {
-      "mainSkill": "げんきオールS",
-      "ingredients": [
-        "リラックスカカオ",
-        "モーモーミルク",
-        "とくせんエッグ"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "げんきオールS",
+        "ingredients": [
+            "リラックスカカオ",
+            "モーモーミルク",
+            "とくせんエッグ"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原",
+            "ゴールド旧発電所"
+        ]
     },
     "clodsire": {
-      "mainSkill": "げんきチャージS",
-      "ingredients": [
-        "リラックスカカオ",
-        "めざましコーヒー",
-        "ほっこりポテト"
-      ],
-      "baseGauge": "12"
+        "mainSkill": "げんきチャージS",
+        "ingredients": [
+            "リラックスカカオ",
+            "めざましコーヒー",
+            "ほっこりポテト"
+        ],
+        "baseGauge": "12",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ゴールド旧発電所"
+        ]
     },
     "blastoise": {
-      "mainSkill": "食材ゲットS",
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "baseGauge": "5"
+        "mainSkill": "食材ゲットS",
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ラピスラズリ湖畔"
+        ]
     },
     "sandslash": {
-      "ingredients": [
-        "ずっしりカボチャ",
-        "ワカクサコーン",
-        "ほっこりポテト"
-      ],
-      "mainSkill": "食材セレクトS",
-      "baseGauge": "5"
+        "ingredients": [
+            "ずっしりカボチャ",
+            "ワカクサコーン",
+            "ほっこりポテト"
+        ],
+        "mainSkill": "食材セレクトS",
+        "baseGauge": "5",
+        "fields": []
     },
     "ninetales": {
-      "ingredients": [
-        "ワカクサ大豆",
-        "ワカクサコーン",
-        "ほっこりポテト"
-      ],
-      "mainSkill": "げんきエールS",
-      "baseGauge": "5"
+        "ingredients": [
+            "ワカクサ大豆",
+            "ワカクサコーン",
+            "ほっこりポテト"
+        ],
+        "mainSkill": "げんきエールS",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ウノハナ雪原"
+        ]
     },
     "ninetales-alola": {
-      "ingredients": [
-        "ワカクサ大豆",
-        "ワカクサコーン",
-        "ほっこりポテト"
-      ],
-      "mainSkill": "おてつだいサポートS",
-      "baseGauge": "5"
+        "ingredients": [
+            "ワカクサ大豆",
+            "ワカクサコーン",
+            "ほっこりポテト"
+        ],
+        "mainSkill": "おてつだいサポートS",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ウノハナ雪原"
+        ]
     },
     "ditto": {
-      "ingredients": [
-        "ピュアなオイル",
-        "ふといながねぎ",
-        "おいしいシッポ"
-      ],
-      "mainSkill": "へんしん(スキルコピー)",
-      "baseGauge": "16"
+        "ingredients": [
+            "ピュアなオイル",
+            "ふといながねぎ",
+            "おいしいシッポ"
+        ],
+        "mainSkill": "へんしん(スキルコピー)",
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "mew": {
-      "ingredients": [
-        "とくせんエッグ",
-        "げきからハーブ"
-      ],
-      "mainSkill": "オールマイティー(ゆびをふる)",
-      "baseGauge": "25"
+        "ingredients": [
+            "とくせんエッグ",
+            "げきからハーブ"
+        ],
+        "mainSkill": "オールマイティー(ゆびをふる)",
+        "baseGauge": "25",
+        "fields": []
     },
     "quagsire": {
-      "ingredients": [
-        "あじわいキノコ",
-        "ほっこりポテト",
-        "マメミート"
-      ],
-      "mainSkill": "げんきチャージS",
-      "baseGauge": "5"
+        "ingredients": [
+            "あじわいキノコ",
+            "ほっこりポテト",
+            "マメミート"
+        ],
+        "mainSkill": "げんきチャージS",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ゴールド旧発電所"
+        ]
     },
     "blissey": {
-      "ingredients": [
-        "とくせんエッグ",
-        "ほっこりポテト",
-        "あまいミツ"
-      ],
-      "mainSkill": "げんきオールS",
-      "baseGauge": "5"
+        "ingredients": [
+            "とくせんエッグ",
+            "ほっこりポテト",
+            "あまいミツ"
+        ],
+        "mainSkill": "げんきオールS",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原"
+        ]
     },
     "tyranitar": {
-      "ingredients": [
-        "あったかジンジャー",
-        "ワカクサ大豆",
-        "マメミート"
-      ],
-      "mainSkill": "げんきチャージS",
-      "baseGauge": "5"
+        "ingredients": [
+            "あったかジンジャー",
+            "ワカクサ大豆",
+            "マメミート"
+        ],
+        "mainSkill": "げんきチャージS",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟"
+        ]
     },
     "gardevoir": {
-      "ingredients": [
-        "とくせんリンゴ",
-        "ワカクサコーン",
-        "ふといながねぎ"
-      ],
-      "mainSkill": "げんきオールS",
-      "baseGauge": "5"
+        "ingredients": [
+            "とくせんリンゴ",
+            "ワカクサコーン",
+            "ふといながねぎ"
+        ],
+        "mainSkill": "げんきオールS",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔"
+        ]
     },
     "sableye": {
-      "ingredients": [
-        "ピュアなオイル",
-        "あじわいキノコ",
-        "リラックスカカオ"
-      ],
-      "mainSkill": "ゆめのかけらゲットS",
-      "baseGauge": "16"
+        "ingredients": [
+            "ピュアなオイル",
+            "あじわいキノコ",
+            "リラックスカカオ"
+        ],
+        "mainSkill": "ゆめのかけらゲットS",
+        "baseGauge": "16",
+        "fields": [
+            "トープ洞窟",
+            "ワカクサ本島"
+        ]
     },
     "mawile": {
-      "ingredients": [
-        "ピュアなオイル",
-        "ワカクサコーン",
-        "あんみんトマト"
-      ],
-      "mainSkill": "かいりきバサミ(食材セレクトS)",
-      "baseGauge": "16"
+        "ingredients": [
+            "ピュアなオイル",
+            "ワカクサコーン",
+            "あんみんトマト"
+        ],
+        "mainSkill": "かいりきバサミ(食材セレクトS)",
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "latias": {
-      "ingredients": [
-        "あんみんトマト",
-        "ずっしりカボチャ",
-        "あじわいキノコ"
-      ],
-      "mainSkill": "いやしのはどう(げんきエールS)",
-      "baseGauge": "30"
+        "ingredients": [
+            "あんみんトマト",
+            "ずっしりカボチャ",
+            "あじわいキノコ"
+        ],
+        "mainSkill": "いやしのはどう(げんきエールS)",
+        "baseGauge": "30",
+        "fields": []
     },
     "leafeon": {
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "mainSkill": "げんきエールS",
-      "baseGauge": "5"
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "mainSkill": "げんきエールS",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "glaceon": {
-      "ingredients": [
-        "モーモーミルク",
-        "リラックスカカオ",
-        "マメミート"
-      ],
-      "mainSkill": "料理パワーアップS",
-      "baseGauge": "5"
+        "ingredients": [
+            "モーモーミルク",
+            "リラックスカカオ",
+            "マメミート"
+        ],
+        "mainSkill": "料理パワーアップS",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "トープ洞窟",
+            "ウノハナ雪原",
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所"
+        ]
     },
     "tyrantrum": {
-      "ingredients": [
-        "マメミート",
-        "とくせんリンゴ",
-        "ほっこりポテト"
-      ],
-      "mainSkill": "料理パワーアップS",
-      "baseGauge": "5"
+        "ingredients": [
+            "マメミート",
+            "とくせんリンゴ",
+            "ほっこりポテト"
+        ],
+        "mainSkill": "料理パワーアップS",
+        "baseGauge": "5",
+        "fields": []
     },
     "noivern": {
-      "ingredients": [
-        "とくせんリンゴ",
-        "ふといながねぎ",
-        "マメミート"
-      ],
-      "mainSkill": "エナジーチャージM",
-      "baseGauge": "5"
+        "ingredients": [
+            "とくせんリンゴ",
+            "ふといながねぎ",
+            "マメミート"
+        ],
+        "mainSkill": "エナジーチャージM",
+        "baseGauge": "5",
+        "fields": []
     },
     "ribombee": {
-      "ingredients": [
-        "あまいミツ",
-        "ピュアなオイル",
-        "ワカクサコーン"
-      ],
-      "mainSkill": "食材セレクトS",
-      "baseGauge": "5"
+        "ingredients": [
+            "あまいミツ",
+            "ピュアなオイル",
+            "ワカクサコーン"
+        ],
+        "mainSkill": "食材セレクトS",
+        "baseGauge": "5",
+        "fields": []
     },
     "togedemaru": {
-      "ingredients": [
-        "モーモーミルク",
-        "つやつやアボカド",
-        "リラックスカカオ"
-      ],
-      "mainSkill": "ほっぺすりすり(げんきエールS)",
-      "baseGauge": "16"
+        "ingredients": [
+            "モーモーミルク",
+            "つやつやアボカド",
+            "リラックスカカオ"
+        ],
+        "mainSkill": "ほっぺすりすり(げんきエールS)",
+        "baseGauge": "16",
+        "fields": []
     },
     "cetitan": {
-      "ingredients": [
-        "ほっこりポテト",
-        "マメミート",
-        "ずっしりカボチャ"
-      ],
-      "mainSkill": "げんきチャージS",
-      "baseGauge": "5"
+        "ingredients": [
+            "ほっこりポテト",
+            "マメミート",
+            "ずっしりカボチャ"
+        ],
+        "mainSkill": "げんきチャージS",
+        "baseGauge": "5",
+        "fields": []
     }
-  };
+};
 const newPokemonIds = new Set([]);
 
 let state = loadState();
@@ -1182,6 +1740,7 @@ const finishedPool = document.querySelector("#finishedPool");
 const finishedCount = document.querySelector("#finishedCount");
 const searchInput = document.querySelector("#searchInput");
 const typeFilter = document.querySelector("#typeFilter");
+const fieldFilter = document.querySelector("#fieldFilter");
 const ingredientFilter = document.querySelector("#ingredientFilter");
 const ingredientScopeFilter = document.querySelector("#ingredientScopeFilter");
 const moveDialog = document.querySelector("#moveDialog");
@@ -1201,6 +1760,7 @@ detailButton.addEventListener("click", () => {
 });
 searchInput.addEventListener("input", render);
 typeFilter.addEventListener("change", render);
+fieldFilter.addEventListener("change", render);
 ingredientFilter.addEventListener("change", render);
 ingredientScopeFilter.addEventListener("change", render);
 window.addEventListener("resize", () => {
@@ -1215,6 +1775,7 @@ document.querySelectorAll("[data-specialty]").forEach(button => {
 });
 
 initializeTypeFilter();
+initializeFieldFilter();
 initializeIngredientFilter();
 render();
 
@@ -1398,8 +1959,16 @@ function matchesCurrentFilters(pokemon) {
   const matchesQuery = !query || pokemon.name.includes(query) || pokemon.type.includes(query) || pokemon.specialty.includes(query);
   const matchesSpecialty = activeSpecialty === "all" || pokemon.specialty === activeSpecialty;
   const matchesType = typeFilter.value === "all" || pokemon.type === typeFilter.value;
+  const matchesField = matchesFieldFilter(pokemon);
   const matchesIngredient = matchesIngredientFilter(pokemon);
-  return matchesQuery && matchesSpecialty && matchesType && matchesIngredient;
+  return matchesQuery && matchesSpecialty && matchesType && matchesField && matchesIngredient;
+}
+
+function matchesFieldFilter(pokemon) {
+  if (fieldFilter.value === "all") return true;
+  const detail = pokemonDetailData[pokemon.id];
+  const fields = Array.isArray(detail?.fields) ? detail.fields : [];
+  return fields.includes(fieldFilter.value);
 }
 
 function matchesIngredientFilter(pokemon) {
@@ -1417,6 +1986,19 @@ function initializeTypeFilter() {
     option.value = type;
     option.textContent = type;
     typeFilter.append(option);
+  });
+}
+
+function initializeFieldFilter() {
+  const fields = [...new Set(
+    Object.values(pokemonDetailData)
+      .flatMap(detail => Array.isArray(detail.fields) ? detail.fields : []),
+  )].sort((a, b) => a.localeCompare(b, "ja"));
+  fields.forEach(field => {
+    const option = document.createElement("option");
+    option.value = field;
+    option.textContent = field;
+    fieldFilter.append(option);
   });
 }
 
@@ -1598,6 +2180,7 @@ function renderPokemonInfoFields(pokemon) {
   [
     ["mainSkill", "メインスキル"],
     ["ingredients", "食材構成"],
+    ["fields", "出現フィールド(種基準)"],
     ["baseGauge", "種ポケモンのゲージ"],
   ].forEach(([key, labelText]) => {
     const item = document.createElement("div");

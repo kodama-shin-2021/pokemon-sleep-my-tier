@@ -2056,10 +2056,21 @@ function initializeTypeFilter() {
 }
 
 function initializeFieldFilter() {
+  const fieldOrder = [
+    "ワカクサ本島",
+    "シアンの砂浜",
+    "トープ洞窟",
+    "ウノハナ雪原",
+    "ラピスラズリ湖畔",
+    "ゴールド旧発電所",
+    "アンバー渓谷",
+    "ワカクサ本島EX",
+  ];
+  const fieldRank = new Map(fieldOrder.map((field, index) => [field, index]));
   const fields = [...new Set(
     Object.values(pokemonDetailData)
       .flatMap(detail => Array.isArray(detail.fields) ? detail.fields : []),
-  )].sort((a, b) => a.localeCompare(b, "ja"));
+  )].sort((a, b) => (fieldRank.get(a) ?? Number.MAX_SAFE_INTEGER) - (fieldRank.get(b) ?? Number.MAX_SAFE_INTEGER) || a.localeCompare(b, "ja"));
   fields.forEach(field => {
     const option = document.createElement("option");
     option.value = field;

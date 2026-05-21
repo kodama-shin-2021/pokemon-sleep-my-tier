@@ -240,7 +240,7 @@ button:active {
 
 .tier-filter-bar {
   display: grid;
-  grid-template-columns: minmax(220px, 1.2fr) minmax(320px, 1.8fr) repeat(4, minmax(140px, 1fr));
+  grid-template-columns: minmax(190px, 1fr) minmax(390px, 2fr) repeat(4, minmax(125px, 1fr));
   gap: 12px;
   align-items: end;
   margin-bottom: 12px;
@@ -268,7 +268,7 @@ button:active {
 }
 
 .filter-specialty {
-  min-width: 320px;
+  min-width: 390px;
 }
 
 .tier-row {
@@ -382,13 +382,15 @@ button:active {
 
 .filter-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
   min-height: 40px;
   align-items: center;
+  overflow-x: auto;
 }
 
 .filter-chip {
+  flex: 0 0 auto;
   min-height: 32px;
   padding: 0 12px;
   border-radius: 6px;

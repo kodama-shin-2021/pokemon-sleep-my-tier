@@ -1004,7 +1004,7 @@ const pokemonDetailData = {
         "ほっこりポテト"
       ],
       "mainSkill": "食材セレクトS",
-      "baseGauge": "12"
+      "baseGauge": "5"
     },
     "ninetales": {
       "ingredients": [
@@ -1013,7 +1013,7 @@ const pokemonDetailData = {
         "ほっこりポテト"
       ],
       "mainSkill": "げんきエールS",
-      "baseGauge": "20"
+      "baseGauge": "5"
     },
     "ninetales-alola": {
       "ingredients": [
@@ -1022,7 +1022,7 @@ const pokemonDetailData = {
         "ほっこりポテト"
       ],
       "mainSkill": "おてつだいサポートS",
-      "baseGauge": "20"
+      "baseGauge": "5"
     },
     "ditto": {
       "ingredients": [
@@ -1048,7 +1048,7 @@ const pokemonDetailData = {
         "マメミート"
       ],
       "mainSkill": "げんきチャージS",
-      "baseGauge": "12"
+      "baseGauge": "5"
     },
     "blissey": {
       "ingredients": [
@@ -1057,7 +1057,7 @@ const pokemonDetailData = {
         "あまいミツ"
       ],
       "mainSkill": "げんきオールS",
-      "baseGauge": "20"
+      "baseGauge": "5"
     },
     "tyranitar": {
       "ingredients": [
@@ -1066,7 +1066,7 @@ const pokemonDetailData = {
         "マメミート"
       ],
       "mainSkill": "げんきチャージS",
-      "baseGauge": "25"
+      "baseGauge": "5"
     },
     "gardevoir": {
       "ingredients": [
@@ -1075,7 +1075,7 @@ const pokemonDetailData = {
         "ふといながねぎ"
       ],
       "mainSkill": "げんきオールS",
-      "baseGauge": "20"
+      "baseGauge": "5"
     },
     "sableye": {
       "ingredients": [
@@ -1111,7 +1111,7 @@ const pokemonDetailData = {
         "マメミート"
       ],
       "mainSkill": "げんきエールS",
-      "baseGauge": "20"
+      "baseGauge": "5"
     },
     "glaceon": {
       "ingredients": [
@@ -1120,7 +1120,7 @@ const pokemonDetailData = {
         "マメミート"
       ],
       "mainSkill": "料理パワーアップS",
-      "baseGauge": "20"
+      "baseGauge": "5"
     },
     "tyrantrum": {
       "ingredients": [
@@ -1129,7 +1129,7 @@ const pokemonDetailData = {
         "ほっこりポテト"
       ],
       "mainSkill": "料理パワーアップS",
-      "baseGauge": "20"
+      "baseGauge": "5"
     },
     "noivern": {
       "ingredients": [
@@ -1138,7 +1138,7 @@ const pokemonDetailData = {
         "マメミート"
       ],
       "mainSkill": "エナジーチャージM",
-      "baseGauge": "12"
+      "baseGauge": "5"
     },
     "ribombee": {
       "ingredients": [
@@ -1147,7 +1147,7 @@ const pokemonDetailData = {
         "ワカクサコーン"
       ],
       "mainSkill": "食材セレクトS",
-      "baseGauge": "12"
+      "baseGauge": "5"
     },
     "togedemaru": {
       "ingredients": [
@@ -1165,7 +1165,7 @@ const pokemonDetailData = {
         "ずっしりカボチャ"
       ],
       "mainSkill": "げんきチャージS",
-      "baseGauge": "20"
+      "baseGauge": "5"
     }
   };
 const newPokemonIds = new Set([]);

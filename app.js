@@ -1059,7 +1059,9 @@ const pokemonDetailData = {
             "マメミート"
         ],
         "baseGauge": "5",
-        "fields": []
+        "fields": [
+            "アンバー渓谷"
+        ]
     },
     "luxray": {
         "mainSkill": "料理パワーアップS",
@@ -1244,7 +1246,9 @@ const pokemonDetailData = {
             "ピュアなオイル"
         ],
         "baseGauge": "5",
-        "fields": []
+        "fields": [
+            "アンバー渓谷"
+        ]
     },
     "braviary": {
         "mainSkill": "きのみバースト",
@@ -1492,7 +1496,12 @@ const pokemonDetailData = {
         ],
         "mainSkill": "食材セレクトS",
         "baseGauge": "5",
-        "fields": []
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ワカクサ本島EX",
+            "アンバー渓谷"
+        ]
     },
     "ninetales": {
         "ingredients": [
@@ -1639,7 +1648,12 @@ const pokemonDetailData = {
         ],
         "mainSkill": "いやしのはどう(げんきエールS)",
         "baseGauge": "30",
-        "fields": []
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX",
+            "アンバー渓谷"
+        ]
     },
     "leafeon": {
         "ingredients": [
@@ -1683,7 +1697,12 @@ const pokemonDetailData = {
         ],
         "mainSkill": "料理パワーアップS",
         "baseGauge": "5",
-        "fields": []
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ワカクサ本島EX",
+            "アンバー渓谷"
+        ]
     },
     "noivern": {
         "ingredients": [
@@ -1693,7 +1712,12 @@ const pokemonDetailData = {
         ],
         "mainSkill": "エナジーチャージM",
         "baseGauge": "5",
-        "fields": []
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ワカクサ本島EX",
+            "アンバー渓谷"
+        ]
     },
     "ribombee": {
         "ingredients": [
@@ -1703,7 +1727,13 @@ const pokemonDetailData = {
         ],
         "mainSkill": "食材セレクトS",
         "baseGauge": "5",
-        "fields": []
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX",
+            "アンバー渓谷"
+        ]
     },
     "togedemaru": {
         "ingredients": [
@@ -1713,7 +1743,13 @@ const pokemonDetailData = {
         ],
         "mainSkill": "ほっぺすりすり(げんきエールS)",
         "baseGauge": "16",
-        "fields": []
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原",
+            "ゴールド旧発電所",
+            "ワカクサ本島EX",
+            "アンバー渓谷"
+        ]
     },
     "cetitan": {
         "ingredients": [
@@ -1723,7 +1759,11 @@ const pokemonDetailData = {
         ],
         "mainSkill": "げんきチャージS",
         "baseGauge": "5",
-        "fields": []
+        "fields": [
+            "ワカクサ本島",
+            "ウノハナ雪原",
+            "ワカクサ本島EX"
+        ]
     }
 };
 const newPokemonIds = new Set([]);

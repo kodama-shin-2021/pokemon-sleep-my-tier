@@ -262,7 +262,7 @@ button:active {
   margin-bottom: 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--surface);
+  background: var(--surface-2);
   box-shadow: var(--shadow);
 }
 
@@ -271,7 +271,7 @@ button:active {
   justify-content: flex-start;
   padding: 10px 12px;
   border-bottom: 1px solid var(--line);
-  background: var(--surface-2);
+  background: transparent;
 }
 
 .filter-toggle-button {
@@ -307,6 +307,11 @@ button:active {
 
 .filter-panel:not(.is-open) .filter-panel-head {
   border-bottom: 0;
+}
+
+.filter-panel .tier-filter-bar {
+  padding: 12px;
+  background: transparent;
 }
 
 .filter-panel:not(.is-open) .tier-filter-bar {

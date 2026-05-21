@@ -1748,6 +1748,7 @@ const moveTargets = document.querySelector("#moveTargets");
 const pokemonInfoFields = document.querySelector("#pokemonInfoFields");
 const dialogPokemonName = document.querySelector("#dialogPokemonName");
 const detailButton = document.querySelector("#detailButton");
+const mobileDragQuery = window.matchMedia("(max-width: 900px)");
 let activeSpecialty = "all";
 
 document.querySelector("#addTierButton").addEventListener("click", addTier);
@@ -1766,6 +1767,11 @@ ingredientScopeFilter.addEventListener("change", render);
 window.addEventListener("resize", () => {
   requestAnimationFrame(syncTierRowHeights);
 });
+if (typeof mobileDragQuery.addEventListener === "function") {
+  mobileDragQuery.addEventListener("change", updatePokemonCardDragState);
+} else {
+  mobileDragQuery.addListener(updatePokemonCardDragState);
+}
 document.querySelectorAll("[data-specialty]").forEach(button => {
   button.addEventListener("click", () => {
     activeSpecialty = activeSpecialty === button.dataset.specialty ? "all" : button.dataset.specialty;
@@ -2020,22 +2026,28 @@ function createPokemonCard(pokemon, currentTierId = null) {
   card.className = "pokemon-card";
   if (newPokemonIds.has(pokemon.id)) card.classList.add("new-pokemon");
   card.type = "button";
-  card.draggable = true;
+  card.draggable = !isMobileDragDisabled();
   card.dataset.pokemonId = pokemon.id;
   card.title = `${pokemon.name} / ${pokemon.specialty} / ${pokemon.type}`;
   card.addEventListener("click", () => openMoveDialog(pokemon.id, currentTierId));
   card.addEventListener("dragstart", event => {
+    if (isMobileDragDisabled()) {
+      event.preventDefault();
+      return;
+    }
     activePokemonId = pokemon.id;
     event.dataTransfer.setData("text/plain", pokemon.id);
     card.classList.add("dragging");
   });
   card.addEventListener("dragend", () => card.classList.remove("dragging"));
   card.addEventListener("dragover", event => {
+    if (isMobileDragDisabled()) return;
     event.preventDefault();
     card.classList.add("drop-hover");
   });
   card.addEventListener("dragleave", () => card.classList.remove("drop-hover"));
   card.addEventListener("drop", event => {
+    if (isMobileDragDisabled()) return;
     event.preventDefault();
     event.stopPropagation();
     card.classList.remove("drop-hover");
@@ -2067,6 +2079,18 @@ function createPokemonCard(pokemon, currentTierId = null) {
   return card;
 }
 
+function isMobileDragDisabled() {
+  return mobileDragQuery.matches;
+}
+
+function updatePokemonCardDragState() {
+  document.querySelectorAll(".pokemon-card").forEach(card => {
+    card.draggable = !isMobileDragDisabled();
+    card.classList.remove("dragging", "drop-hover");
+  });
+  document.querySelectorAll(".drop-hover").forEach(element => element.classList.remove("drop-hover"));
+}
+
 function setImageSource(img, pokemon, index) {
   img.dataset.sourceIndex = String(index);
   img.src = pokemon.iconUrls[index];
@@ -2089,6 +2113,7 @@ function iconButton(text, onClick, label) {
 }
 
 function allowDrop(event) {
+  if (isMobileDragDisabled()) return;
   event.preventDefault();
   event.currentTarget.classList.add("drop-hover");
 }
@@ -2098,6 +2123,7 @@ function clearDropHover(event) {
 }
 
 function dropPokemon(event, targetTierId) {
+  if (isMobileDragDisabled()) return;
   event.preventDefault();
   event.currentTarget.classList.remove("drop-hover");
   const pokemonId = event.dataTransfer.getData("text/plain") || activePokemonId;
@@ -2105,6 +2131,7 @@ function dropPokemon(event, targetTierId) {
 }
 
 function dropStatusPokemon(event, status, targetTierId) {
+  if (isMobileDragDisabled()) return;
   event.preventDefault();
   event.currentTarget.classList.remove("drop-hover");
   const pokemonId = event.dataTransfer.getData("text/plain") || activePokemonId;

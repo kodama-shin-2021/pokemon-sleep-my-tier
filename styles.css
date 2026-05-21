@@ -240,7 +240,7 @@ button:active {
 
 .tier-filter-bar {
   display: grid;
-  grid-template-columns: minmax(390px, 2fr) repeat(4, minmax(125px, 1fr)) minmax(220px, 1.2fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
   align-items: end;
   margin-bottom: 12px;
@@ -264,11 +264,7 @@ button:active {
 }
 
 .filter-search {
-  min-width: 220px;
-}
-
-.filter-specialty {
-  min-width: 390px;
+  min-width: 0;
 }
 
 .tier-row {
@@ -398,19 +394,6 @@ button:active {
 @media (max-width: 1180px) {
   .tier-filter-bar {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .filter-search,
-  .filter-specialty {
-    min-width: 0;
-  }
-
-  .filter-specialty {
-    grid-column: span 2;
-  }
-
-  .filter-search {
-    grid-column: span 1;
   }
 }
 

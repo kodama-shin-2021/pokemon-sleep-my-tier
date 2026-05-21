@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ポケスリ My厳選Tier</title>
-    <link rel="stylesheet" href="styles.css?v=20260520-3" />
+    <link rel="stylesheet" href="styles.css?v=20260521-1" />
   </head>
   <body>
     <div class="app-shell">
@@ -38,6 +38,13 @@
         </div>
         <select id="typeFilter" aria-label="タイプで絞り込み">
           <option value="all">全タイプ</option>
+        </select>
+        <select id="ingredientFilter" aria-label="食材で絞り込み">
+          <option value="all">全食材</option>
+        </select>
+        <select id="ingredientScopeFilter" aria-label="食材フィルター対象">
+          <option value="first">第1食材のみ</option>
+          <option value="first-second">第1・第2食材のみ</option>
         </select>
       </div>
 
@@ -105,6 +112,6 @@
       </form>
     </dialog>
 
-    <script src="app.js?v=20260520-3"></script>
+    <script src="app.js?v=20260521-1"></script>
   </body>
 </html>

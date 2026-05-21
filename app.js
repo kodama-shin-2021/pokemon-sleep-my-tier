@@ -134,487 +134,487 @@ const defaultCompromiseTiers = defaultTiers.map(tier => ({
 const defaultCompromiseTierByName = new Map(defaultCompromiseTiers.map(tier => [tier.name, tier]));
 const pokemonDetailData = {
     "venusaur": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["あまいミツ","あんみんトマト","ほっこりポテト"],
       "baseGauge": "5"
     },
     "charizard": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["マメミート","あったかジンジャー","げきからハーブ"],
       "baseGauge": "5"
     },
     "butterfree": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["あまいミツ","あんみんトマト","ワカクサ大豆"],
       "baseGauge": "5"
     },
     "raticate": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["とくせんリンゴ","ワカクサ大豆","マメミート"],
       "baseGauge": "12"
     },
     "arbok": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["マメミート","とくせんエッグ","げきからハーブ"],
       "baseGauge": "12"
     },
     "pikachu-halloween": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["とくせんリンゴ","とくせんエッグ","あったかジンジャー"],
       "baseGauge": "7"
     },
     "pikachu-holiday": {
-      "mainSkill": "Dream Shard Magnet S",
+      "mainSkill": "ゆめのかけらゲットS",
       "ingredients": ["とくせんリンゴ","とくせんエッグ","あったかジンジャー"],
       "baseGauge": "7"
     },
     "raichu": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["とくせんリンゴ","とくせんエッグ","あったかジンジャー"],
       "baseGauge": "7"
     },
     "clefable": {
-      "mainSkill": "Metronome",
+      "mainSkill": "ゆびをふる",
       "ingredients": ["とくせんリンゴ","あまいミツ","ワカクサ大豆"],
       "baseGauge": "7"
     },
     "wigglytuff": {
-      "mainSkill": "Energy for Everyone S",
+      "mainSkill": "げんきオールS",
       "ingredients": ["あまいミツ","ピュアなオイル","リラックスカカオ"],
       "baseGauge": "16"
     },
     "dugtrio": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["あんみんトマト","ふといながねぎ","ワカクサ大豆"],
       "baseGauge": "12"
     },
     "persian": {
-      "mainSkill": "Dream Shard Magnet S",
+      "mainSkill": "ゆめのかけらゲットS",
       "ingredients": ["モーモーミルク","マメミート"],
       "baseGauge": "12"
     },
     "golduck": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["リラックスカカオ","とくせんリンゴ","マメミート"],
       "baseGauge": "12"
     },
     "primeape": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["マメミート","あじわいキノコ","あまいミツ"],
       "baseGauge": "12"
     },
     "arcanine": {
-      "mainSkill": "Extra Helpful S",
+      "mainSkill": "おてつだいサポートS",
       "ingredients": ["げきからハーブ","マメミート","モーモーミルク"],
       "baseGauge": "5"
     },
     "victreebel": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["あんみんトマト","ほっこりポテト","ふといながねぎ"],
       "baseGauge": "5"
     },
     "golem": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["ワカクサ大豆","あじわいキノコ","ほっこりポテト"],
       "baseGauge": "5"
     },
     "slowbro": {
-      "mainSkill": "Energizing Cheer S",
+      "mainSkill": "げんきエールS",
       "ingredients": ["リラックスカカオ","おいしいシッポ","あんみんトマト"],
       "baseGauge": "12"
     },
     "farfetchd": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["ふといながねぎ","マメミート","あったかジンジャー"],
       "baseGauge": "16"
     },
     "dodrio": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["ワカクサ大豆","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "gengar": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["げきからハーブ","あじわいキノコ","ピュアなオイル"],
       "baseGauge": "5"
     },
     "onix": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["あんみんトマト","マメミート","ほっこりポテト"],
       "baseGauge": "16"
     },
     "marowak": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["あったかジンジャー","リラックスカカオ"],
       "baseGauge": "12"
     },
     "kangaskhan": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["あったかジンジャー","ほっこりポテト","ワカクサ大豆"],
       "baseGauge": "16"
     },
     "mr-mime": {
-      "mainSkill": "Mimic (Skill Copy)",
+      "mainSkill": "ものまね(スキルコピー)",
       "ingredients": ["あんみんトマト","ほっこりポテト","ふといながねぎ"],
       "baseGauge": "12"
     },
     "pinsir": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["あまいミツ","とくせんリンゴ","マメミート"],
       "baseGauge": "16"
     },
     "eevee-holiday": {
-      "mainSkill": "Dream Shard Magnet S",
+      "mainSkill": "ゆめのかけらゲットS",
       "ingredients": ["モーモーミルク","リラックスカカオ"],
       "baseGauge": "5"
     },
     "eevee-halloween": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "vaporeon": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "jolteon": {
-      "mainSkill": "Extra Helpful S",
+      "mainSkill": "おてつだいサポートS",
       "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "flareon": {
-      "mainSkill": "Cooking Power-Up S",
+      "mainSkill": "料理パワーアップS",
       "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "dragonite": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["げきからハーブ","ワカクサコーン","ピュアなオイル"],
       "baseGauge": "5"
     },
     "meganium": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["リラックスカカオ","あまいミツ","ふといながねぎ"],
       "baseGauge": "5"
     },
     "typhlosion": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["あったかジンジャー","げきからハーブ","ピュアなオイル"],
       "baseGauge": "5"
     },
     "feraligatr": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["マメミート","ピュアなオイル"],
       "baseGauge": "5"
     },
     "xatu": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["とくせんエッグ","リラックスカカオ","とくせんリンゴ"],
       "baseGauge": "12"
     },
     "ampharos": {
-      "mainSkill": "Charge Strength M",
+      "mainSkill": "エナジーチャージM",
       "ingredients": ["げきからハーブ","とくせんエッグ"],
       "baseGauge": "5"
     },
     "sudowoodo": {
-      "mainSkill": "Charge Strength M",
+      "mainSkill": "エナジーチャージM",
       "ingredients": ["あんみんトマト","ワカクサ大豆","あじわいキノコ"],
       "baseGauge": "7"
     },
     "espeon": {
-      "mainSkill": "Charge Strength M",
+      "mainSkill": "エナジーチャージM",
       "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "umbreon": {
-      "mainSkill": "Moonlight (Charge Energy S)",
+      "mainSkill": "つきのひかり(げんきチャージS)",
       "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "slowking": {
-      "mainSkill": "Energizing Cheer S",
+      "mainSkill": "げんきエールS",
       "ingredients": ["リラックスカカオ","おいしいシッポ","あんみんトマト"],
       "baseGauge": "5"
     },
     "wobbuffet": {
-      "mainSkill": "Energizing Cheer S",
+      "mainSkill": "げんきエールS",
       "ingredients": ["とくせんリンゴ","あじわいキノコ","ピュアなオイル"],
       "baseGauge": "7"
     },
     "steelix": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["あんみんトマト","マメミート","ほっこりポテト"],
       "baseGauge": "16"
     },
     "shuckle": {
-      "mainSkill": "Berry Juice (Energy for Eneryone S)",
+      "mainSkill": "きのみジュース(げんきオールS)",
       "ingredients": ["ピュアなオイル","めざましコーヒー","あまいミツ"],
       "baseGauge": "16"
     },
     "heracross": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["あまいミツ","あじわいキノコ","マメミート"],
       "baseGauge": "16"
     },
     "weavile": {
-      "mainSkill": "Tasty Chance S",
+      "mainSkill": "料理チャンスS",
       "ingredients": ["マメミート","とくせんエッグ","ワカクサ大豆"],
       "baseGauge": "16"
     },
     "delibird": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["とくせんエッグ","とくせんリンゴ","リラックスカカオ"],
       "baseGauge": "16"
     },
     "houndoom": {
-      "mainSkill": "Charge Strength M",
+      "mainSkill": "エナジーチャージM",
       "ingredients": ["げきからハーブ","あったかジンジャー","ふといながねぎ"],
       "baseGauge": "5"
     },
     "raikou": {
-      "mainSkill": "Helper Boost (Electric)",
+      "mainSkill": "おてつだいブースト(でんき)",
       "ingredients": ["マメミート","げきからハーブ","ふといながねぎ"],
       "baseGauge": "30"
     },
     "entei": {
-      "mainSkill": "Helper Boost (Fire)",
+      "mainSkill": "おてつだいブースト(ほのお)",
       "ingredients": ["ピュアなオイル","あんみんトマト","あじわいキノコ"],
       "baseGauge": "30"
     },
     "suicune": {
-      "mainSkill": "Helper Boost (Water)",
+      "mainSkill": "おてつだいブースト(みず)",
       "ingredients": ["とくせんリンゴ","ピュアなオイル","ワカクサコーン"],
       "baseGauge": "30"
     },
     "spheal-holiday": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["ピュアなオイル","マメミート","あったかジンジャー"],
       "baseGauge": "5"
     },
     "sceptile": {
-      "mainSkill": "Berry Burst",
+      "mainSkill": "きのみバースト",
       "ingredients": ["とくせんエッグ","めざましコーヒー","ふといながねぎ"],
       "baseGauge": "20"
     },
     "blaziken": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["あじわいキノコ","ワカクサ大豆","ピュアなオイル"],
       "baseGauge": "20"
     },
     "swampert": {
-      "mainSkill": "Tasty Chance S",
+      "mainSkill": "料理チャンスS",
       "ingredients": ["ワカクサコーン","モーモーミルク","あじわいキノコ"],
       "baseGauge": "20"
     },
     "slaking": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["あんみんトマト","あまいミツ","とくせんリンゴ"],
       "baseGauge": "5"
     },
     "aggron": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["マメミート","めざましコーヒー","ワカクサ大豆"],
       "baseGauge": "5"
     },
     "plusle": {
-      "mainSkill": "Plus (Ingredient Magnet S)",
+      "mainSkill": "プラス(食材ゲットS)",
       "ingredients": ["めざましコーヒー","ふといながねぎ","モーモーミルク"],
       "baseGauge": "10"
     },
     "swalot": {
-      "mainSkill": "Dream Shard Magnet S",
+      "mainSkill": "ゆめのかけらゲットS",
       "ingredients": ["ワカクサ大豆","あじわいキノコ","あまいミツ"],
       "baseGauge": "5"
     },
     "minun": {
-      "mainSkill": "Minus (Cooking Power-Up S)",
+      "mainSkill": "マイナス(料理パワーアップS)",
       "ingredients": ["あまいミツ","とくせんエッグ","モーモーミルク"],
       "baseGauge": "10"
     },
     "flygon": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["つやつやアボカド","げきからハーブ","ワカクサ大豆"],
       "baseGauge": "20"
     },
     "altaria": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["とくせんエッグ","ワカクサ大豆","とくせんリンゴ"],
       "baseGauge": "5"
     },
     "banette": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["ピュアなオイル","あったかジンジャー","あじわいキノコ"],
       "baseGauge": "5"
     },
     "absol": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["リラックスカカオ","あじわいキノコ","とくせんリンゴ"],
       "baseGauge": "16"
     },
     "walrein": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["ピュアなオイル","マメミート","あったかジンジャー"],
       "baseGauge": "5"
     },
     "salamence": {
-      "mainSkill": "Cooking Power-Up S",
+      "mainSkill": "料理パワーアップS",
       "ingredients": ["ほっこりポテト","あったかジンジャー","マメミート"],
       "baseGauge": "5"
     },
     "luxray": {
-      "mainSkill": "Cooking Power-Up S",
+      "mainSkill": "料理パワーアップS",
       "ingredients": ["あんみんトマト","ピュアなオイル","めざましコーヒー"],
       "baseGauge": "5"
     },
     "drifblim": {
-      "mainSkill": "Stockpile (Charge Strength S)",
+      "mainSkill": "たくわえる(エナジーチャージS)",
       "ingredients": ["ワカクサコーン","ピュアなオイル","ほっこりポテト"],
       "baseGauge": "5"
     },
     "honchkrow": {
-      "mainSkill": "Super Luck (Ingredient Draw S)",
+      "mainSkill": "きょううん(食材セレクトS)",
       "ingredients": ["めざましコーヒー","ワカクサ大豆","げきからハーブ"],
       "baseGauge": "20"
     },
     "spiritomb": {
-      "mainSkill": "Extra Helpful S",
+      "mainSkill": "おてつだいサポートS",
       "ingredients": ["あじわいキノコ","ずっしりカボチャ","ふといながねぎ"],
       "baseGauge": "16"
     },
     "lucario": {
-      "mainSkill": "Dream Shard Magnet S",
+      "mainSkill": "ゆめのかけらゲットS",
       "ingredients": ["ピュアなオイル","ほっこりポテト","とくせんエッグ"],
       "baseGauge": "20"
     },
     "toxicroak": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["ピュアなオイル","マメミート"],
       "baseGauge": "5"
     },
     "abomasnow": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["あんみんトマト","とくせんエッグ","あじわいキノコ"],
       "baseGauge": "5"
     },
     "magnezone": {
-      "mainSkill": "Cooking Power-Up S",
+      "mainSkill": "料理パワーアップS",
       "ingredients": ["ピュアなオイル","げきからハーブ"],
       "baseGauge": "5"
     },
     "togekiss": {
-      "mainSkill": "Metronome",
+      "mainSkill": "ゆびをふる",
       "ingredients": ["とくせんエッグ","あったかジンジャー","リラックスカカオ"],
       "baseGauge": "5"
     },
     "gallade": {
-      "mainSkill": "Extra Helpful S",
+      "mainSkill": "おてつだいサポートS",
       "ingredients": ["とくせんリンゴ","ワカクサコーン","ふといながねぎ"],
       "baseGauge": "5"
     },
     "cresselia": {
-      "mainSkill": "Lunar Blessing (Energy for Everyone S)",
+      "mainSkill": "みかづきのいのり(げんきオールS)",
       "ingredients": ["あったかジンジャー","リラックスカカオ","あんみんトマト"],
       "baseGauge": "30"
     },
     "darkrai": {
-      "mainSkill": "Bad Dreams (Charge Strength M)",
+      "mainSkill": "ナイトメア(エナジーチャージM)",
       "ingredients": ["マメミート"],
       "baseGauge": "20"
     },
     "musharna": {
-      "mainSkill": "Dream Shard Magnet S",
+      "mainSkill": "ゆめのかけらゲットS",
       "ingredients": ["モーモーミルク","あまいミツ","めざましコーヒー"],
       "baseGauge": "20"
     },
     "crustle": {
-      "mainSkill": "Ingredient Draw S",
+      "mainSkill": "食材セレクトS",
       "ingredients": ["つやつやアボカド","ほっこりポテト","ピュアなオイル"],
       "baseGauge": "5"
     },
     "braviary": {
-      "mainSkill": "Berry Burst",
+      "mainSkill": "きのみバースト",
       "ingredients": ["マメミート","ワカクサコーン","めざましコーヒー"],
       "baseGauge": "12"
     },
     "sylveon": {
-      "mainSkill": "Energy for Everyone S",
+      "mainSkill": "げんきオールS",
       "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "dedenne": {
-      "mainSkill": "Tasty Chance S",
+      "mainSkill": "料理チャンスS",
       "ingredients": ["とくせんリンゴ","リラックスカカオ","ワカクサコーン"],
       "baseGauge": "16"
     },
     "gourgeist": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["ずっしりカボチャ","ワカクサ大豆","ほっこりポテト"],
       "baseGauge": "20"
     },
     "vikavolt": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["めざましコーヒー","あじわいキノコ","あまいミツ"],
       "baseGauge": "5"
     },
     "bewear": {
-      "mainSkill": "Charge Strength S",
+      "mainSkill": "エナジーチャージS",
       "ingredients": ["ワカクサコーン","マメミート","とくせんエッグ"],
       "baseGauge": "5"
     },
     "comfey": {
-      "mainSkill": "Energizing Cheer S",
+      "mainSkill": "げんきエールS",
       "ingredients": ["ワカクサコーン","あったかジンジャー","リラックスカカオ"],
       "baseGauge": "16"
     },
     "mimikyu": {
-      "mainSkill": "Disguise (Berry Burst)",
+      "mainSkill": "ばけのかわ(きのみバースト)",
       "ingredients": ["とくせんリンゴ","めざましコーヒー","あじわいキノコ"],
       "baseGauge": "16"
     },
     "cramorant": {
-      "mainSkill": "Tasty Chance S",
+      "mainSkill": "料理チャンスS",
       "ingredients": ["ピュアなオイル","ほっこりポテト","とくせんエッグ"],
       "baseGauge": "16"
     },
     "toxtricity-low": {
-      "mainSkill": "Minus (Cooking Power-Up S)",
+      "mainSkill": "マイナス(料理パワーアップS)",
       "ingredients": ["モーモーミルク","とくせんリンゴ","ふといながねぎ"],
       "baseGauge": "20"
     },
     "toxtricity-amped": {
-      "mainSkill": "Plus (Ingredient Magnet S)",
+      "mainSkill": "プラス(食材ゲットS)",
       "ingredients": ["モーモーミルク","とくせんリンゴ","ふといながねぎ"],
       "baseGauge": "20"
     },
     "meowscarada": {
-      "mainSkill": "Cooking Power-Up S",
+      "mainSkill": "料理パワーアップS",
       "ingredients": ["ほっこりポテト","モーモーミルク","あったかジンジャー"],
       "baseGauge": "5"
     },
     "skeledirge": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["とくせんリンゴ","マメミート","げきからハーブ"],
       "baseGauge": "5"
     },
     "quaquaval": {
-      "mainSkill": "Charge Strength M",
+      "mainSkill": "エナジーチャージM",
       "ingredients": ["ワカクサ大豆","ふといながねぎ","ピュアなオイル"],
       "baseGauge": "5"
     },
     "pawmot": {
-      "mainSkill": "Energy for Everyone S",
+      "mainSkill": "げんきオールS",
       "ingredients": ["リラックスカカオ","モーモーミルク","とくせんエッグ"],
       "baseGauge": "5"
     },
     "clodsire": {
-      "mainSkill": "Charge Energy S",
+      "mainSkill": "げんきチャージS",
       "ingredients": ["リラックスカカオ","めざましコーヒー","ほっこりポテト"],
       "baseGauge": "12"
     },
     "blastoise": {
-      "mainSkill": "Ingredient Magnet S",
+      "mainSkill": "食材ゲットS",
       "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     }
@@ -633,6 +633,8 @@ const finishedPool = document.querySelector("#finishedPool");
 const finishedCount = document.querySelector("#finishedCount");
 const searchInput = document.querySelector("#searchInput");
 const typeFilter = document.querySelector("#typeFilter");
+const ingredientFilter = document.querySelector("#ingredientFilter");
+const ingredientScopeFilter = document.querySelector("#ingredientScopeFilter");
 const moveDialog = document.querySelector("#moveDialog");
 const moveTargets = document.querySelector("#moveTargets");
 const pokemonInfoFields = document.querySelector("#pokemonInfoFields");
@@ -650,18 +652,21 @@ detailButton.addEventListener("click", () => {
 });
 searchInput.addEventListener("input", render);
 typeFilter.addEventListener("change", render);
+ingredientFilter.addEventListener("change", render);
+ingredientScopeFilter.addEventListener("change", render);
 window.addEventListener("resize", () => {
   requestAnimationFrame(syncTierRowHeights);
 });
 document.querySelectorAll("[data-specialty]").forEach(button => {
   button.addEventListener("click", () => {
-    activeSpecialty = button.dataset.specialty;
-    document.querySelectorAll("[data-specialty]").forEach(item => item.classList.toggle("active", item === button));
+    activeSpecialty = activeSpecialty === button.dataset.specialty ? "all" : button.dataset.specialty;
+    document.querySelectorAll("[data-specialty]").forEach(item => item.classList.toggle("active", item.dataset.specialty === activeSpecialty));
     render();
   });
 });
 
 initializeTypeFilter();
+initializeIngredientFilter();
 render();
 
 function loadState() {
@@ -844,7 +849,16 @@ function matchesCurrentFilters(pokemon) {
   const matchesQuery = !query || pokemon.name.includes(query) || pokemon.type.includes(query) || pokemon.specialty.includes(query);
   const matchesSpecialty = activeSpecialty === "all" || pokemon.specialty === activeSpecialty;
   const matchesType = typeFilter.value === "all" || pokemon.type === typeFilter.value;
-  return matchesQuery && matchesSpecialty && matchesType;
+  const matchesIngredient = matchesIngredientFilter(pokemon);
+  return matchesQuery && matchesSpecialty && matchesType && matchesIngredient;
+}
+
+function matchesIngredientFilter(pokemon) {
+  if (ingredientFilter.value === "all") return true;
+  const detail = pokemonDetailData[pokemon.id];
+  const ingredients = Array.isArray(detail?.ingredients) ? detail.ingredients : [];
+  const targetCount = ingredientScopeFilter.value === "first-second" ? 2 : 1;
+  return ingredients.slice(0, targetCount).includes(ingredientFilter.value);
 }
 
 function initializeTypeFilter() {
@@ -854,6 +868,19 @@ function initializeTypeFilter() {
     option.value = type;
     option.textContent = type;
     typeFilter.append(option);
+  });
+}
+
+function initializeIngredientFilter() {
+  const ingredients = [...new Set(
+    Object.values(pokemonDetailData)
+      .flatMap(detail => Array.isArray(detail.ingredients) ? detail.ingredients : []),
+  )].sort((a, b) => a.localeCompare(b, "ja"));
+  ingredients.forEach(ingredient => {
+    const option = document.createElement("option");
+    option.value = ingredient;
+    option.textContent = ingredient;
+    ingredientFilter.append(option);
   });
 }
 

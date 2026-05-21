@@ -2412,25 +2412,28 @@ function getPokemon(id) {
 
 async function exportPng() {
   const scale = 2;
-  const labelWidth = 180;
-  const cardWidth = 96;
+  const labelWidth = 170;
+  const cardWidth = 84;
   const cardHeight = 92;
-  const gap = 10;
-  const width = 1200;
-  const unfinishedExportTiers = state.tiers.map(tier => ({ ...tier, name: `厳選未完了 ${tier.name}` }));
-  const compromiseExportTiers = state.compromiseTiers
-    .filter(tier => tier.pokemonIds.length)
-    .map(tier => ({ ...tier, name: `妥協 ${tier.name}` }));
-  const finishedExportTiers = state.finishedTiers
-    .filter(tier => tier.pokemonIds.length)
-    .map(tier => ({ ...tier, name: `完了 ${tier.name}` }));
-  const exportTiers = [...unfinishedExportTiers, ...compromiseExportTiers, ...finishedExportTiers];
-  const cardsPerLine = Math.floor((width - 40 - labelWidth - gap * 2) / (cardWidth + gap));
-  const rowHeights = exportTiers.map(tier => {
-    const lineCount = Math.max(1, Math.ceil(tier.pokemonIds.length / cardsPerLine));
-    return 24 + lineCount * cardHeight + (lineCount - 1) * 6;
+  const gap = 8;
+  const width = 1600;
+  const tableX = 20;
+  const tableWidth = width - tableX * 2;
+  const statusColumnWidth = Math.floor((tableWidth - labelWidth) / 3);
+  const headerHeight = 44;
+  const cardsPerLine = Math.max(1, Math.floor((statusColumnWidth - gap * 2) / (cardWidth + gap)));
+  const rowHeights = state.tiers.map((tier, index) => {
+    const compromiseTier = state.compromiseTiers[index] || { pokemonIds: [] };
+    const finishedTier = state.finishedTiers[index] || { pokemonIds: [] };
+    const maxLineCount = Math.max(
+      1,
+      Math.ceil(tier.pokemonIds.length / cardsPerLine),
+      Math.ceil(compromiseTier.pokemonIds.length / cardsPerLine),
+      Math.ceil(finishedTier.pokemonIds.length / cardsPerLine),
+    );
+    return 24 + maxLineCount * cardHeight + (maxLineCount - 1) * 6;
   });
-  const height = 74 + rowHeights.reduce((total, rowHeight) => total + rowHeight, 0) + 24;
+  const height = 74 + headerHeight + rowHeights.reduce((total, rowHeight) => total + rowHeight, 0) + 24;
   const canvas = document.createElement("canvas");
   canvas.width = width * scale;
   canvas.height = height * scale;
@@ -2446,37 +2449,43 @@ async function exportPng() {
   ctx.fillText(new Date().toLocaleDateString("ja-JP"), 24, 64);
 
   let y = 74;
-  for (let rowIndex = 0; rowIndex < exportTiers.length; rowIndex += 1) {
-    const tier = exportTiers[rowIndex];
+  const headers = ["Tier", "厳選未完了", "妥協個体あり", "厳選完了"];
+  const headerWidths = [labelWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth];
+  let headerX = tableX;
+  ctx.fillStyle = "#eef2f6";
+  roundedRect(ctx, tableX, y, tableWidth, headerHeight, 8);
+  ctx.fill();
+  ctx.fillStyle = "#17202a";
+  ctx.font = "800 16px system-ui, sans-serif";
+  ctx.textAlign = "center";
+  headers.forEach((header, index) => {
+    ctx.fillText(header, headerX + headerWidths[index] / 2, y + 28);
+    headerX += headerWidths[index];
+  });
+  y += headerHeight;
+
+  for (let rowIndex = 0; rowIndex < state.tiers.length; rowIndex += 1) {
+    const tier = state.tiers[rowIndex];
+    const compromiseTier = state.compromiseTiers[rowIndex] || { pokemonIds: [] };
+    const finishedTier = state.finishedTiers[rowIndex] || { pokemonIds: [] };
     const rowHeight = rowHeights[rowIndex];
     ctx.fillStyle = "#ffffff";
-    roundedRect(ctx, 20, y, width - 40, rowHeight - 8, 8);
+    roundedRect(ctx, tableX, y, tableWidth, rowHeight - 8, 8);
     ctx.fill();
     ctx.fillStyle = tier.color;
-    roundedRect(ctx, 20, y, labelWidth, rowHeight - 8, 8);
+    roundedRect(ctx, tableX, y, labelWidth, rowHeight - 8, 8);
     ctx.fill();
     ctx.fillStyle = "#17202a";
     ctx.font = "800 34px system-ui, sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText(tier.name, 20 + labelWidth / 2, y + 48);
+    ctx.fillText(tier.name, tableX + labelWidth / 2, y + 48);
     if (tier.description) {
       ctx.font = "700 13px system-ui, sans-serif";
-      wrapText(ctx, tier.description, 20 + labelWidth / 2, y + 68, labelWidth - 16, 14);
+      wrapText(ctx, tier.description, tableX + labelWidth / 2, y + 68, labelWidth - 16, 14);
     }
-    ctx.textAlign = "left";
-
-    let x = 20 + labelWidth + gap;
-    let innerY = y + 8;
-    for (const pokemonId of tier.pokemonIds) {
-      const pokemon = getPokemon(pokemonId);
-      if (!pokemon) continue;
-      if (x + cardWidth > width - 30) {
-        x = 20 + labelWidth + gap;
-        innerY += cardHeight + 6;
-      }
-      await drawExportCard(ctx, pokemon, x, innerY, cardWidth, cardHeight);
-      x += cardWidth + gap;
-    }
+    await drawExportCards(ctx, tier.pokemonIds, tableX + labelWidth, y, statusColumnWidth, cardWidth, cardHeight, gap);
+    await drawExportCards(ctx, compromiseTier.pokemonIds, tableX + labelWidth + statusColumnWidth, y, statusColumnWidth, cardWidth, cardHeight, gap);
+    await drawExportCards(ctx, finishedTier.pokemonIds, tableX + labelWidth + statusColumnWidth * 2, y, statusColumnWidth, cardWidth, cardHeight, gap);
     y += rowHeight;
   }
 
@@ -2484,6 +2493,21 @@ async function exportPng() {
   link.download = "pokesuri-tier.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
+}
+
+async function drawExportCards(ctx, pokemonIds, x, y, columnWidth, cardWidth, cardHeight, gap) {
+  let cardX = x + gap;
+  let cardY = y + 8;
+  for (const pokemonId of pokemonIds) {
+    const pokemon = getPokemon(pokemonId);
+    if (!pokemon) continue;
+    if (cardX + cardWidth > x + columnWidth - gap) {
+      cardX = x + gap;
+      cardY += cardHeight + 6;
+    }
+    await drawExportCard(ctx, pokemon, cardX, cardY, cardWidth, cardHeight);
+    cardX += cardWidth + gap;
+  }
 }
 
 async function drawExportCard(ctx, pokemon, x, y, width, height) {

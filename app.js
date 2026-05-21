@@ -854,7 +854,7 @@ function matchesCurrentFilters(pokemon) {
 }
 
 function matchesIngredientFilter(pokemon) {
-  if (ingredientFilter.value === "all") return true;
+  if (ingredientScopeFilter.value === "all" || ingredientFilter.value === "all") return true;
   const detail = pokemonDetailData[pokemon.id];
   const ingredients = Array.isArray(detail?.ingredients) ? detail.ingredients : [];
   const targetCount = ingredientScopeFilter.value === "first-second" ? 2 : 1;

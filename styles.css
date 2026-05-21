@@ -282,6 +282,8 @@ button:active {
   min-height: 32px;
   padding: 0 12px;
   border-radius: 6px;
+  border: 0;
+  background: transparent;
   font-size: 13px;
   text-align: left;
 }
@@ -429,6 +431,7 @@ button:active {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0 12px;
+  background: rgba(255, 255, 255, 0.24);
 }
 
 #typeFilter,
@@ -441,7 +444,7 @@ button:active {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0 10px;
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.24);
   color: var(--ink);
   font: inherit;
 }

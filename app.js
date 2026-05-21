@@ -1784,16 +1784,20 @@ const typeFilter = document.querySelector("#typeFilter");
 const fieldFilter = document.querySelector("#fieldFilter");
 const ingredientFilter = document.querySelector("#ingredientFilter");
 const ingredientScopeFilter = document.querySelector("#ingredientScopeFilter");
+const filterPanel = document.querySelector("#filterPanelBody");
+const filterToggleButton = document.querySelector("#filterToggleButton");
 const moveDialog = document.querySelector("#moveDialog");
 const moveTargets = document.querySelector("#moveTargets");
 const pokemonInfoFields = document.querySelector("#pokemonInfoFields");
 const dialogPokemonName = document.querySelector("#dialogPokemonName");
 const detailButton = document.querySelector("#detailButton");
 const mobileDragQuery = window.matchMedia("(max-width: 900px)");
+const FILTER_PANEL_OPEN_KEY = "pokesuri-tier-maker-filters-open";
 
 document.querySelector("#addTierButton").addEventListener("click", addTier);
 document.querySelector("#resetButton").addEventListener("click", resetState);
 document.querySelector("#exportButton").addEventListener("click", exportPng);
+filterToggleButton.addEventListener("click", toggleFilterPanel);
 detailButton.addEventListener("click", () => {
   const pokemon = getPokemon(activePokemonId);
   if (pokemon) openPokemonSearch(pokemon);
@@ -1816,6 +1820,7 @@ if (typeof mobileDragQuery.addEventListener === "function") {
 initializeTypeFilter();
 initializeFieldFilter();
 initializeIngredientFilter();
+initializeFilterPanel();
 render();
 
 function loadState() {
@@ -1832,6 +1837,23 @@ function loadState() {
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(serializeState(state)));
+}
+
+function initializeFilterPanel() {
+  const isOpen = localStorage.getItem(FILTER_PANEL_OPEN_KEY) === "1";
+  setFilterPanelOpen(isOpen);
+}
+
+function toggleFilterPanel() {
+  setFilterPanelOpen(!filterPanel.classList.contains("is-open"));
+}
+
+function setFilterPanelOpen(isOpen) {
+  filterPanel.hidden = !isOpen;
+  filterPanel.classList.toggle("is-open", isOpen);
+  filterToggleButton.setAttribute("aria-expanded", String(isOpen));
+  filterToggleButton.textContent = isOpen ? "フィルタを閉じる" : "フィルタ";
+  localStorage.setItem(FILTER_PANEL_OPEN_KEY, isOpen ? "1" : "0");
 }
 
 function render() {

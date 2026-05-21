@@ -463,7 +463,7 @@ button:active {
 }
 
 .pokemon-card {
-  touch-action: none;
+  touch-action: pan-y;
   display: grid;
   justify-items: center;
   gap: 4px;

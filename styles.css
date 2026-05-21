@@ -261,15 +261,15 @@ button:active {
 .filter-panel {
   margin-bottom: 12px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface-2);
-  box-shadow: var(--shadow);
+  border-radius: 10px;
+  background: #eef1f5;
+  box-shadow: none;
 }
 
 .filter-panel-head {
   display: flex;
   justify-content: flex-start;
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-bottom: 1px solid var(--line);
   background: transparent;
 }
@@ -280,16 +280,18 @@ button:active {
   justify-content: space-between;
   width: 100%;
   min-height: 32px;
-  padding: 0 12px;
-  border-radius: 6px;
+  padding: 0 2px;
+  border-radius: 0;
   border: 0;
   background: transparent;
+  color: var(--ink);
   font-size: 13px;
   text-align: left;
 }
 
 .filter-toggle-label {
   flex: 1 1 auto;
+  font-weight: 700;
 }
 
 .filter-toggle-icon {
@@ -301,6 +303,7 @@ button:active {
   border-right: 5px solid transparent;
   border-top: 6px solid currentColor;
   transition: transform 0.18s ease;
+  opacity: 0.72;
 }
 
 .filter-panel.is-open .filter-toggle-icon {
@@ -431,7 +434,7 @@ button:active {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0 12px;
-  background: rgba(255, 255, 255, 0.24);
+  background: #edf1f5;
 }
 
 #typeFilter,
@@ -444,7 +447,7 @@ button:active {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0 10px;
-  background: rgba(255, 255, 255, 0.24);
+  background: #edf1f5;
   color: var(--ink);
   font: inherit;
 }

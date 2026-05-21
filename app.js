@@ -1787,6 +1787,7 @@ const ingredientScopeFilter = document.querySelector("#ingredientScopeFilter");
 const filterPanel = document.querySelector(".filter-panel");
 const filterPanelBody = document.querySelector("#filterPanelBody");
 const filterToggleButton = document.querySelector("#filterToggleButton");
+const filterToggleLabel = document.querySelector(".filter-toggle-label");
 const moveDialog = document.querySelector("#moveDialog");
 const moveTargets = document.querySelector("#moveTargets");
 const pokemonInfoFields = document.querySelector("#pokemonInfoFields");
@@ -1853,7 +1854,8 @@ function setFilterPanelOpen(isOpen) {
   filterPanelBody.hidden = !isOpen;
   filterPanel.classList.toggle("is-open", isOpen);
   filterToggleButton.setAttribute("aria-expanded", String(isOpen));
-  filterToggleButton.textContent = isOpen ? "フィルタを閉じる" : "フィルタ";
+  filterToggleLabel.textContent = "フィルタ";
+  filterToggleButton.setAttribute("aria-label", isOpen ? "フィルタを閉じる" : "フィルタを開く");
   localStorage.setItem(FILTER_PANEL_OPEN_KEY, isOpen ? "1" : "0");
 }
 

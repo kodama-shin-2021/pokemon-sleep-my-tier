@@ -1978,11 +1978,13 @@ function matchesFieldFilter(pokemon) {
 }
 
 function matchesIngredientFilter(pokemon) {
-  if (ingredientScopeFilter.value === "all" || ingredientFilter.value === "all") return true;
+  if (ingredientFilter.value === "all") return true;
   const detail = pokemonDetailData[pokemon.id];
   const ingredients = Array.isArray(detail?.ingredients) ? detail.ingredients : [];
-  const targetCount = ingredientScopeFilter.value === "first-second" ? 2 : 1;
-  return ingredients.slice(0, targetCount).includes(ingredientFilter.value);
+  const targetIngredients = ingredientScopeFilter.value === "all"
+    ? ingredients
+    : ingredients.slice(0, ingredientScopeFilter.value === "first-second" ? 2 : 1);
+  return targetIngredients.includes(ingredientFilter.value);
 }
 
 function initializeTypeFilter() {

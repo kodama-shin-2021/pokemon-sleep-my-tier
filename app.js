@@ -1779,6 +1779,7 @@ const compromiseCount = document.querySelector("#compromiseCount");
 const finishedPool = document.querySelector("#finishedPool");
 const finishedCount = document.querySelector("#finishedCount");
 const searchInput = document.querySelector("#searchInput");
+const specialtyFilter = document.querySelector("#specialtyFilter");
 const typeFilter = document.querySelector("#typeFilter");
 const fieldFilter = document.querySelector("#fieldFilter");
 const ingredientFilter = document.querySelector("#ingredientFilter");
@@ -1789,7 +1790,6 @@ const pokemonInfoFields = document.querySelector("#pokemonInfoFields");
 const dialogPokemonName = document.querySelector("#dialogPokemonName");
 const detailButton = document.querySelector("#detailButton");
 const mobileDragQuery = window.matchMedia("(max-width: 900px)");
-let activeSpecialty = "all";
 
 document.querySelector("#addTierButton").addEventListener("click", addTier);
 document.querySelector("#resetButton").addEventListener("click", resetState);
@@ -1800,6 +1800,7 @@ detailButton.addEventListener("click", () => {
   moveDialog.close();
 });
 searchInput.addEventListener("input", render);
+specialtyFilter.addEventListener("change", render);
 typeFilter.addEventListener("change", render);
 fieldFilter.addEventListener("change", render);
 ingredientFilter.addEventListener("change", render);
@@ -1812,14 +1813,6 @@ if (typeof mobileDragQuery.addEventListener === "function") {
 } else {
   mobileDragQuery.addListener(updatePokemonCardDragState);
 }
-document.querySelectorAll("[data-specialty]").forEach(button => {
-  button.addEventListener("click", () => {
-    activeSpecialty = activeSpecialty === button.dataset.specialty ? "all" : button.dataset.specialty;
-    document.querySelectorAll("[data-specialty]").forEach(item => item.classList.toggle("active", item.dataset.specialty === activeSpecialty));
-    render();
-  });
-});
-
 initializeTypeFilter();
 initializeFieldFilter();
 initializeIngredientFilter();
@@ -2003,7 +1996,7 @@ function syncTierRowHeights() {
 function matchesCurrentFilters(pokemon) {
   const query = searchInput.value.trim();
   const matchesQuery = !query || pokemon.name.includes(query) || pokemon.type.includes(query) || pokemon.specialty.includes(query);
-  const matchesSpecialty = activeSpecialty === "all" || pokemon.specialty === activeSpecialty;
+  const matchesSpecialty = specialtyFilter.value === "all" || pokemon.specialty === specialtyFilter.value;
   const matchesType = typeFilter.value === "all" || pokemon.type === typeFilter.value;
   const matchesField = matchesFieldFilter(pokemon);
   const matchesIngredient = matchesIngredientFilter(pokemon);

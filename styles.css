@@ -380,31 +380,8 @@ button:active {
   padding: 0 12px;
 }
 
-.filter-row {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 6px;
-  min-height: 40px;
-  align-items: center;
-  overflow-x: auto;
-}
-
-.filter-chip {
-  flex: 0 0 auto;
-  min-height: 32px;
-  padding: 0 12px;
-  border-radius: 6px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.filter-chip.active {
-  border-color: var(--accent);
-  background: rgba(37, 111, 143, 0.1);
-  color: var(--accent);
-}
-
 #typeFilter,
+#specialtyFilter,
 #fieldFilter,
 #ingredientFilter,
 #ingredientScopeFilter {

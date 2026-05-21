@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ポケスリ My厳選Tier</title>
-    <link rel="stylesheet" href="styles.css?v=20260521-5" />
+    <link rel="stylesheet" href="styles.css?v=20260521-6" />
   </head>
   <body>
     <div class="app-shell">
@@ -28,16 +28,16 @@
       </header>
 
       <div class="tier-filter-bar">
-        <div class="filter-field filter-specialty">
+        <label class="filter-field filter-specialty">
           <span>得意</span>
-          <div class="filter-row" aria-label="得意カテゴリ">
-            <button class="filter-chip active" type="button" data-specialty="all">すべて</button>
-            <button class="filter-chip" type="button" data-specialty="きのみ">きのみ</button>
-            <button class="filter-chip" type="button" data-specialty="食材">食材</button>
-            <button class="filter-chip" type="button" data-specialty="スキル">スキル</button>
-            <button class="filter-chip" type="button" data-specialty="オール">オール</button>
-          </div>
-        </div>
+          <select id="specialtyFilter" aria-label="得意カテゴリで絞り込み">
+            <option value="all">すべて</option>
+            <option value="きのみ">きのみ</option>
+            <option value="食材">食材</option>
+            <option value="スキル">スキル</option>
+            <option value="オール">オール</option>
+          </select>
+        </label>
         <label class="filter-field">
           <span>タイプ</span>
           <select id="typeFilter" aria-label="タイプで絞り込み">

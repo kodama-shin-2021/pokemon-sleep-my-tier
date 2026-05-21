@@ -95,7 +95,7 @@ const defaultTiers = [
   {
     id: createId(),
     name: "A",
-    description: "誰もいないときボナサブを投げる",
+    description: "ボナサブ要員",
     color: "#b8d98b",
     pokemonIds: ids("sylveon glaceon toxicroak swalot houndoom flareon golem primeape dugtrio wigglytuff arbok mr-mime abomasnow quagsire mimikyu braviary darkrai plusle crustle spheal-holiday ribombee latias sandslash onix"),
   },
@@ -2655,7 +2655,7 @@ function normalizeTiers(tiers) {
   return tiers.map(tier => ({
     id: tier.id || createId(),
     name: tier.name || " ",
-    description: tier.description || getDefaultTierDescription(tier.name),
+    description: normalizeTierDescription(tier.name, tier.description),
     color: tier.color || "#d5dce5",
     pokemonIds: uniqueKnownIds(tier.pokemonIds, knownIds),
   }));
@@ -2684,7 +2684,7 @@ function normalizeStatusTiers(parsed, status) {
     return {
       id: saved?.id || defaultTier?.id || createId(),
       name: tier.name || " ",
-      description: tier.description || getDefaultTierDescription(tier.name),
+      description: normalizeTierDescription(tier.name, tier.description),
       color: tier.color || "#d5dce5",
       pokemonIds: uniqueKnownIds(saved?.pokemonIds, knownIds),
     };
@@ -2702,6 +2702,13 @@ function getKnownPokemonIds() {
 
 function getDefaultTierDescription(name) {
   return defaultTiers.find(tier => tier.name === name)?.description || "";
+}
+
+function normalizeTierDescription(name, description) {
+  const fallback = getDefaultTierDescription(name);
+  if (!description) return fallback;
+  if (name === "A" && description === "誰もいないときボナサブを投げる") return "ボナサブ要員";
+  return description;
 }
 
 function ids(value) {

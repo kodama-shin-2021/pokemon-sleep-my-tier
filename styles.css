@@ -240,7 +240,7 @@ button:active {
 
 .tier-filter-bar {
   display: grid;
-  grid-template-columns: minmax(190px, 1fr) minmax(390px, 2fr) repeat(4, minmax(125px, 1fr));
+  grid-template-columns: minmax(390px, 2fr) repeat(4, minmax(125px, 1fr)) minmax(220px, 1.2fr);
   gap: 12px;
   align-items: end;
   margin-bottom: 12px;
@@ -428,12 +428,12 @@ button:active {
     min-width: 0;
   }
 
-  .filter-search {
-    grid-column: span 1;
-  }
-
   .filter-specialty {
     grid-column: span 2;
+  }
+
+  .filter-search {
+    grid-column: span 1;
   }
 }
 

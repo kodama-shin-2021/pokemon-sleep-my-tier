@@ -1040,15 +1040,6 @@ function openMoveDialog(pokemonId, currentTierId = null) {
     appendStatusMoveButtons(pokemonId, "finished", "完了");
   }
 
-  const poolButton = document.createElement("button");
-  poolButton.type = "button";
-  poolButton.textContent = "未配置へ戻す";
-  poolButton.addEventListener("click", () => {
-    removePokemonFromAllLists(pokemonId);
-    moveDialog.close();
-    render();
-  });
-  moveTargets.append(poolButton);
   moveDialog.showModal();
 }
 

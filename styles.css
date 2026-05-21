@@ -268,17 +268,41 @@ button:active {
 
 .filter-panel-head {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   padding: 10px 12px;
   border-bottom: 1px solid var(--line);
   background: var(--surface-2);
 }
 
 .filter-toggle-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
   min-height: 32px;
   padding: 0 12px;
-  border-radius: 999px;
+  border-radius: 6px;
   font-size: 13px;
+  text-align: left;
+}
+
+.filter-toggle-label {
+  flex: 1 1 auto;
+}
+
+.filter-toggle-icon {
+  flex: 0 0 auto;
+  width: 0;
+  height: 0;
+  margin-left: 10px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid currentColor;
+  transition: transform 0.18s ease;
+}
+
+.filter-panel.is-open .filter-toggle-icon {
+  transform: rotate(180deg);
 }
 
 .filter-panel:not(.is-open) .filter-panel-head {

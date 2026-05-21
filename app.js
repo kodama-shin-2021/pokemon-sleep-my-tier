@@ -1784,7 +1784,8 @@ const typeFilter = document.querySelector("#typeFilter");
 const fieldFilter = document.querySelector("#fieldFilter");
 const ingredientFilter = document.querySelector("#ingredientFilter");
 const ingredientScopeFilter = document.querySelector("#ingredientScopeFilter");
-const filterPanel = document.querySelector("#filterPanelBody");
+const filterPanel = document.querySelector(".filter-panel");
+const filterPanelBody = document.querySelector("#filterPanelBody");
 const filterToggleButton = document.querySelector("#filterToggleButton");
 const moveDialog = document.querySelector("#moveDialog");
 const moveTargets = document.querySelector("#moveTargets");
@@ -1849,7 +1850,7 @@ function toggleFilterPanel() {
 }
 
 function setFilterPanelOpen(isOpen) {
-  filterPanel.hidden = !isOpen;
+  filterPanelBody.hidden = !isOpen;
   filterPanel.classList.toggle("is-open", isOpen);
   filterToggleButton.setAttribute("aria-expanded", String(isOpen));
   filterToggleButton.textContent = isOpen ? "フィルタを閉じる" : "フィルタ";

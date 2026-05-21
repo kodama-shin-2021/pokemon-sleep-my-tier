@@ -80,17 +80,6 @@ button:active {
   font-weight: 700;
 }
 
-.header-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.header-actions button {
-  padding: 0 14px;
-}
-
 .primary-button {
   background: var(--accent);
   border-color: var(--accent);
@@ -159,6 +148,18 @@ button:active {
 
 .site-footer p {
   margin: 0;
+}
+
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.page-actions button {
+  padding: 0 14px;
 }
 
 .workspace {
@@ -621,9 +622,10 @@ dialog h2 {
     align-items: start;
   }
 
-  .header-actions {
+  .page-actions {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-content: stretch;
   }
 
   .workspace {

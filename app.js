@@ -135,487 +135,487 @@ const defaultCompromiseTierByName = new Map(defaultCompromiseTiers.map(tier => [
 const pokemonDetailData = {
     "venusaur": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Honey / Snoozy Tomato / Soft Potato",
+      "ingredients": ["あまいミツ","あんみんトマト","ほっこりポテト"],
       "baseGauge": "5"
     },
     "charizard": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Bean Sausage / Warming Ginger / Fiery Herb",
+      "ingredients": ["マメミート","あったかジンジャー","げきからハーブ"],
       "baseGauge": "5"
     },
     "butterfree": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Honey / Snoozy Tomato / Greengrass Soybeans",
+      "ingredients": ["あまいミツ","あんみんトマト","ワカクサ大豆"],
       "baseGauge": "5"
     },
     "raticate": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Fancy Apple / Greengrass Soybeans / Bean Sausage",
+      "ingredients": ["とくせんリンゴ","ワカクサ大豆","マメミート"],
       "baseGauge": "12"
     },
     "arbok": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Bean Sausage / Fancy Egg / Fiery Herb",
+      "ingredients": ["マメミート","とくせんエッグ","げきからハーブ"],
       "baseGauge": "12"
     },
     "pikachu-halloween": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Fancy Apple / Fancy Egg / Warming Ginger",
+      "ingredients": ["とくせんリンゴ","とくせんエッグ","あったかジンジャー"],
       "baseGauge": "7"
     },
     "pikachu-holiday": {
       "mainSkill": "Dream Shard Magnet S",
-      "ingredients": "Fancy Apple / Fancy Egg / Warming Ginger",
+      "ingredients": ["とくせんリンゴ","とくせんエッグ","あったかジンジャー"],
       "baseGauge": "7"
     },
     "raichu": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Fancy Apple / Fancy Egg / Warming Ginger",
+      "ingredients": ["とくせんリンゴ","とくせんエッグ","あったかジンジャー"],
       "baseGauge": "7"
     },
     "clefable": {
       "mainSkill": "Metronome",
-      "ingredients": "Fancy Apple / Honey / Greengrass Soybeans",
+      "ingredients": ["とくせんリンゴ","あまいミツ","ワカクサ大豆"],
       "baseGauge": "7"
     },
     "wigglytuff": {
       "mainSkill": "Energy for Everyone S",
-      "ingredients": "Honey / Pure Oil / Soothing Cacao",
+      "ingredients": ["あまいミツ","ピュアなオイル","リラックスカカオ"],
       "baseGauge": "16"
     },
     "dugtrio": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Snoozy Tomato / Large Leek / Greengrass Soybeans",
+      "ingredients": ["あんみんトマト","ふといながねぎ","ワカクサ大豆"],
       "baseGauge": "12"
     },
     "persian": {
       "mainSkill": "Dream Shard Magnet S",
-      "ingredients": "Moomoo Milk / Bean Sausage",
+      "ingredients": ["モーモーミルク","マメミート"],
       "baseGauge": "12"
     },
     "golduck": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Soothing Cacao / Fancy Apple / Bean Sausage",
+      "ingredients": ["リラックスカカオ","とくせんリンゴ","マメミート"],
       "baseGauge": "12"
     },
     "primeape": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Bean Sausage / Tasty Mushroom / Honey",
+      "ingredients": ["マメミート","あじわいキノコ","あまいミツ"],
       "baseGauge": "12"
     },
     "arcanine": {
       "mainSkill": "Extra Helpful S",
-      "ingredients": "Fiery Herb / Bean Sausage / Moomoo Milk",
+      "ingredients": ["げきからハーブ","マメミート","モーモーミルク"],
       "baseGauge": "5"
     },
     "victreebel": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Snoozy Tomato / Soft Potato / Large Leek",
+      "ingredients": ["あんみんトマト","ほっこりポテト","ふといながねぎ"],
       "baseGauge": "5"
     },
     "golem": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Greengrass Soybeans / Tasty Mushroom / Soft Potato",
+      "ingredients": ["ワカクサ大豆","あじわいキノコ","ほっこりポテト"],
       "baseGauge": "5"
     },
     "slowbro": {
       "mainSkill": "Energizing Cheer S",
-      "ingredients": "Soothing Cacao / Slowpoke Tail / Snoozy Tomato",
+      "ingredients": ["リラックスカカオ","おいしいシッポ","あんみんトマト"],
       "baseGauge": "12"
     },
     "farfetchd": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Large Leek / Bean Sausage / Warming Ginger",
+      "ingredients": ["ふといながねぎ","マメミート","あったかジンジャー"],
       "baseGauge": "16"
     },
     "dodrio": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Greengrass Soybeans / Soothing Cacao / Bean Sausage",
+      "ingredients": ["ワカクサ大豆","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "gengar": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Fiery Herb / Tasty Mushroom / Pure Oil",
+      "ingredients": ["げきからハーブ","あじわいキノコ","ピュアなオイル"],
       "baseGauge": "5"
     },
     "onix": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Snoozy Tomato / Bean Sausage / Soft Potato",
+      "ingredients": ["あんみんトマト","マメミート","ほっこりポテト"],
       "baseGauge": "16"
     },
     "marowak": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Warming Ginger / Soothing Cacao",
+      "ingredients": ["あったかジンジャー","リラックスカカオ"],
       "baseGauge": "12"
     },
     "kangaskhan": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Warming Ginger / Soft Potato / Greengrass Soybeans",
+      "ingredients": ["あったかジンジャー","ほっこりポテト","ワカクサ大豆"],
       "baseGauge": "16"
     },
     "mr-mime": {
       "mainSkill": "Mimic (Skill Copy)",
-      "ingredients": "Snoozy Tomato / Soft Potato / Large Leek",
+      "ingredients": ["あんみんトマト","ほっこりポテト","ふといながねぎ"],
       "baseGauge": "12"
     },
     "pinsir": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Honey / Fancy Apple / Bean Sausage",
+      "ingredients": ["あまいミツ","とくせんリンゴ","マメミート"],
       "baseGauge": "16"
     },
     "eevee-holiday": {
       "mainSkill": "Dream Shard Magnet S",
-      "ingredients": "Moomoo Milk / Soothing Cacao",
+      "ingredients": ["モーモーミルク","リラックスカカオ"],
       "baseGauge": "5"
     },
     "eevee-halloween": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "vaporeon": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "jolteon": {
       "mainSkill": "Extra Helpful S",
-      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "flareon": {
       "mainSkill": "Cooking Power-Up S",
-      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "dragonite": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Fiery Herb / Greengrass Corn / Pure Oil",
+      "ingredients": ["げきからハーブ","ワカクサコーン","ピュアなオイル"],
       "baseGauge": "5"
     },
     "meganium": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Soothing Cacao / Honey / Large Leek",
+      "ingredients": ["リラックスカカオ","あまいミツ","ふといながねぎ"],
       "baseGauge": "5"
     },
     "typhlosion": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Warming Ginger / Fiery Herb / Pure Oil",
+      "ingredients": ["あったかジンジャー","げきからハーブ","ピュアなオイル"],
       "baseGauge": "5"
     },
     "feraligatr": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Bean Sausage / Pure Oil",
+      "ingredients": ["マメミート","ピュアなオイル"],
       "baseGauge": "5"
     },
     "xatu": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Fancy Egg / Soothing Cacao / Fancy Apple",
+      "ingredients": ["とくせんエッグ","リラックスカカオ","とくせんリンゴ"],
       "baseGauge": "12"
     },
     "ampharos": {
       "mainSkill": "Charge Strength M",
-      "ingredients": "Fiery Herb / Fancy Egg",
+      "ingredients": ["げきからハーブ","とくせんエッグ"],
       "baseGauge": "5"
     },
     "sudowoodo": {
       "mainSkill": "Charge Strength M",
-      "ingredients": "Snoozy Tomato / Greengrass Soybeans / Tasty Mushroom",
+      "ingredients": ["あんみんトマト","ワカクサ大豆","あじわいキノコ"],
       "baseGauge": "7"
     },
     "espeon": {
       "mainSkill": "Charge Strength M",
-      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "umbreon": {
       "mainSkill": "Moonlight (Charge Energy S)",
-      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "slowking": {
       "mainSkill": "Energizing Cheer S",
-      "ingredients": "Soothing Cacao / Slowpoke Tail / Snoozy Tomato",
+      "ingredients": ["リラックスカカオ","おいしいシッポ","あんみんトマト"],
       "baseGauge": "5"
     },
     "wobbuffet": {
       "mainSkill": "Energizing Cheer S",
-      "ingredients": "Fancy Apple / Tasty Mushroom / Pure Oil",
+      "ingredients": ["とくせんリンゴ","あじわいキノコ","ピュアなオイル"],
       "baseGauge": "7"
     },
     "steelix": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Snoozy Tomato / Bean Sausage / Soft Potato",
+      "ingredients": ["あんみんトマト","マメミート","ほっこりポテト"],
       "baseGauge": "16"
     },
     "shuckle": {
       "mainSkill": "Berry Juice (Energy for Eneryone S)",
-      "ingredients": "Pure Oil / Rousing Coffee / Honey",
+      "ingredients": ["ピュアなオイル","めざましコーヒー","あまいミツ"],
       "baseGauge": "16"
     },
     "heracross": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Honey / Tasty Mushroom / Bean Sausage",
+      "ingredients": ["あまいミツ","あじわいキノコ","マメミート"],
       "baseGauge": "16"
     },
     "weavile": {
       "mainSkill": "Tasty Chance S",
-      "ingredients": "Bean Sausage / Fancy Egg / Greengrass Soybeans",
+      "ingredients": ["マメミート","とくせんエッグ","ワカクサ大豆"],
       "baseGauge": "16"
     },
     "delibird": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Fancy Egg / Fancy Apple / Soothing Cacao",
+      "ingredients": ["とくせんエッグ","とくせんリンゴ","リラックスカカオ"],
       "baseGauge": "16"
     },
     "houndoom": {
       "mainSkill": "Charge Strength M",
-      "ingredients": "Fiery Herb / Warming Ginger / Large Leek",
+      "ingredients": ["げきからハーブ","あったかジンジャー","ふといながねぎ"],
       "baseGauge": "5"
     },
     "raikou": {
       "mainSkill": "Helper Boost (Electric)",
-      "ingredients": "Bean Sausage / Fiery Herb / Large Leek",
+      "ingredients": ["マメミート","げきからハーブ","ふといながねぎ"],
       "baseGauge": "30"
     },
     "entei": {
       "mainSkill": "Helper Boost (Fire)",
-      "ingredients": "Pure Oil / Snoozy Tomato / Tasty Mushroom",
+      "ingredients": ["ピュアなオイル","あんみんトマト","あじわいキノコ"],
       "baseGauge": "30"
     },
     "suicune": {
       "mainSkill": "Helper Boost (Water)",
-      "ingredients": "Fancy Apple / Pure Oil / Greengrass Corn",
+      "ingredients": ["とくせんリンゴ","ピュアなオイル","ワカクサコーン"],
       "baseGauge": "30"
     },
     "spheal-holiday": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Pure Oil / Bean Sausage / Warming Ginger",
+      "ingredients": ["ピュアなオイル","マメミート","あったかジンジャー"],
       "baseGauge": "5"
     },
     "sceptile": {
       "mainSkill": "Berry Burst",
-      "ingredients": "Fancy Egg / Rousing Coffee / Large Leek",
+      "ingredients": ["とくせんエッグ","めざましコーヒー","ふといながねぎ"],
       "baseGauge": "20"
     },
     "blaziken": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Tasty Mushroom / Greengrass Soybeans / Pure Oil",
+      "ingredients": ["あじわいキノコ","ワカクサ大豆","ピュアなオイル"],
       "baseGauge": "20"
     },
     "swampert": {
       "mainSkill": "Tasty Chance S",
-      "ingredients": "Greengrass Corn / Moomoo Milk / Tasty Mushroom",
+      "ingredients": ["ワカクサコーン","モーモーミルク","あじわいキノコ"],
       "baseGauge": "20"
     },
     "slaking": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Snoozy Tomato / Honey / Fancy Apple",
+      "ingredients": ["あんみんトマト","あまいミツ","とくせんリンゴ"],
       "baseGauge": "5"
     },
     "aggron": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Bean Sausage / Rousing Coffee / Greengrass Soybeans",
+      "ingredients": ["マメミート","めざましコーヒー","ワカクサ大豆"],
       "baseGauge": "5"
     },
     "plusle": {
       "mainSkill": "Plus (Ingredient Magnet S)",
-      "ingredients": "Rousing Coffee / Large Leek / Moomoo Milk",
+      "ingredients": ["めざましコーヒー","ふといながねぎ","モーモーミルク"],
       "baseGauge": "10"
     },
     "swalot": {
       "mainSkill": "Dream Shard Magnet S",
-      "ingredients": "Greengrass Soybeans / Tasty Mushroom / Honey",
+      "ingredients": ["ワカクサ大豆","あじわいキノコ","あまいミツ"],
       "baseGauge": "5"
     },
     "minun": {
       "mainSkill": "Minus (Cooking Power-Up S)",
-      "ingredients": "Honey / Fancy Egg / Moomoo Milk",
+      "ingredients": ["あまいミツ","とくせんエッグ","モーモーミルク"],
       "baseGauge": "10"
     },
     "flygon": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Glossy Avocado / Fiery Herb / Greengrass Soybeans",
+      "ingredients": ["つやつやアボカド","げきからハーブ","ワカクサ大豆"],
       "baseGauge": "20"
     },
     "altaria": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Fancy Egg / Greengrass Soybeans / Fancy Apple",
+      "ingredients": ["とくせんエッグ","ワカクサ大豆","とくせんリンゴ"],
       "baseGauge": "5"
     },
     "banette": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Pure Oil / Warming Ginger / Tasty Mushroom",
+      "ingredients": ["ピュアなオイル","あったかジンジャー","あじわいキノコ"],
       "baseGauge": "5"
     },
     "absol": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Soothing Cacao / Tasty Mushroom / Fancy Apple",
+      "ingredients": ["リラックスカカオ","あじわいキノコ","とくせんリンゴ"],
       "baseGauge": "16"
     },
     "walrein": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Pure Oil / Bean Sausage / Warming Ginger",
+      "ingredients": ["ピュアなオイル","マメミート","あったかジンジャー"],
       "baseGauge": "5"
     },
     "salamence": {
       "mainSkill": "Cooking Power-Up S",
-      "ingredients": "Soft Potato / Warming Ginger / Bean Sausage",
+      "ingredients": ["ほっこりポテト","あったかジンジャー","マメミート"],
       "baseGauge": "5"
     },
     "luxray": {
       "mainSkill": "Cooking Power-Up S",
-      "ingredients": "Snoozy Tomato / Pure Oil / Rousing Coffee",
+      "ingredients": ["あんみんトマト","ピュアなオイル","めざましコーヒー"],
       "baseGauge": "5"
     },
     "drifblim": {
       "mainSkill": "Stockpile (Charge Strength S)",
-      "ingredients": "Greengrass Corn / Pure Oil / Soft Potato",
+      "ingredients": ["ワカクサコーン","ピュアなオイル","ほっこりポテト"],
       "baseGauge": "5"
     },
     "honchkrow": {
       "mainSkill": "Super Luck (Ingredient Draw S)",
-      "ingredients": "Rousing Coffee / Greengrass Soybeans / Fiery Herb",
+      "ingredients": ["めざましコーヒー","ワカクサ大豆","げきからハーブ"],
       "baseGauge": "20"
     },
     "spiritomb": {
       "mainSkill": "Extra Helpful S",
-      "ingredients": "Tasty Mushroom / Plump Pumpkin / Large Leek",
+      "ingredients": ["あじわいキノコ","ずっしりカボチャ","ふといながねぎ"],
       "baseGauge": "16"
     },
     "lucario": {
       "mainSkill": "Dream Shard Magnet S",
-      "ingredients": "Pure Oil / Soft Potato / Fancy Egg",
+      "ingredients": ["ピュアなオイル","ほっこりポテト","とくせんエッグ"],
       "baseGauge": "20"
     },
     "toxicroak": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Pure Oil / Bean Sausage",
+      "ingredients": ["ピュアなオイル","マメミート"],
       "baseGauge": "5"
     },
     "abomasnow": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Snoozy Tomato / Fancy Egg / Tasty Mushroom",
+      "ingredients": ["あんみんトマト","とくせんエッグ","あじわいキノコ"],
       "baseGauge": "5"
     },
     "magnezone": {
       "mainSkill": "Cooking Power-Up S",
-      "ingredients": "Pure Oil / Fiery Herb",
+      "ingredients": ["ピュアなオイル","げきからハーブ"],
       "baseGauge": "5"
     },
     "togekiss": {
       "mainSkill": "Metronome",
-      "ingredients": "Fancy Egg / Warming Ginger / Soothing Cacao",
+      "ingredients": ["とくせんエッグ","あったかジンジャー","リラックスカカオ"],
       "baseGauge": "5"
     },
     "gallade": {
       "mainSkill": "Extra Helpful S",
-      "ingredients": "Fancy Apple / Greengrass Corn / Large Leek",
+      "ingredients": ["とくせんリンゴ","ワカクサコーン","ふといながねぎ"],
       "baseGauge": "5"
     },
     "cresselia": {
       "mainSkill": "Lunar Blessing (Energy for Everyone S)",
-      "ingredients": "Warming Ginger / Soothing Cacao / Snoozy Tomato",
+      "ingredients": ["あったかジンジャー","リラックスカカオ","あんみんトマト"],
       "baseGauge": "30"
     },
     "darkrai": {
       "mainSkill": "Bad Dreams (Charge Strength M)",
-      "ingredients": "Bean Sausage",
+      "ingredients": ["マメミート"],
       "baseGauge": "20"
     },
     "musharna": {
       "mainSkill": "Dream Shard Magnet S",
-      "ingredients": "Moomoo Milk / Honey / Rousing Coffee",
+      "ingredients": ["モーモーミルク","あまいミツ","めざましコーヒー"],
       "baseGauge": "20"
     },
     "crustle": {
       "mainSkill": "Ingredient Draw S",
-      "ingredients": "Glossy Avocado / Soft Potato / Pure Oil",
+      "ingredients": ["つやつやアボカド","ほっこりポテト","ピュアなオイル"],
       "baseGauge": "5"
     },
     "braviary": {
       "mainSkill": "Berry Burst",
-      "ingredients": "Bean Sausage / Greengrass Corn / Rousing Coffee",
+      "ingredients": ["マメミート","ワカクサコーン","めざましコーヒー"],
       "baseGauge": "12"
     },
     "sylveon": {
       "mainSkill": "Energy for Everyone S",
-      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     },
     "dedenne": {
       "mainSkill": "Tasty Chance S",
-      "ingredients": "Fancy Apple / Soothing Cacao / Greengrass Corn",
+      "ingredients": ["とくせんリンゴ","リラックスカカオ","ワカクサコーン"],
       "baseGauge": "16"
     },
     "gourgeist": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Plump Pumpkin / Greengrass Soybeans / Soft Potato",
+      "ingredients": ["ずっしりカボチャ","ワカクサ大豆","ほっこりポテト"],
       "baseGauge": "20"
     },
     "vikavolt": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Rousing Coffee / Tasty Mushroom / Honey",
+      "ingredients": ["めざましコーヒー","あじわいキノコ","あまいミツ"],
       "baseGauge": "5"
     },
     "bewear": {
       "mainSkill": "Charge Strength S",
-      "ingredients": "Greengrass Corn / Bean Sausage / Fancy Egg",
+      "ingredients": ["ワカクサコーン","マメミート","とくせんエッグ"],
       "baseGauge": "5"
     },
     "comfey": {
       "mainSkill": "Energizing Cheer S",
-      "ingredients": "Greengrass Corn / Warming Ginger / Soothing Cacao",
+      "ingredients": ["ワカクサコーン","あったかジンジャー","リラックスカカオ"],
       "baseGauge": "16"
     },
     "mimikyu": {
       "mainSkill": "Disguise (Berry Burst)",
-      "ingredients": "Fancy Apple / Rousing Coffee / Tasty Mushroom",
+      "ingredients": ["とくせんリンゴ","めざましコーヒー","あじわいキノコ"],
       "baseGauge": "16"
     },
     "cramorant": {
       "mainSkill": "Tasty Chance S",
-      "ingredients": "Pure Oil / Soft Potato / Fancy Egg",
+      "ingredients": ["ピュアなオイル","ほっこりポテト","とくせんエッグ"],
       "baseGauge": "16"
     },
     "toxtricity-low": {
       "mainSkill": "Minus (Cooking Power-Up S)",
-      "ingredients": "Moomoo Milk / Fancy Apple / Large Leek",
+      "ingredients": ["モーモーミルク","とくせんリンゴ","ふといながねぎ"],
       "baseGauge": "20"
     },
     "toxtricity-amped": {
       "mainSkill": "Plus (Ingredient Magnet S)",
-      "ingredients": "Moomoo Milk / Fancy Apple / Large Leek",
+      "ingredients": ["モーモーミルク","とくせんリンゴ","ふといながねぎ"],
       "baseGauge": "20"
     },
     "meowscarada": {
       "mainSkill": "Cooking Power-Up S",
-      "ingredients": "Soft Potato / Moomoo Milk / Warming Ginger",
+      "ingredients": ["ほっこりポテト","モーモーミルク","あったかジンジャー"],
       "baseGauge": "5"
     },
     "skeledirge": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Fancy Apple / Bean Sausage / Fiery Herb",
+      "ingredients": ["とくせんリンゴ","マメミート","げきからハーブ"],
       "baseGauge": "5"
     },
     "quaquaval": {
       "mainSkill": "Charge Strength M",
-      "ingredients": "Greengrass Soybeans / Large Leek / Pure Oil",
+      "ingredients": ["ワカクサ大豆","ふといながねぎ","ピュアなオイル"],
       "baseGauge": "5"
     },
     "pawmot": {
       "mainSkill": "Energy for Everyone S",
-      "ingredients": "Soothing Cacao / Moomoo Milk / Fancy Egg",
+      "ingredients": ["リラックスカカオ","モーモーミルク","とくせんエッグ"],
       "baseGauge": "5"
     },
     "clodsire": {
       "mainSkill": "Charge Energy S",
-      "ingredients": "Soothing Cacao / Rousing Coffee / Soft Potato",
+      "ingredients": ["リラックスカカオ","めざましコーヒー","ほっこりポテト"],
       "baseGauge": "12"
     },
     "blastoise": {
       "mainSkill": "Ingredient Magnet S",
-      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "ingredients": ["モーモーミルク","リラックスカカオ","マメミート"],
       "baseGauge": "5"
     }
   };
@@ -1038,10 +1038,15 @@ function renderPokemonInfoFields(pokemon) {
     const span = document.createElement("span");
     span.textContent = labelText;
     const value = document.createElement("strong");
-    value.textContent = detail[key] || "未設定";
+    value.textContent = formatPokemonDetailValue(detail[key]);
     item.append(span, value);
     pokemonInfoFields.append(item);
   });
+}
+
+function formatPokemonDetailValue(value) {
+  if (Array.isArray(value)) return value.length ? value.join(" / ") : "未設定";
+  return value || "未設定";
 }
 
 function appendStatusMoveButtons(pokemonId, status, label) {

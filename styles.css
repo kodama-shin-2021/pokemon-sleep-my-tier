@@ -552,7 +552,7 @@ dialog h2 {
   background: #fbfcfd;
 }
 
-.pokemon-info-fields label {
+.pokemon-info-item {
   display: grid;
   gap: 5px;
 }
@@ -563,16 +563,11 @@ dialog h2 {
   font-weight: 800;
 }
 
-.pokemon-info-fields input,
-.pokemon-info-fields textarea {
-  width: 100%;
-  min-height: 36px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  padding: 7px 9px;
-  background: var(--surface);
+.pokemon-info-item strong {
   color: var(--ink);
-  resize: vertical;
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .move-targets {

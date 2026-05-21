@@ -1,5 +1,5 @@
 const STORAGE_KEY = "pokesuri-tier-maker-state";
-const STORAGE_SCHEMA_VERSION = 3;
+const STORAGE_SCHEMA_VERSION = 4;
 const LEGACY_STORAGE_KEYS = [
   "pokesuri-tier-maker-state-v4",
   "pokesuri-tier-maker-state-v3",
@@ -132,6 +132,493 @@ const defaultCompromiseTiers = defaultTiers.map(tier => ({
   pokemonIds: [],
 }));
 const defaultCompromiseTierByName = new Map(defaultCompromiseTiers.map(tier => [tier.name, tier]));
+const pokemonDetailData = {
+    "venusaur": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Honey / Snoozy Tomato / Soft Potato",
+      "baseGauge": "5"
+    },
+    "charizard": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Bean Sausage / Warming Ginger / Fiery Herb",
+      "baseGauge": "5"
+    },
+    "butterfree": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Honey / Snoozy Tomato / Greengrass Soybeans",
+      "baseGauge": "5"
+    },
+    "raticate": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Fancy Apple / Greengrass Soybeans / Bean Sausage",
+      "baseGauge": "12"
+    },
+    "arbok": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Bean Sausage / Fancy Egg / Fiery Herb",
+      "baseGauge": "12"
+    },
+    "pikachu-halloween": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Fancy Apple / Fancy Egg / Warming Ginger",
+      "baseGauge": "7"
+    },
+    "pikachu-holiday": {
+      "mainSkill": "Dream Shard Magnet S",
+      "ingredients": "Fancy Apple / Fancy Egg / Warming Ginger",
+      "baseGauge": "7"
+    },
+    "raichu": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Fancy Apple / Fancy Egg / Warming Ginger",
+      "baseGauge": "7"
+    },
+    "clefable": {
+      "mainSkill": "Metronome",
+      "ingredients": "Fancy Apple / Honey / Greengrass Soybeans",
+      "baseGauge": "7"
+    },
+    "wigglytuff": {
+      "mainSkill": "Energy for Everyone S",
+      "ingredients": "Honey / Pure Oil / Soothing Cacao",
+      "baseGauge": "16"
+    },
+    "dugtrio": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Snoozy Tomato / Large Leek / Greengrass Soybeans",
+      "baseGauge": "12"
+    },
+    "persian": {
+      "mainSkill": "Dream Shard Magnet S",
+      "ingredients": "Moomoo Milk / Bean Sausage",
+      "baseGauge": "12"
+    },
+    "golduck": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Soothing Cacao / Fancy Apple / Bean Sausage",
+      "baseGauge": "12"
+    },
+    "primeape": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Bean Sausage / Tasty Mushroom / Honey",
+      "baseGauge": "12"
+    },
+    "arcanine": {
+      "mainSkill": "Extra Helpful S",
+      "ingredients": "Fiery Herb / Bean Sausage / Moomoo Milk",
+      "baseGauge": "5"
+    },
+    "victreebel": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Snoozy Tomato / Soft Potato / Large Leek",
+      "baseGauge": "5"
+    },
+    "golem": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Greengrass Soybeans / Tasty Mushroom / Soft Potato",
+      "baseGauge": "5"
+    },
+    "slowbro": {
+      "mainSkill": "Energizing Cheer S",
+      "ingredients": "Soothing Cacao / Slowpoke Tail / Snoozy Tomato",
+      "baseGauge": "12"
+    },
+    "farfetchd": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Large Leek / Bean Sausage / Warming Ginger",
+      "baseGauge": "16"
+    },
+    "dodrio": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Greengrass Soybeans / Soothing Cacao / Bean Sausage",
+      "baseGauge": "5"
+    },
+    "gengar": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Fiery Herb / Tasty Mushroom / Pure Oil",
+      "baseGauge": "5"
+    },
+    "onix": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Snoozy Tomato / Bean Sausage / Soft Potato",
+      "baseGauge": "16"
+    },
+    "marowak": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Warming Ginger / Soothing Cacao",
+      "baseGauge": "12"
+    },
+    "kangaskhan": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Warming Ginger / Soft Potato / Greengrass Soybeans",
+      "baseGauge": "16"
+    },
+    "mr-mime": {
+      "mainSkill": "Mimic (Skill Copy)",
+      "ingredients": "Snoozy Tomato / Soft Potato / Large Leek",
+      "baseGauge": "12"
+    },
+    "pinsir": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Honey / Fancy Apple / Bean Sausage",
+      "baseGauge": "16"
+    },
+    "eevee-holiday": {
+      "mainSkill": "Dream Shard Magnet S",
+      "ingredients": "Moomoo Milk / Soothing Cacao",
+      "baseGauge": "5"
+    },
+    "eevee-halloween": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "baseGauge": "5"
+    },
+    "vaporeon": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "baseGauge": "5"
+    },
+    "jolteon": {
+      "mainSkill": "Extra Helpful S",
+      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "baseGauge": "5"
+    },
+    "flareon": {
+      "mainSkill": "Cooking Power-Up S",
+      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "baseGauge": "5"
+    },
+    "dragonite": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Fiery Herb / Greengrass Corn / Pure Oil",
+      "baseGauge": "5"
+    },
+    "meganium": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Soothing Cacao / Honey / Large Leek",
+      "baseGauge": "5"
+    },
+    "typhlosion": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Warming Ginger / Fiery Herb / Pure Oil",
+      "baseGauge": "5"
+    },
+    "feraligatr": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Bean Sausage / Pure Oil",
+      "baseGauge": "5"
+    },
+    "xatu": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Fancy Egg / Soothing Cacao / Fancy Apple",
+      "baseGauge": "12"
+    },
+    "ampharos": {
+      "mainSkill": "Charge Strength M",
+      "ingredients": "Fiery Herb / Fancy Egg",
+      "baseGauge": "5"
+    },
+    "sudowoodo": {
+      "mainSkill": "Charge Strength M",
+      "ingredients": "Snoozy Tomato / Greengrass Soybeans / Tasty Mushroom",
+      "baseGauge": "7"
+    },
+    "espeon": {
+      "mainSkill": "Charge Strength M",
+      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "baseGauge": "5"
+    },
+    "umbreon": {
+      "mainSkill": "Moonlight (Charge Energy S)",
+      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "baseGauge": "5"
+    },
+    "slowking": {
+      "mainSkill": "Energizing Cheer S",
+      "ingredients": "Soothing Cacao / Slowpoke Tail / Snoozy Tomato",
+      "baseGauge": "5"
+    },
+    "wobbuffet": {
+      "mainSkill": "Energizing Cheer S",
+      "ingredients": "Fancy Apple / Tasty Mushroom / Pure Oil",
+      "baseGauge": "7"
+    },
+    "steelix": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Snoozy Tomato / Bean Sausage / Soft Potato",
+      "baseGauge": "16"
+    },
+    "shuckle": {
+      "mainSkill": "Berry Juice (Energy for Eneryone S)",
+      "ingredients": "Pure Oil / Rousing Coffee / Honey",
+      "baseGauge": "16"
+    },
+    "heracross": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Honey / Tasty Mushroom / Bean Sausage",
+      "baseGauge": "16"
+    },
+    "weavile": {
+      "mainSkill": "Tasty Chance S",
+      "ingredients": "Bean Sausage / Fancy Egg / Greengrass Soybeans",
+      "baseGauge": "16"
+    },
+    "delibird": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Fancy Egg / Fancy Apple / Soothing Cacao",
+      "baseGauge": "16"
+    },
+    "houndoom": {
+      "mainSkill": "Charge Strength M",
+      "ingredients": "Fiery Herb / Warming Ginger / Large Leek",
+      "baseGauge": "5"
+    },
+    "raikou": {
+      "mainSkill": "Helper Boost (Electric)",
+      "ingredients": "Bean Sausage / Fiery Herb / Large Leek",
+      "baseGauge": "30"
+    },
+    "entei": {
+      "mainSkill": "Helper Boost (Fire)",
+      "ingredients": "Pure Oil / Snoozy Tomato / Tasty Mushroom",
+      "baseGauge": "30"
+    },
+    "suicune": {
+      "mainSkill": "Helper Boost (Water)",
+      "ingredients": "Fancy Apple / Pure Oil / Greengrass Corn",
+      "baseGauge": "30"
+    },
+    "spheal-holiday": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Pure Oil / Bean Sausage / Warming Ginger",
+      "baseGauge": "5"
+    },
+    "sceptile": {
+      "mainSkill": "Berry Burst",
+      "ingredients": "Fancy Egg / Rousing Coffee / Large Leek",
+      "baseGauge": "20"
+    },
+    "blaziken": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Tasty Mushroom / Greengrass Soybeans / Pure Oil",
+      "baseGauge": "20"
+    },
+    "swampert": {
+      "mainSkill": "Tasty Chance S",
+      "ingredients": "Greengrass Corn / Moomoo Milk / Tasty Mushroom",
+      "baseGauge": "20"
+    },
+    "slaking": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Snoozy Tomato / Honey / Fancy Apple",
+      "baseGauge": "5"
+    },
+    "aggron": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Bean Sausage / Rousing Coffee / Greengrass Soybeans",
+      "baseGauge": "5"
+    },
+    "plusle": {
+      "mainSkill": "Plus (Ingredient Magnet S)",
+      "ingredients": "Rousing Coffee / Large Leek / Moomoo Milk",
+      "baseGauge": "10"
+    },
+    "swalot": {
+      "mainSkill": "Dream Shard Magnet S",
+      "ingredients": "Greengrass Soybeans / Tasty Mushroom / Honey",
+      "baseGauge": "5"
+    },
+    "minun": {
+      "mainSkill": "Minus (Cooking Power-Up S)",
+      "ingredients": "Honey / Fancy Egg / Moomoo Milk",
+      "baseGauge": "10"
+    },
+    "flygon": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Glossy Avocado / Fiery Herb / Greengrass Soybeans",
+      "baseGauge": "20"
+    },
+    "altaria": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Fancy Egg / Greengrass Soybeans / Fancy Apple",
+      "baseGauge": "5"
+    },
+    "banette": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Pure Oil / Warming Ginger / Tasty Mushroom",
+      "baseGauge": "5"
+    },
+    "absol": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Soothing Cacao / Tasty Mushroom / Fancy Apple",
+      "baseGauge": "16"
+    },
+    "walrein": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Pure Oil / Bean Sausage / Warming Ginger",
+      "baseGauge": "5"
+    },
+    "salamence": {
+      "mainSkill": "Cooking Power-Up S",
+      "ingredients": "Soft Potato / Warming Ginger / Bean Sausage",
+      "baseGauge": "5"
+    },
+    "luxray": {
+      "mainSkill": "Cooking Power-Up S",
+      "ingredients": "Snoozy Tomato / Pure Oil / Rousing Coffee",
+      "baseGauge": "5"
+    },
+    "drifblim": {
+      "mainSkill": "Stockpile (Charge Strength S)",
+      "ingredients": "Greengrass Corn / Pure Oil / Soft Potato",
+      "baseGauge": "5"
+    },
+    "honchkrow": {
+      "mainSkill": "Super Luck (Ingredient Draw S)",
+      "ingredients": "Rousing Coffee / Greengrass Soybeans / Fiery Herb",
+      "baseGauge": "20"
+    },
+    "spiritomb": {
+      "mainSkill": "Extra Helpful S",
+      "ingredients": "Tasty Mushroom / Plump Pumpkin / Large Leek",
+      "baseGauge": "16"
+    },
+    "lucario": {
+      "mainSkill": "Dream Shard Magnet S",
+      "ingredients": "Pure Oil / Soft Potato / Fancy Egg",
+      "baseGauge": "20"
+    },
+    "toxicroak": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Pure Oil / Bean Sausage",
+      "baseGauge": "5"
+    },
+    "abomasnow": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Snoozy Tomato / Fancy Egg / Tasty Mushroom",
+      "baseGauge": "5"
+    },
+    "magnezone": {
+      "mainSkill": "Cooking Power-Up S",
+      "ingredients": "Pure Oil / Fiery Herb",
+      "baseGauge": "5"
+    },
+    "togekiss": {
+      "mainSkill": "Metronome",
+      "ingredients": "Fancy Egg / Warming Ginger / Soothing Cacao",
+      "baseGauge": "5"
+    },
+    "gallade": {
+      "mainSkill": "Extra Helpful S",
+      "ingredients": "Fancy Apple / Greengrass Corn / Large Leek",
+      "baseGauge": "5"
+    },
+    "cresselia": {
+      "mainSkill": "Lunar Blessing (Energy for Everyone S)",
+      "ingredients": "Warming Ginger / Soothing Cacao / Snoozy Tomato",
+      "baseGauge": "30"
+    },
+    "darkrai": {
+      "mainSkill": "Bad Dreams (Charge Strength M)",
+      "ingredients": "Bean Sausage",
+      "baseGauge": "20"
+    },
+    "musharna": {
+      "mainSkill": "Dream Shard Magnet S",
+      "ingredients": "Moomoo Milk / Honey / Rousing Coffee",
+      "baseGauge": "20"
+    },
+    "crustle": {
+      "mainSkill": "Ingredient Draw S",
+      "ingredients": "Glossy Avocado / Soft Potato / Pure Oil",
+      "baseGauge": "5"
+    },
+    "braviary": {
+      "mainSkill": "Berry Burst",
+      "ingredients": "Bean Sausage / Greengrass Corn / Rousing Coffee",
+      "baseGauge": "12"
+    },
+    "sylveon": {
+      "mainSkill": "Energy for Everyone S",
+      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "baseGauge": "5"
+    },
+    "dedenne": {
+      "mainSkill": "Tasty Chance S",
+      "ingredients": "Fancy Apple / Soothing Cacao / Greengrass Corn",
+      "baseGauge": "16"
+    },
+    "gourgeist": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Plump Pumpkin / Greengrass Soybeans / Soft Potato",
+      "baseGauge": "20"
+    },
+    "vikavolt": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Rousing Coffee / Tasty Mushroom / Honey",
+      "baseGauge": "5"
+    },
+    "bewear": {
+      "mainSkill": "Charge Strength S",
+      "ingredients": "Greengrass Corn / Bean Sausage / Fancy Egg",
+      "baseGauge": "5"
+    },
+    "comfey": {
+      "mainSkill": "Energizing Cheer S",
+      "ingredients": "Greengrass Corn / Warming Ginger / Soothing Cacao",
+      "baseGauge": "16"
+    },
+    "mimikyu": {
+      "mainSkill": "Disguise (Berry Burst)",
+      "ingredients": "Fancy Apple / Rousing Coffee / Tasty Mushroom",
+      "baseGauge": "16"
+    },
+    "cramorant": {
+      "mainSkill": "Tasty Chance S",
+      "ingredients": "Pure Oil / Soft Potato / Fancy Egg",
+      "baseGauge": "16"
+    },
+    "toxtricity-low": {
+      "mainSkill": "Minus (Cooking Power-Up S)",
+      "ingredients": "Moomoo Milk / Fancy Apple / Large Leek",
+      "baseGauge": "20"
+    },
+    "toxtricity-amped": {
+      "mainSkill": "Plus (Ingredient Magnet S)",
+      "ingredients": "Moomoo Milk / Fancy Apple / Large Leek",
+      "baseGauge": "20"
+    },
+    "meowscarada": {
+      "mainSkill": "Cooking Power-Up S",
+      "ingredients": "Soft Potato / Moomoo Milk / Warming Ginger",
+      "baseGauge": "5"
+    },
+    "skeledirge": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Fancy Apple / Bean Sausage / Fiery Herb",
+      "baseGauge": "5"
+    },
+    "quaquaval": {
+      "mainSkill": "Charge Strength M",
+      "ingredients": "Greengrass Soybeans / Large Leek / Pure Oil",
+      "baseGauge": "5"
+    },
+    "pawmot": {
+      "mainSkill": "Energy for Everyone S",
+      "ingredients": "Soothing Cacao / Moomoo Milk / Fancy Egg",
+      "baseGauge": "5"
+    },
+    "clodsire": {
+      "mainSkill": "Charge Energy S",
+      "ingredients": "Soothing Cacao / Rousing Coffee / Soft Potato",
+      "baseGauge": "12"
+    },
+    "blastoise": {
+      "mainSkill": "Ingredient Magnet S",
+      "ingredients": "Moomoo Milk / Soothing Cacao / Bean Sausage",
+      "baseGauge": "5"
+    }
+  };
 const newPokemonIds = new Set([]);
 
 let state = loadState();
@@ -540,37 +1027,21 @@ function openMoveDialog(pokemonId, currentTierId = null) {
 
 function renderPokemonInfoFields(pokemon) {
   pokemonInfoFields.innerHTML = "";
-  const detail = getPokemonDetail(pokemon.id);
+  const detail = pokemonDetailData[pokemon.id] || {};
   [
-    ["mainSkill", "メインスキル", "例: エナジーチャージS"],
-    ["ingredients", "食材構成", "例: ミルク / カカオ / カカオ"],
-    ["baseGauge", "種ポケモンのゲージ", "例: 5"],
-  ].forEach(([key, labelText, placeholder]) => {
-    const label = document.createElement("label");
+    ["mainSkill", "メインスキル"],
+    ["ingredients", "食材構成"],
+    ["baseGauge", "種ポケモンのゲージ"],
+  ].forEach(([key, labelText]) => {
+    const item = document.createElement("div");
+    item.className = "pokemon-info-item";
     const span = document.createElement("span");
     span.textContent = labelText;
-    const input = document.createElement(key === "ingredients" ? "textarea" : "input");
-    input.value = detail[key] || "";
-    input.placeholder = placeholder;
-    if (key === "ingredients") input.rows = 2;
-    input.addEventListener("input", () => {
-      updatePokemonDetail(pokemon.id, key, input.value);
-    });
-    label.append(span, input);
-    pokemonInfoFields.append(label);
+    const value = document.createElement("strong");
+    value.textContent = detail[key] || "未設定";
+    item.append(span, value);
+    pokemonInfoFields.append(item);
   });
-}
-
-function getPokemonDetail(pokemonId) {
-  return state.pokemonDetails[pokemonId] || {};
-}
-
-function updatePokemonDetail(pokemonId, key, value) {
-  state.pokemonDetails[pokemonId] = {
-    ...getPokemonDetail(pokemonId),
-    [key]: value.trim(),
-  };
-  saveState();
 }
 
 function appendStatusMoveButtons(pokemonId, status, label) {
@@ -874,7 +1345,6 @@ function createDefaultState() {
     tiers: clone(defaultTiers),
     compromiseTiers: clone(defaultCompromiseTiers),
     finishedTiers: clone(defaultFinishedTiers),
-    pokemonDetails: {},
   };
 }
 
@@ -890,7 +1360,6 @@ function serializeState(value) {
     tiers: normalizeTiers(value.tiers),
     compromiseTiers: normalizeStatusTiers(value, "compromise"),
     finishedTiers: normalizeFinishedTiers(value),
-    pokemonDetails: normalizePokemonDetails(value.pokemonDetails),
   };
 }
 
@@ -901,25 +1370,7 @@ function migrateState(parsed) {
     tiers: normalizeTiers(parsed.tiers),
     compromiseTiers: normalizeStatusTiers(parsed, "compromise"),
     finishedTiers: normalizeFinishedTiers(parsed),
-    pokemonDetails: normalizePokemonDetails(parsed.pokemonDetails),
   };
-}
-
-function normalizePokemonDetails(detailsValue) {
-  const knownIds = getKnownPokemonIds();
-  if (!detailsValue || typeof detailsValue !== "object") return {};
-  return Object.fromEntries(
-    Object.entries(detailsValue)
-      .filter(([id]) => knownIds.has(id))
-      .map(([id, detail]) => [
-        id,
-        {
-          mainSkill: String(detail?.mainSkill || ""),
-          ingredients: String(detail?.ingredients || ""),
-          baseGauge: String(detail?.baseGauge || ""),
-        },
-      ]),
-  );
 }
 
 function normalizeTiers(tiers) {

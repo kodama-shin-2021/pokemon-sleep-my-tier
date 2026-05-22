@@ -3,8 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ポケモンスリープの厳選状況をTier、妥協個体あり、厳選完了に分けて端末保存できる非公式管理ツールです。" />
+    <meta name="theme-color" content="#256f8f" />
     <title>ポケスリ厳選ノート</title>
-    <link rel="stylesheet" href="styles.css?v=20260522-1" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css?v=20260522-2" />
   </head>
   <body>
     <div class="app-shell">
@@ -16,6 +19,7 @@
             整理することで、サブレの無駄遣いを減らすための判断に役立てられます。
             <br />
             使い方: ポケモンをクリックして、妥協個体ありや厳選完了に移すことで厳選状況を管理できます。また、Tierの変更もできます。
+            編集内容はこの端末内に保存され、JSONでバックアップできます。
             <br />
             Tierの元情報は
             <a href="https://game8.jp/pokemonsleep/542600" target="_blank" rel="noopener">Game8の最強ポケモンランキングTier表</a>
@@ -72,6 +76,7 @@
             <span>検索</span>
             <input id="searchInput" type="search" placeholder="ポケモン名・タイプ・得意" autocomplete="off" />
           </label>
+          <div id="activeFilters" class="active-filters" aria-live="polite"></div>
         </div>
       </section>
 
@@ -117,6 +122,9 @@
 
       <div class="page-actions">
         <button id="exportButton" class="primary-button" type="button">画像保存</button>
+        <button id="exportDataButton" type="button">JSON保存</button>
+        <button id="importDataButton" type="button">JSON復元</button>
+        <input id="importDataInput" type="file" accept="application/json,.json" hidden />
         <button id="addTierButton" type="button">Tier追加</button>
         <button id="resetButton" class="danger-button" type="button">リセット</button>
       </div>
@@ -126,7 +134,7 @@
           <a href="about.html">このサイトについて</a>
           <a href="privacy.html">プライバシーポリシー</a>
         </nav>
-        <p>Pokemon Sleep My Tier is an unofficial fan-made tool.</p>
+        <p>非公式ファンツール / データは端末内保存 / 最終更新: 2026年5月22日</p>
       </footer>
     </div>
 
@@ -142,6 +150,6 @@
       </form>
     </dialog>
 
-    <script src="app.js?v=20260521-12"></script>
+    <script src="app.js?v=20260522-1"></script>
   </body>
 </html>

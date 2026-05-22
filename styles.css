@@ -327,6 +327,34 @@ button:active {
   min-width: 0;
 }
 
+.active-filters {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.active-filters[hidden] {
+  display: none;
+}
+
+.active-filters button {
+  min-height: 30px;
+  padding: 0 10px;
+  border-color: #c7d1dc;
+  border-radius: 999px;
+  background: #e4eaf1;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.active-filters .clear-filters-button {
+  background: transparent;
+  color: var(--accent);
+}
+
 .tier-row {
   display: grid;
   grid-template-columns: var(--tier-label-width) minmax(220px, 1fr) minmax(220px, 1fr) minmax(220px, 1fr) 36px;
@@ -647,6 +675,14 @@ dialog h2 {
   width: 100%;
 }
 
+.move-group-title {
+  grid-column: 1 / -1;
+  padding-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
 @media (max-width: 860px) {
   .app-shell {
     padding: 10px;
@@ -659,7 +695,7 @@ dialog h2 {
 
   .page-actions {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     justify-content: stretch;
   }
 
@@ -713,5 +749,21 @@ dialog h2 {
   .pokemon-card img {
     width: 38px;
     height: 38px;
+  }
+
+  dialog {
+    width: min(520px, calc(100% - 16px));
+  }
+
+  dialog form {
+    padding: 12px;
+  }
+
+  .move-targets {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .move-targets button {
+    min-height: 46px;
   }
 }

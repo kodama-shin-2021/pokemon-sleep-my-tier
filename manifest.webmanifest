@@ -1,0 +1,10 @@
+{
+  "name": "ポケスリ厳選ノート",
+  "short_name": "厳選ノート",
+  "description": "ポケモンスリープの厳選状況をTier、妥協個体あり、厳選完了に分けて端末保存できる非公式管理ツールです。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6f7f9",
+  "theme_color": "#256f8f",
+  "lang": "ja"
+}

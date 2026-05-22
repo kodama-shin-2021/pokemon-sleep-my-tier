@@ -1784,6 +1784,7 @@ const typeFilter = document.querySelector("#typeFilter");
 const fieldFilter = document.querySelector("#fieldFilter");
 const ingredientFilter = document.querySelector("#ingredientFilter");
 const ingredientScopeFilter = document.querySelector("#ingredientScopeFilter");
+const activeFilters = document.querySelector("#activeFilters");
 const filterPanel = document.querySelector(".filter-panel");
 const filterPanelBody = document.querySelector("#filterPanelBody");
 const filterToggleButton = document.querySelector("#filterToggleButton");
@@ -1799,6 +1800,9 @@ const FILTER_PANEL_OPEN_KEY = "pokesuri-tier-maker-filters-open";
 document.querySelector("#addTierButton").addEventListener("click", addTier);
 document.querySelector("#resetButton").addEventListener("click", resetState);
 document.querySelector("#exportButton").addEventListener("click", exportPng);
+document.querySelector("#exportDataButton").addEventListener("click", exportJson);
+document.querySelector("#importDataButton").addEventListener("click", () => document.querySelector("#importDataInput").click());
+document.querySelector("#importDataInput").addEventListener("change", importJson);
 filterToggleButton.addEventListener("click", toggleFilterPanel);
 detailButton.addEventListener("click", () => {
   const pokemon = getPokemon(activePokemonId);
@@ -1824,6 +1828,7 @@ initializeFieldFilter();
 initializeIngredientFilter();
 initializeFilterPanel();
 render();
+registerServiceWorker();
 
 function loadState() {
   const saved = loadStoredState();
@@ -1862,6 +1867,7 @@ function setFilterPanelOpen(isOpen) {
 function render() {
   renderTiers();
   renderPool();
+  renderActiveFilters();
   syncTierRowHeights();
   saveState();
 }
@@ -2045,6 +2051,64 @@ function matchesIngredientFilter(pokemon) {
   return targetIngredients.includes(ingredientFilter.value);
 }
 
+function renderActiveFilters() {
+  activeFilters.innerHTML = "";
+  const filters = getActiveFilterItems();
+  if (!filters.length) {
+    activeFilters.hidden = true;
+    return;
+  }
+  activeFilters.hidden = false;
+  filters.forEach(filter => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = `${filter.label}: ${filter.value} ×`;
+    button.addEventListener("click", () => {
+      filter.clear();
+      render();
+    });
+    activeFilters.append(button);
+  });
+  const clearButton = document.createElement("button");
+  clearButton.type = "button";
+  clearButton.className = "clear-filters-button";
+  clearButton.textContent = "すべて解除";
+  clearButton.addEventListener("click", () => {
+    clearFilters();
+    render();
+  });
+  activeFilters.append(clearButton);
+}
+
+function getActiveFilterItems() {
+  const items = [];
+  if (specialtyFilter.value !== "all") {
+    items.push({ label: "得意", value: specialtyFilter.value, clear: () => { specialtyFilter.value = "all"; } });
+  }
+  if (typeFilter.value !== "all") {
+    items.push({ label: "タイプ", value: typeFilter.value, clear: () => { typeFilter.value = "all"; } });
+  }
+  if (fieldFilter.value !== "all") {
+    items.push({ label: "フィールド", value: fieldFilter.value, clear: () => { fieldFilter.value = "all"; } });
+  }
+  if (ingredientFilter.value !== "all") {
+    items.push({ label: "食材", value: `${ingredientScopeFilter.selectedOptions[0]?.textContent || "全食材"} / ${ingredientFilter.value}`, clear: () => { ingredientFilter.value = "all"; } });
+  }
+  if (searchInput.value.trim()) {
+    items.push({ label: "検索", value: searchInput.value.trim(), clear: () => { searchInput.value = ""; } });
+  }
+  return items;
+}
+
+function clearFilters() {
+  searchInput.value = "";
+  specialtyFilter.value = "all";
+  typeFilter.value = "all";
+  fieldFilter.value = "all";
+  ingredientFilter.value = "all";
+  ingredientScopeFilter.value = "all";
+}
+
 function initializeTypeFilter() {
   const types = [...new Set(finalPokemon.map(pokemon => pokemon.type))].sort((a, b) => a.localeCompare(b, "ja"));
   types.forEach(type => {
@@ -2215,16 +2279,6 @@ function openMoveDialog(pokemonId, currentTierId = null) {
   dialogPokemonName.textContent = pokemon.name;
   moveTargets.innerHTML = "";
   renderPokemonInfoFields(pokemon);
-  state.tiers.forEach(tier => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = tier.name;
-    button.addEventListener("click", () => {
-      movePokemon(pokemonId, tier.id);
-      moveDialog.close();
-    });
-    moveTargets.append(button);
-  });
   const currentStatus = parseStatusTierId(currentTierId);
   if (currentStatus) {
     const currentStatusTier = getStatusTiers(currentStatus.status).find(tier => tier.id === currentStatus.tierId);
@@ -2269,7 +2323,26 @@ function openMoveDialog(pokemonId, currentTierId = null) {
     appendStatusMoveButtons(pokemonId, "finished", "完了");
   }
 
+  appendMoveGroupTitle("Tier変更");
+  state.tiers.forEach(tier => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = tier.name;
+    button.addEventListener("click", () => {
+      movePokemon(pokemonId, tier.id);
+      moveDialog.close();
+    });
+    moveTargets.append(button);
+  });
+
   moveDialog.showModal();
+}
+
+function appendMoveGroupTitle(text) {
+  const title = document.createElement("div");
+  title.className = "move-group-title";
+  title.textContent = text;
+  moveTargets.append(title);
 }
 
 function renderPokemonInfoFields(pokemon) {
@@ -2286,13 +2359,24 @@ function renderPokemonInfoFields(pokemon) {
     const span = document.createElement("span");
     span.textContent = labelText;
     const value = document.createElement("strong");
-    value.textContent = formatPokemonDetailValue(detail[key]);
+    value.textContent = formatPokemonDetailValue(key, detail[key]);
     item.append(span, value);
     pokemonInfoFields.append(item);
   });
+  const sourceItem = document.createElement("div");
+  sourceItem.className = "pokemon-info-item";
+  const sourceLabel = document.createElement("span");
+  sourceLabel.textContent = "参考情報";
+  const sourceValue = document.createElement("strong");
+  sourceValue.textContent = "Game8 / Bulbapedia";
+  sourceItem.append(sourceLabel, sourceValue);
+  pokemonInfoFields.append(sourceItem);
 }
 
-function formatPokemonDetailValue(value) {
+function formatPokemonDetailValue(key, value) {
+  if (key === "ingredients" && Array.isArray(value)) {
+    return value.length ? value.map((ingredient, index) => `第${index + 1}: ${ingredient}`).join(" / ") : "未設定";
+  }
   if (Array.isArray(value)) return value.length ? value.join(" / ") : "未設定";
   return value || "未設定";
 }
@@ -2472,7 +2556,7 @@ async function exportPng() {
   ctx.fillRect(0, 0, width, height);
   ctx.fillStyle = "#17202a";
   ctx.font = "700 30px system-ui, sans-serif";
-  ctx.fillText("ポケスリ マイ厳選tier", 24, 44);
+  ctx.fillText("ポケスリ厳選ノート", 24, 44);
   ctx.font = "14px system-ui, sans-serif";
   ctx.fillStyle = "#5d6977";
   ctx.fillText(new Date().toLocaleDateString("ja-JP"), 24, 64);
@@ -2517,11 +2601,38 @@ async function exportPng() {
     await drawExportCards(ctx, finishedTier.pokemonIds, tableX + labelWidth + statusColumnWidth * 2, y, statusColumnWidth, cardWidth, cardHeight, gap);
     y += rowHeight;
   }
+  ctx.fillStyle = "#5d6977";
+  ctx.font = "12px system-ui, sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("Tier元情報: Game8の最強ポケモンランキングTier表を参考に作成", 24, height - 8);
 
   const link = document.createElement("a");
   link.download = "pokesuri-tier.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
+}
+
+function exportJson() {
+  const blob = new Blob([JSON.stringify(serializeState(state), null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.download = `pokesuri-note-${new Date().toISOString().slice(0, 10)}.json`;
+  link.href = URL.createObjectURL(blob);
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+}
+
+async function importJson(event) {
+  const file = event.target.files?.[0];
+  event.target.value = "";
+  if (!file) return;
+  try {
+    const text = await file.text();
+    state = migrateState(JSON.parse(text));
+    render();
+    alert("JSONから復元しました。");
+  } catch {
+    alert("JSONを読み込めませんでした。ポケスリ厳選ノートで保存したJSONを選んでください。");
+  }
 }
 
 async function drawExportCards(ctx, pokemonIds, x, y, columnWidth, cardWidth, cardHeight, gap) {
@@ -2718,4 +2829,11 @@ function ids(value) {
 function clone(value) {
   if (typeof structuredClone === "function") return structuredClone(value);
   return JSON.parse(JSON.stringify(value));
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
 }

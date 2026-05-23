@@ -1,15 +1,18 @@
 :root {
   color-scheme: light;
   --tier-label-width: 96px;
-  --bg: #f6f7f9;
+  --bg: #f4f6f5;
   --surface: #ffffff;
-  --surface-2: #eef2f6;
-  --ink: #17202a;
-  --muted: #5d6977;
-  --line: #d9e0e8;
-  --accent: #256f8f;
+  --surface-2: #edf2ef;
+  --ink: #17211f;
+  --muted: #61706c;
+  --line: #d7e0dc;
+  --accent: #2b6f6a;
+  --accent-strong: #19544f;
+  --accent-soft: #dcecea;
+  --warm: #c67c3f;
   --danger: #b54444;
-  --shadow: 0 8px 24px rgba(18, 33, 48, 0.08);
+  --shadow: 0 14px 36px rgba(20, 42, 38, 0.1);
 }
 
 * {
@@ -18,7 +21,9 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    linear-gradient(180deg, #e8f1ee 0, #f4f6f5 260px),
+    var(--bg);
   color: var(--ink);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -42,6 +47,13 @@ button,
   font-weight: 700;
   cursor: pointer;
   text-decoration: none;
+  transition: background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+button:hover,
+.button-link:hover {
+  border-color: #b9c8c4;
+  box-shadow: 0 6px 16px rgba(20, 42, 38, 0.08);
 }
 
 button:active {
@@ -51,28 +63,45 @@ button:active {
 .app-shell {
   width: min(1280px, 100%);
   margin: 0 auto;
-  padding: 16px;
+  padding: 18px 16px;
 }
 
 .app-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  display: grid;
   gap: 16px;
-  padding: 8px 0 16px;
+  padding: 18px 20px;
+  border: 1px solid rgba(43, 111, 106, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 16px 40px rgba(20, 42, 38, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.app-kicker {
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 6px;
+  padding: 3px 8px;
+  border: 1px solid #c7ddd8;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: clamp(24px, 5vw, 40px);
+  font-size: 38px;
+  line-height: 1.08;
   letter-spacing: 0;
 }
 
 .app-header p {
-  margin: 6px 0 0;
+  margin: 8px 0 0;
   color: var(--muted);
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
 .app-header a {
@@ -84,6 +113,11 @@ button:active {
   background: var(--accent);
   border-color: var(--accent);
   color: white;
+}
+
+.primary-button:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
 }
 
 .danger-button {
@@ -169,6 +203,22 @@ button:active {
   border-radius: 8px;
   background: var(--surface);
   box-shadow: var(--shadow);
+  scrollbar-color: #a9bbb6 #e7eeeb;
+  scrollbar-width: thin;
+}
+
+.workspace::-webkit-scrollbar {
+  height: 10px;
+}
+
+.workspace::-webkit-scrollbar-track {
+  background: #e7eeeb;
+}
+
+.workspace::-webkit-scrollbar-thumb {
+  border: 2px solid #e7eeeb;
+  border-radius: 999px;
+  background: #a9bbb6;
 }
 
 .board-column {
@@ -222,8 +272,8 @@ button:active {
   grid-template-columns: var(--tier-label-width) minmax(220px, 1fr) minmax(220px, 1fr) minmax(220px, 1fr) 36px;
   min-height: 42px;
   border-bottom: 1px solid var(--line);
-  background: var(--surface-2);
-  color: var(--muted);
+  background: #213632;
+  color: #f8fbfa;
   font-size: 12px;
   font-weight: 800;
 }
@@ -232,7 +282,7 @@ button:active {
   display: grid;
   place-items: center;
   padding: 8px;
-  border-right: 1px solid var(--line);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .tier-table-header div:last-child {
@@ -262,7 +312,7 @@ button:active {
   margin-bottom: 12px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: #eef1f5;
+  background: rgba(237, 242, 239, 0.9);
   box-shadow: none;
 }
 
@@ -285,7 +335,7 @@ button:active {
   border: 0;
   background: transparent;
   color: var(--ink);
-  font-size: 13px;
+  font-size: 14px;
   text-align: left;
 }
 
@@ -342,9 +392,9 @@ button:active {
 .active-filters button {
   min-height: 30px;
   padding: 0 10px;
-  border-color: #c7d1dc;
+  border-color: #bfd1cc;
   border-radius: 999px;
-  background: #e4eaf1;
+  background: #dcecea;
   color: var(--ink);
   font-size: 12px;
   font-weight: 700;
@@ -366,6 +416,10 @@ button:active {
   background: var(--surface);
 }
 
+.tier-row:nth-child(even) {
+  background: #fbfdfc;
+}
+
 .tier-row + .tier-row {
   margin-top: 0;
 }
@@ -382,7 +436,7 @@ button:active {
   width: 100%;
   border: 0;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.76);
   color: #101820;
   text-align: center;
   font-size: 22px;
@@ -417,6 +471,7 @@ button:active {
   min-height: 104px;
   padding: 8px;
   border-right: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.38);
 }
 
 .tier-actions {
@@ -462,7 +517,7 @@ button:active {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0 12px;
-  background: #edf1f5;
+  background: #f7faf9;
 }
 
 #typeFilter,
@@ -475,7 +530,7 @@ button:active {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0 10px;
-  background: #edf1f5;
+  background: #f7faf9;
   color: var(--ink);
   font: inherit;
 }
@@ -541,17 +596,24 @@ button:active {
   gap: 4px;
   min-width: 76px;
   min-height: 88px;
-  border: 1px solid var(--line);
-  border-radius: 4px;
+  border: 1px solid #d6e1dd;
+  border-radius: 8px;
   padding: 6px;
-  background: #fbfcfd;
+  background: #ffffff;
   color: var(--ink);
   user-select: none;
+  box-shadow: 0 4px 10px rgba(20, 42, 38, 0.06);
+}
+
+.pokemon-card:hover {
+  border-color: #98b8b1;
+  background: #f8fcfb;
+  transform: translateY(-1px);
 }
 
 .pokemon-card.new-pokemon {
   border-color: #d8a800;
-  background: #fff3a6;
+  background: #fff6bf;
 }
 
 .pokemon-card.dragging {
@@ -588,8 +650,12 @@ button:active {
 }
 
 .pokemon-meta {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #edf2ef;
   color: var(--muted);
   font-size: 10px;
+  font-weight: 800;
 }
 
 .drop-hover {
@@ -613,6 +679,7 @@ dialog form {
   display: grid;
   gap: 12px;
   padding: 16px;
+  background: #f8fbfa;
 }
 
 .dialog-title-row {
@@ -644,7 +711,7 @@ dialog h2 {
   padding: 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #fbfcfd;
+  background: #ffffff;
 }
 
 .pokemon-info-item {
@@ -673,6 +740,7 @@ dialog h2 {
 
 .move-targets button {
   width: 100%;
+  background: #ffffff;
 }
 
 .move-group-title {
@@ -691,6 +759,15 @@ dialog h2 {
   .app-header {
     display: grid;
     align-items: start;
+    padding: 14px;
+  }
+
+  .app-header h1 {
+    font-size: 30px;
+  }
+
+  .app-header p {
+    font-size: 13px;
   }
 
   .page-actions {

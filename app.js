@@ -2552,8 +2552,10 @@ async function exportPng() {
   canvas.height = height * scale;
   const ctx = canvas.getContext("2d");
   ctx.scale(scale, scale);
-  ctx.fillStyle = "#f6f7f9";
+  ctx.fillStyle = "#f4f6f5";
   ctx.fillRect(0, 0, width, height);
+  ctx.fillStyle = "#e8f1ee";
+  ctx.fillRect(0, 0, width, 74);
   ctx.fillStyle = "#17202a";
   ctx.font = "700 30px system-ui, sans-serif";
   ctx.fillText("ポケスリ厳選ノート", 24, 44);
@@ -2565,10 +2567,10 @@ async function exportPng() {
   const headers = ["Tier", "厳選未完了", "妥協個体あり", "厳選完了"];
   const headerWidths = [labelWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth];
   let headerX = tableX;
-  ctx.fillStyle = "#eef2f6";
+  ctx.fillStyle = "#213632";
   roundedRect(ctx, tableX, y, tableWidth, headerHeight, 8);
   ctx.fill();
-  ctx.fillStyle = "#17202a";
+  ctx.fillStyle = "#f8fbfa";
   ctx.font = "800 16px system-ui, sans-serif";
   ctx.textAlign = "center";
   headers.forEach((header, index) => {
@@ -2582,7 +2584,7 @@ async function exportPng() {
     const compromiseTier = state.compromiseTiers[rowIndex] || { pokemonIds: [] };
     const finishedTier = state.finishedTiers[rowIndex] || { pokemonIds: [] };
     const rowHeight = rowHeights[rowIndex];
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = rowIndex % 2 === 0 ? "#ffffff" : "#fbfdfc";
     roundedRect(ctx, tableX, y, tableWidth, rowHeight - 8, 8);
     ctx.fill();
     ctx.fillStyle = tier.color;
@@ -2651,10 +2653,10 @@ async function drawExportCards(ctx, pokemonIds, x, y, columnWidth, cardWidth, ca
 }
 
 async function drawExportCard(ctx, pokemon, x, y, width, height) {
-  ctx.fillStyle = "#fbfcfd";
+  ctx.fillStyle = "#ffffff";
   roundedRect(ctx, x, y, width, height, 8);
   ctx.fill();
-  ctx.strokeStyle = "#d9e0e8";
+  ctx.strokeStyle = "#d6e1dd";
   ctx.stroke();
   const image = await loadFirstImage(pokemon.iconUrls);
   if (image) {

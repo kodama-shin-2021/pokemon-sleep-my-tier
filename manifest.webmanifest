@@ -5,6 +5,14 @@
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f6f7f9",
-  "theme_color": "#256f8f",
-  "lang": "ja"
+  "theme_color": "#2b6f6a",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }

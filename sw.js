@@ -7,6 +7,7 @@ const CACHE_URLS = [
   "./styles.css",
   "./app.js",
   "./manifest.webmanifest",
+  "./assets/favicon.svg",
 ];
 
 self.addEventListener("install", event => {

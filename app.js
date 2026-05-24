@@ -2395,7 +2395,23 @@ function openMoveDialog(pokemonId, currentTierId = null) {
     appendStatusMoveButtons(pokemonId, "finished", "完了");
   }
 
-  appendMoveGroupTitle(currentStatus ? "厳選未完了へ戻す" : "Tier変更");
+  if (currentStatus) {
+    appendMoveGroupTitle("Tier変更");
+    getStatusTiers(currentStatus.status).forEach(tier => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = tier.name;
+      button.addEventListener("click", () => {
+        movePokemonToStatus(pokemonId, currentStatus.status, tier.id);
+        moveDialog.close();
+      });
+      moveTargets.append(button);
+    });
+
+    appendMoveGroupTitle("厳選未完了へ戻す");
+  } else {
+    appendMoveGroupTitle("Tier変更");
+  }
   state.tiers.forEach(tier => {
     const button = document.createElement("button");
     button.type = "button";

@@ -703,6 +703,12 @@ dialog form {
   gap: 12px;
 }
 
+.dialog-title-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 dialog h2 {
   margin: 0;
   font-size: 20px;
@@ -717,6 +723,17 @@ dialog h2 {
   font-size: 12px;
   font-weight: 700;
   text-decoration: underline;
+}
+
+.dialog-close-button {
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
 }
 
 .pokemon-info-fields {

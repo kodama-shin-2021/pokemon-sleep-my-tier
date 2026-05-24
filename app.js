@@ -2395,11 +2395,11 @@ function openMoveDialog(pokemonId, currentTierId = null) {
     appendStatusMoveButtons(pokemonId, "finished", "完了");
   }
 
-  appendMoveGroupTitle("Tier変更");
+  appendMoveGroupTitle(currentStatus ? "厳選未完了へ戻す" : "Tier変更");
   state.tiers.forEach(tier => {
     const button = document.createElement("button");
     button.type = "button";
-    button.textContent = tier.name;
+    button.textContent = currentStatus ? `${tier.name}へ戻す` : tier.name;
     button.addEventListener("click", () => {
       movePokemon(pokemonId, tier.id);
       moveDialog.close();

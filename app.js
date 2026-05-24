@@ -1855,6 +1855,9 @@ const filterToggleLabel = document.querySelector(".filter-toggle-label");
 const moveDialog = document.querySelector("#moveDialog");
 const moveTargets = document.querySelector("#moveTargets");
 const candidatePanel = document.querySelector("#candidatePanel");
+const candidateTabCount = document.querySelector("#candidateTabCount");
+const detailTabButtons = [...document.querySelectorAll("[data-detail-tab]")];
+const detailTabPanels = [...document.querySelectorAll("[data-detail-panel]")];
 const pokemonInfoFields = document.querySelector("#pokemonInfoFields");
 const dialogPokemonName = document.querySelector("#dialogPokemonName");
 const detailButton = document.querySelector("#detailButton");
@@ -1868,6 +1871,9 @@ document.querySelector("#exportDataButton").addEventListener("click", exportJson
 document.querySelector("#importDataButton").addEventListener("click", () => document.querySelector("#importDataInput").click());
 document.querySelector("#importDataInput").addEventListener("change", importJson);
 filterToggleButton.addEventListener("click", toggleFilterPanel);
+detailTabButtons.forEach(button => {
+  button.addEventListener("click", () => setDetailTab(button.dataset.detailTab));
+});
 detailButton.addEventListener("click", () => {
   const pokemon = getPokemon(activePokemonId);
   if (pokemon) openPokemonSearch(pokemon);
@@ -2344,6 +2350,19 @@ function dropStatusPokemon(event, status, targetTierId) {
   movePokemonToStatus(pokemonId, status, targetTierId);
 }
 
+function setDetailTab(tabName) {
+  detailTabButtons.forEach(button => {
+    const isActive = button.dataset.detailTab === tabName;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", String(isActive));
+  });
+  detailTabPanels.forEach(panel => {
+    const isActive = panel.dataset.detailPanel === tabName;
+    panel.classList.toggle("is-active", isActive);
+    panel.hidden = !isActive;
+  });
+}
+
 function openMoveDialog(pokemonId, currentTierId = null) {
   activePokemonId = pokemonId;
   const pokemon = getPokemon(pokemonId);
@@ -2351,25 +2370,33 @@ function openMoveDialog(pokemonId, currentTierId = null) {
   moveTargets.innerHTML = "";
   renderPokemonInfoFields(pokemon);
   renderCandidatePanel(pokemonId);
+  setDetailTab("overview");
   const currentStatus = parseStatusTierId(currentTierId);
   const currentStatusTier = currentStatus
     ? getStatusTiers(currentStatus.status).find(tier => tier.id === currentStatus.tierId)
     : null;
 
+  appendStatusChangeActions(pokemonId, currentTierId, currentStatus, currentStatusTier);
+  appendTierChangeActions(pokemonId, currentStatus);
+
+  moveDialog.showModal();
+}
+
+function appendStatusChangeActions(pokemonId, currentTierId, currentStatus, currentStatusTier) {
   appendMoveGroupTitle("厳選状況変更");
   if (currentStatus) {
+    const restoreTier = state.tiers.find(tier => tier.name === currentStatusTier?.name) || state.tiers[0];
+    if (restoreTier) {
+      appendMoveAction("厳選未完了に戻す", () => {
+        movePokemon(pokemonId, restoreTier.id);
+      });
+    }
+
     const nextStatus = currentStatus.status === "compromise" ? "finished" : "compromise";
     const nextStatusTier = getStatusTiers(nextStatus).find(tier => tier.name === currentStatusTier?.name);
     if (nextStatusTier) {
       appendMoveAction(nextStatus === "compromise" ? "妥協個体ありへ" : "厳選完了へ", () => {
         movePokemonToStatus(pokemonId, nextStatus, nextStatusTier.id);
-      });
-    }
-
-    const restoreTier = state.tiers.find(tier => tier.name === currentStatusTier?.name) || state.tiers[0];
-    if (restoreTier) {
-      appendMoveAction("厳選未完了に戻す", () => {
-        movePokemon(pokemonId, restoreTier.id);
       });
     }
   } else {
@@ -2391,7 +2418,9 @@ function openMoveDialog(pokemonId, currentTierId = null) {
       appendStatusMoveButtons(pokemonId, "finished", "完了");
     }
   }
+}
 
+function appendTierChangeActions(pokemonId, currentStatus) {
   appendMoveGroupTitle("Tier変更");
   if (currentStatus) {
     getStatusTiers(currentStatus.status).forEach(tier => {
@@ -2406,8 +2435,6 @@ function openMoveDialog(pokemonId, currentTierId = null) {
       });
     });
   }
-
-  moveDialog.showModal();
 }
 
 function appendMoveAction(text, onMove) {
@@ -2445,6 +2472,7 @@ function renderCandidatePanel(pokemonId) {
   candidatePanel.append(header);
 
   const candidates = getCandidates(pokemonId);
+  candidateTabCount.textContent = String(candidates.length);
   if (!candidates.length) {
     const empty = document.createElement("p");
     empty.className = "candidate-empty";

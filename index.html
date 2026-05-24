@@ -8,7 +8,7 @@
     <title>ポケスリ厳選ノート</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=20260525-9" />
+    <link rel="stylesheet" href="styles.css?v=20260525-10" />
   </head>
   <body>
     <div class="app-shell">
@@ -149,13 +149,38 @@
             <button class="dialog-close-button" value="cancel" type="submit" aria-label="閉じる">×</button>
           </div>
         </div>
-        <div id="pokemonInfoFields" class="pokemon-info-fields"></div>
-        <div id="moveTargets" class="move-targets"></div>
-        <div id="candidatePanel" class="candidate-panel"></div>
-        <button value="cancel" type="submit">閉じる</button>
+        <div class="dialog-tabs" role="tablist" aria-label="ポケモン詳細">
+          <button class="dialog-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="detailOverviewPanel" data-detail-tab="overview">
+            基本情報・管理
+          </button>
+          <button class="dialog-tab" type="button" role="tab" aria-selected="false" aria-controls="candidatePanel" data-detail-tab="candidates">
+            厳選候補比較
+            <span id="candidateTabCount" class="dialog-tab-count">0</span>
+          </button>
+        </div>
+        <section id="detailOverviewPanel" class="dialog-tab-panel is-active" role="tabpanel" data-detail-panel="overview">
+          <div class="detail-layout">
+            <section class="detail-card">
+              <div class="detail-section-head">
+                <h3>ポケモン情報</h3>
+              </div>
+              <div id="pokemonInfoFields" class="pokemon-info-fields"></div>
+            </section>
+            <section class="detail-card">
+              <div class="detail-section-head">
+                <h3>管理操作</h3>
+              </div>
+              <div id="moveTargets" class="move-targets"></div>
+            </section>
+          </div>
+        </section>
+        <section id="candidatePanel" class="dialog-tab-panel candidate-panel" role="tabpanel" data-detail-panel="candidates" hidden></section>
+        <div class="dialog-footer">
+          <button value="cancel" type="submit">閉じる</button>
+        </div>
       </form>
     </dialog>
 
-    <script src="app.js?v=20260525-11"></script>
+    <script src="app.js?v=20260525-12"></script>
   </body>
 </html>

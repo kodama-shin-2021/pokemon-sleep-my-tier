@@ -2396,6 +2396,7 @@ function openMoveDialog(pokemonId, currentTierId = null) {
   }
 
   if (currentStatus) {
+    const currentStatusTier = getStatusTiers(currentStatus.status).find(tier => tier.id === currentStatus.tierId);
     appendMoveGroupTitle("Tier変更");
     getStatusTiers(currentStatus.status).forEach(tier => {
       const button = document.createElement("button");
@@ -2409,19 +2410,30 @@ function openMoveDialog(pokemonId, currentTierId = null) {
     });
 
     appendMoveGroupTitle("厳選未完了へ戻す");
+    const restoreTier = state.tiers.find(tier => tier.name === currentStatusTier?.name) || state.tiers[0];
+    if (restoreTier) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = "厳選未完了に戻す";
+      button.addEventListener("click", () => {
+        movePokemon(pokemonId, restoreTier.id);
+        moveDialog.close();
+      });
+      moveTargets.append(button);
+    }
   } else {
     appendMoveGroupTitle("Tier変更");
-  }
-  state.tiers.forEach(tier => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = currentStatus ? `${tier.name}へ戻す` : tier.name;
-    button.addEventListener("click", () => {
-      movePokemon(pokemonId, tier.id);
-      moveDialog.close();
+    state.tiers.forEach(tier => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = tier.name;
+      button.addEventListener("click", () => {
+        movePokemon(pokemonId, tier.id);
+        moveDialog.close();
+      });
+      moveTargets.append(button);
     });
-    moveTargets.append(button);
-  });
+  }
 
   moveDialog.showModal();
 }

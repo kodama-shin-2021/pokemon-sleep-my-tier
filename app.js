@@ -132,6 +132,50 @@ const defaultCompromiseTiers = defaultTiers.map(tier => ({
   pokemonIds: [],
 }));
 const defaultCompromiseTierByName = new Map(defaultCompromiseTiers.map(tier => [tier.name, tier]));
+const natureOptions = [
+  ["さみしがり", "おてつだいスピード↑ / げんき回復量↓"],
+  ["いじっぱり", "おてつだいスピード↑ / 食材おてつだい確率↓"],
+  ["やんちゃ", "おてつだいスピード↑ / メインスキル発生確率↓"],
+  ["ゆうかん", "おてつだいスピード↑ / EXP獲得量↓"],
+  ["ずぶとい", "げんき回復量↑ / おてつだいスピード↓"],
+  ["わんぱく", "げんき回復量↑ / 食材おてつだい確率↓"],
+  ["のうてんき", "げんき回復量↑ / メインスキル発生確率↓"],
+  ["のんき", "げんき回復量↑ / EXP獲得量↓"],
+  ["ひかえめ", "食材おてつだい確率↑ / おてつだいスピード↓"],
+  ["おっとり", "食材おてつだい確率↑ / げんき回復量↓"],
+  ["うっかりや", "食材おてつだい確率↑ / メインスキル発生確率↓"],
+  ["れいせい", "食材おてつだい確率↑ / EXP獲得量↓"],
+  ["おだやか", "メインスキル発生確率↑ / おてつだいスピード↓"],
+  ["おとなしい", "メインスキル発生確率↑ / げんき回復量↓"],
+  ["しんちょう", "メインスキル発生確率↑ / 食材おてつだい確率↓"],
+  ["なまいき", "メインスキル発生確率↑ / EXP獲得量↓"],
+  ["おくびょう", "EXP獲得量↑ / おてつだいスピード↓"],
+  ["せっかち", "EXP獲得量↑ / げんき回復量↓"],
+  ["ようき", "EXP獲得量↑ / 食材おてつだい確率↓"],
+  ["むじゃき", "EXP獲得量↑ / メインスキル発生確率↓"],
+  ["てれや", "無補正"],
+  ["がんばりや", "無補正"],
+  ["すなお", "無補正"],
+  ["きまぐれ", "無補正"],
+  ["まじめ", "無補正"],
+];
+const subSkillGroups = [
+  {
+    color: "gold",
+    label: "金",
+    skills: ["げんき回復ボーナス", "ゆめのかけらボーナス", "リサーチEXPボーナス", "睡眠EXPボーナス", "おてつだいボーナス", "きのみの数S", "スキルレベルアップM"],
+  },
+  {
+    color: "blue",
+    label: "青",
+    skills: ["スキル確率アップM", "食材確率アップM", "スキルレベルアップS", "最大所持数アップL", "最大所持数アップM", "おてつだいスピードM"],
+  },
+  {
+    color: "white",
+    label: "白",
+    skills: ["スキル確率アップS", "食材確率アップS", "最大所持数アップS", "おてつだいスピードS"],
+  },
+];
 const pokemonDetailData = {
     "venusaur": {
         "mainSkill": "食材ゲットS",
@@ -2410,7 +2454,7 @@ function createCandidateCard(pokemonId, candidate, index) {
   card.append(ingredientRow);
 
   card.append(
-    createCandidateField(pokemonId, candidate, "nature", "性格", "例: おてスピ↑ 食材↓"),
+    createCandidateNatureField(pokemonId, candidate),
     createCandidateSubSkillField(pokemonId, candidate, "10"),
     createCandidateSubSkillField(pokemonId, candidate, "25"),
     createCandidateSubSkillField(pokemonId, candidate, "50"),
@@ -2429,20 +2473,71 @@ function createCandidateField(pokemonId, candidate, key, label, placeholder) {
   return field;
 }
 
+function createCandidateNatureField(pokemonId, candidate) {
+  const field = document.createElement("label");
+  field.className = "candidate-field";
+  const span = document.createElement("span");
+  span.textContent = "性格";
+  const select = document.createElement("select");
+  select.ariaLabel = "性格";
+  appendSelectOption(select, "", "性格を選択");
+  natureOptions.forEach(([name, effect]) => {
+    appendSelectOption(select, name, `${name} (${effect})`);
+  });
+  if (candidate.nature && !natureOptions.some(([name]) => name === candidate.nature)) {
+    appendSelectOption(select, candidate.nature, candidate.nature);
+  }
+  select.value = candidate.nature || "";
+  select.addEventListener("change", () => {
+    candidate.nature = select.value;
+    saveCandidateChange();
+  });
+  field.append(span, select);
+  return field;
+}
+
 function createCandidateSubSkillField(pokemonId, candidate, level) {
   const field = document.createElement("label");
   field.className = "candidate-field";
   const span = document.createElement("span");
   span.textContent = `サブスキル Lv${level}`;
-  const input = document.createElement("input");
-  input.value = candidate.subSkills?.[level] || "";
-  input.placeholder = "例: きのみの数S";
-  input.addEventListener("input", () => {
-    candidate.subSkills = { ...candidate.subSkills, [level]: input.value };
+  const select = document.createElement("select");
+  select.ariaLabel = `サブスキル Lv${level}`;
+  select.className = `subskill-select ${getSubSkillClass(candidate.subSkills?.[level] || "")}`;
+  appendSelectOption(select, "", "サブスキルを選択");
+  subSkillGroups.forEach(group => {
+    const optgroup = document.createElement("optgroup");
+    optgroup.label = `${group.label}サブスキル`;
+    group.skills.forEach(skill => appendSelectOption(optgroup, skill, skill));
+    select.append(optgroup);
+  });
+  if (candidate.subSkills?.[level] && !getSubSkillColor(candidate.subSkills[level])) {
+    appendSelectOption(select, candidate.subSkills[level], candidate.subSkills[level]);
+  }
+  select.value = candidate.subSkills?.[level] || "";
+  select.addEventListener("change", () => {
+    candidate.subSkills = { ...candidate.subSkills, [level]: select.value };
+    select.className = `subskill-select ${getSubSkillClass(select.value)}`;
     saveCandidateChange();
   });
-  field.append(span, input);
+  field.append(span, select);
   return field;
+}
+
+function appendSelectOption(parent, value, text) {
+  const option = document.createElement("option");
+  option.value = value;
+  option.textContent = text;
+  parent.append(option);
+}
+
+function getSubSkillColor(skill) {
+  return subSkillGroups.find(group => group.skills.includes(skill))?.color || "";
+}
+
+function getSubSkillClass(skill) {
+  const color = getSubSkillColor(skill);
+  return color ? `subskill-${color}` : "";
 }
 
 function createCandidateIngredientInput(pokemonId, candidate, index) {

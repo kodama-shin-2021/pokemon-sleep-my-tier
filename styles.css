@@ -864,6 +864,21 @@ dialog h2 {
   line-height: 1.5;
 }
 
+.subskill-select.subskill-gold {
+  border-color: #d0a13f;
+  background: #fff4cc;
+}
+
+.subskill-select.subskill-blue {
+  border-color: #5e91c9;
+  background: #e4f0ff;
+}
+
+.subskill-select.subskill-white {
+  border-color: #c9d1d6;
+  background: #ffffff;
+}
+
 .candidate-ingredients {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }

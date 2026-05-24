@@ -2573,7 +2573,7 @@ function createCandidateTotals(candidate) {
     ["お手スピ", `${formatMultiplier(totals.helpSpeed)}倍`],
     ["食材数", `${formatMultiplier(totals.ingredientCount)}倍`],
     ["スキル回数", `${formatMultiplier(totals.skillCount)}倍`],
-    ["所持数", `+${totals.inventory}こ`],
+    ["所持数", `+${totals.inventory}個`],
   ].forEach(([label, value]) => {
     const item = document.createElement("div");
     const span = document.createElement("span");

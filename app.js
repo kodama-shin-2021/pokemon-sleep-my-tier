@@ -2479,6 +2479,7 @@ function createCandidateCard(pokemonId, candidate, index) {
     createCandidateSubSkillField(pokemonId, candidate, "50"),
     createCandidateSubSkillField(pokemonId, candidate, "75"),
     createCandidateSubSkillField(pokemonId, candidate, "100"),
+    createCandidateTotals(candidate),
     createCandidateMemo(pokemonId, candidate),
   );
   return card;
@@ -2562,6 +2563,86 @@ function appendSelectOption(parent, value, text) {
 
 function getNatureEffect(nature) {
   return natureOptions.find(([name]) => name === nature)?.[1] || "";
+}
+
+function createCandidateTotals(candidate) {
+  const totals = calculateCandidateTotals(candidate);
+  const box = document.createElement("div");
+  box.className = "candidate-totals";
+  [
+    ["お手スピ", `${formatMultiplier(totals.helpSpeed)}倍`],
+    ["食材数", `${formatMultiplier(totals.ingredientCount)}倍`],
+    ["スキル回数", `${formatMultiplier(totals.skillCount)}倍`],
+    ["所持数", `+${totals.inventory}こ`],
+  ].forEach(([label, value]) => {
+    const item = document.createElement("div");
+    const span = document.createElement("span");
+    span.textContent = label;
+    const strong = document.createElement("strong");
+    strong.textContent = value;
+    item.append(span, strong);
+    box.append(item);
+  });
+  return box;
+}
+
+function calculateCandidateTotals(candidate) {
+  const nature = getNatureMultipliers(candidate.nature);
+  const subSkills = Object.values(candidate.subSkills || {});
+  const helpSpeed = subSkills.reduce((total, skill) => total * getSubSkillHelpSpeedMultiplier(skill), nature.helpSpeed);
+  const ingredientRate = subSkills.reduce((total, skill) => total * getSubSkillIngredientMultiplier(skill), nature.ingredientRate);
+  const skillRate = subSkills.reduce((total, skill) => total * getSubSkillTriggerMultiplier(skill), nature.skillRate);
+  const inventory = subSkills.reduce((total, skill) => total + getSubSkillInventoryBonus(skill), 0);
+  return {
+    helpSpeed,
+    ingredientCount: helpSpeed * ingredientRate,
+    skillCount: helpSpeed * skillRate,
+    inventory,
+  };
+}
+
+function getNatureMultipliers(nature) {
+  const effect = getNatureEffect(nature);
+  return {
+    helpSpeed: getEffectMultiplier(effect, "おてつだいスピード"),
+    ingredientRate: getEffectMultiplier(effect, "食材おてつだい確率"),
+    skillRate: getEffectMultiplier(effect, "メインスキル発生確率"),
+  };
+}
+
+function getEffectMultiplier(effect, label) {
+  const match = effect.match(new RegExp(`${label}[↑↓] ([0-9.]+)倍`));
+  return match ? Number(match[1]) : 1;
+}
+
+function getSubSkillHelpSpeedMultiplier(skill) {
+  if (skill === "おてつだいボーナス") return 1 / 0.95;
+  if (skill === "おてつだいスピードM") return 1 / 0.86;
+  if (skill === "おてつだいスピードS") return 1 / 0.93;
+  return 1;
+}
+
+function getSubSkillIngredientMultiplier(skill) {
+  if (skill === "食材確率アップM") return 1.36;
+  if (skill === "食材確率アップS") return 1.18;
+  return 1;
+}
+
+function getSubSkillTriggerMultiplier(skill) {
+  if (skill === "スキル確率アップM") return 1.36;
+  if (skill === "スキル確率アップS") return 1.18;
+  return 1;
+}
+
+function getSubSkillInventoryBonus(skill) {
+  if (skill === "最大所持数アップL") return 18;
+  if (skill === "最大所持数アップM") return 12;
+  if (skill === "最大所持数アップS") return 6;
+  return 0;
+}
+
+function formatMultiplier(value) {
+  return value.toFixed(2);
 }
 
 function getSubSkillColor(skill) {

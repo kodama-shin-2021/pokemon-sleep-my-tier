@@ -874,6 +874,34 @@ dialog h2 {
   font-weight: 800;
 }
 
+.candidate-totals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid #cfe0dc;
+  border-radius: 8px;
+  background: #eef7f5;
+}
+
+.candidate-totals div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.candidate-totals span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.candidate-totals strong {
+  color: var(--accent-strong);
+  font-size: 14px;
+  line-height: 1.2;
+}
+
 .candidate-field textarea {
   min-height: 56px;
   padding: 8px;

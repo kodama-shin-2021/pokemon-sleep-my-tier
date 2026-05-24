@@ -843,6 +843,7 @@ dialog h2 {
 
 .candidate-field input,
 .candidate-field textarea,
+.candidate-field select,
 .candidate-card select,
 .candidate-card-head input {
   width: 100%;

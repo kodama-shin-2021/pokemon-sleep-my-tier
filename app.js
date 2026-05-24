@@ -2446,16 +2446,24 @@ function createCandidateSubSkillField(pokemonId, candidate, level) {
 }
 
 function createCandidateIngredientInput(pokemonId, candidate, index) {
-  const input = document.createElement("input");
-  input.value = candidate.ingredients?.[index] || "";
-  input.placeholder = `第${index + 1}`;
-  input.addEventListener("input", () => {
+  const select = document.createElement("select");
+  select.ariaLabel = `第${index + 1}食材`;
+  const detail = pokemonDetailData[pokemonId] || {};
+  const ingredientOptions = Array.isArray(detail.ingredients) ? detail.ingredients.slice(0, index + 1) : [];
+  ["", ...ingredientOptions].forEach(ingredient => {
+    const option = document.createElement("option");
+    option.value = ingredient;
+    option.textContent = ingredient || `第${index + 1}食材`;
+    select.append(option);
+  });
+  select.value = candidate.ingredients?.[index] || "";
+  select.addEventListener("change", () => {
     const ingredients = Array.isArray(candidate.ingredients) ? [...candidate.ingredients] : ["", "", ""];
-    ingredients[index] = input.value;
+    ingredients[index] = select.value;
     candidate.ingredients = ingredients;
     saveCandidateChange();
   });
-  return input;
+  return select;
 }
 
 function createCandidateInput(pokemonId, candidate, key, value, placeholder) {

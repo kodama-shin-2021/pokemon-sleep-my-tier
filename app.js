@@ -2566,29 +2566,28 @@ function getNatureEffect(nature) {
 }
 
 function createCandidateTotals(candidate) {
-  const totals = calculateCandidateTotals(candidate);
   const box = document.createElement("div");
   box.className = "candidate-totals";
-  [
-    ["お手スピ", `${formatMultiplier(totals.helpSpeed)}倍`],
-    ["食材数", `${formatMultiplier(totals.ingredientCount)}倍`],
-    ["スキル回数", `${formatMultiplier(totals.skillCount)}倍`],
-    ["所持数", `+${totals.inventory}個`],
-  ].forEach(([label, value]) => {
-    const item = document.createElement("div");
-    const span = document.createElement("span");
-    span.textContent = label;
-    const strong = document.createElement("strong");
-    strong.textContent = value;
-    item.append(span, strong);
-    box.append(item);
+  ["50", "75", "100"].forEach(level => {
+    const totals = calculateCandidateTotals(candidate, Number(level));
+    const row = document.createElement("div");
+    row.className = "candidate-total-row";
+    const levelLabel = document.createElement("span");
+    levelLabel.className = "candidate-total-level";
+    levelLabel.textContent = `Lv${level}`;
+    const values = document.createElement("p");
+    values.textContent = `お手スピ ${formatMultiplier(totals.helpSpeed)}倍 / 食材数 ${formatMultiplier(totals.ingredientCount)}倍 / スキル回数 ${formatMultiplier(totals.skillCount)}倍 / 所持数 +${totals.inventory}個`;
+    row.append(levelLabel, values);
+    box.append(row);
   });
   return box;
 }
 
-function calculateCandidateTotals(candidate) {
+function calculateCandidateTotals(candidate, maxLevel = 100) {
   const nature = getNatureMultipliers(candidate.nature);
-  const subSkills = Object.values(candidate.subSkills || {});
+  const subSkills = Object.entries(candidate.subSkills || {})
+    .filter(([level]) => Number(level) <= maxLevel)
+    .map(([, skill]) => skill);
   const helpSpeed = subSkills.reduce((total, skill) => total * getSubSkillHelpSpeedMultiplier(skill), nature.helpSpeed);
   const ingredientRate = subSkills.reduce((total, skill) => total * getSubSkillIngredientMultiplier(skill), nature.ingredientRate);
   const skillRate = subSkills.reduce((total, skill) => total * getSubSkillTriggerMultiplier(skill), nature.skillRate);

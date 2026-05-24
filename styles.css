@@ -876,7 +876,6 @@ dialog h2 {
 
 .candidate-totals {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
   padding: 8px;
   border: 1px solid #cfe0dc;
@@ -884,22 +883,26 @@ dialog h2 {
   background: #eef7f5;
 }
 
-.candidate-totals div {
+.candidate-total-row {
   display: grid;
-  gap: 2px;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 6px;
+  align-items: start;
   min-width: 0;
 }
 
-.candidate-totals span {
+.candidate-total-level {
   color: var(--muted);
   font-size: 10px;
   font-weight: 800;
 }
 
-.candidate-totals strong {
+.candidate-total-row p {
+  margin: 0;
   color: var(--accent-strong);
-  font-size: 14px;
-  line-height: 1.2;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.45;
 }
 
 .candidate-field textarea {

@@ -2352,90 +2352,73 @@ function openMoveDialog(pokemonId, currentTierId = null) {
   renderPokemonInfoFields(pokemon);
   renderCandidatePanel(pokemonId);
   const currentStatus = parseStatusTierId(currentTierId);
+  const currentStatusTier = currentStatus
+    ? getStatusTiers(currentStatus.status).find(tier => tier.id === currentStatus.tierId)
+    : null;
+
+  appendMoveGroupTitle("厳選状況変更");
   if (currentStatus) {
-    const currentStatusTier = getStatusTiers(currentStatus.status).find(tier => tier.id === currentStatus.tierId);
     const nextStatus = currentStatus.status === "compromise" ? "finished" : "compromise";
     const nextStatusTier = getStatusTiers(nextStatus).find(tier => tier.name === currentStatusTier?.name);
     if (nextStatusTier) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = nextStatus === "compromise" ? "妥協個体ありへ" : "厳選完了へ";
-      button.addEventListener("click", () => {
+      appendMoveAction(nextStatus === "compromise" ? "妥協個体ありへ" : "厳選完了へ", () => {
         movePokemonToStatus(pokemonId, nextStatus, nextStatusTier.id);
-        moveDialog.close();
       });
-      moveTargets.append(button);
     }
-  }
-  const linkedCompromiseTier = getLinkedStatusTier("compromise", currentTierId);
-  if (linkedCompromiseTier) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = "妥協個体ありへ";
-    button.addEventListener("click", () => {
-      movePokemonToStatus(pokemonId, "compromise", linkedCompromiseTier.id);
-      moveDialog.close();
-    });
-    moveTargets.append(button);
-  }
-  const linkedFinishedTier = getLinkedStatusTier("finished", currentTierId);
-  if (linkedFinishedTier) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = "厳選完了へ";
-    button.addEventListener("click", () => {
-      movePokemonToStatus(pokemonId, "finished", linkedFinishedTier.id);
-      moveDialog.close();
-    });
-    moveTargets.append(button);
-  }
 
-  if (!currentStatus && !linkedCompromiseTier && !linkedFinishedTier) {
-    appendStatusMoveButtons(pokemonId, "compromise", "妥協");
-    appendStatusMoveButtons(pokemonId, "finished", "完了");
-  }
-
-  if (currentStatus) {
-    const currentStatusTier = getStatusTiers(currentStatus.status).find(tier => tier.id === currentStatus.tierId);
-    appendMoveGroupTitle("Tier変更");
-    getStatusTiers(currentStatus.status).forEach(tier => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = tier.name;
-      button.addEventListener("click", () => {
-        movePokemonToStatus(pokemonId, currentStatus.status, tier.id);
-        moveDialog.close();
-      });
-      moveTargets.append(button);
-    });
-
-    appendMoveGroupTitle("厳選未完了へ戻す");
     const restoreTier = state.tiers.find(tier => tier.name === currentStatusTier?.name) || state.tiers[0];
     if (restoreTier) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = "厳選未完了に戻す";
-      button.addEventListener("click", () => {
+      appendMoveAction("厳選未完了に戻す", () => {
         movePokemon(pokemonId, restoreTier.id);
-        moveDialog.close();
       });
-      moveTargets.append(button);
     }
   } else {
-    appendMoveGroupTitle("Tier変更");
-    state.tiers.forEach(tier => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = tier.name;
-      button.addEventListener("click", () => {
-        movePokemon(pokemonId, tier.id);
-        moveDialog.close();
+    const linkedCompromiseTier = getLinkedStatusTier("compromise", currentTierId);
+    if (linkedCompromiseTier) {
+      appendMoveAction("妥協個体ありへ", () => {
+        movePokemonToStatus(pokemonId, "compromise", linkedCompromiseTier.id);
       });
-      moveTargets.append(button);
+    }
+    const linkedFinishedTier = getLinkedStatusTier("finished", currentTierId);
+    if (linkedFinishedTier) {
+      appendMoveAction("厳選完了へ", () => {
+        movePokemonToStatus(pokemonId, "finished", linkedFinishedTier.id);
+      });
+    }
+
+    if (!linkedCompromiseTier && !linkedFinishedTier) {
+      appendStatusMoveButtons(pokemonId, "compromise", "妥協");
+      appendStatusMoveButtons(pokemonId, "finished", "完了");
+    }
+  }
+
+  appendMoveGroupTitle("Tier変更");
+  if (currentStatus) {
+    getStatusTiers(currentStatus.status).forEach(tier => {
+      appendMoveAction(tier.name, () => {
+        movePokemonToStatus(pokemonId, currentStatus.status, tier.id);
+      });
+    });
+  } else {
+    state.tiers.forEach(tier => {
+      appendMoveAction(tier.name, () => {
+        movePokemon(pokemonId, tier.id);
+      });
     });
   }
 
   moveDialog.showModal();
+}
+
+function appendMoveAction(text, onMove) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = text;
+  button.addEventListener("click", () => {
+    onMove();
+    moveDialog.close();
+  });
+  moveTargets.append(button);
 }
 
 function appendMoveGroupTitle(text) {

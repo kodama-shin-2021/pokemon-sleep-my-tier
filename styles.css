@@ -844,6 +844,7 @@ dialog h2 {
 .candidate-field input,
 .candidate-field textarea,
 .candidate-field select,
+.candidate-field output,
 .candidate-card select,
 .candidate-card-head input {
   width: 100%;
@@ -855,6 +856,14 @@ dialog h2 {
   color: var(--ink);
   font: inherit;
   font-size: 13px;
+}
+
+.candidate-field output {
+  display: grid;
+  align-items: center;
+  background: #eef3f1;
+  color: var(--muted);
+  font-weight: 800;
 }
 
 .candidate-field textarea {

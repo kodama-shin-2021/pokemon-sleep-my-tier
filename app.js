@@ -2458,6 +2458,8 @@ function createCandidateCard(pokemonId, candidate, index) {
     createCandidateSubSkillField(pokemonId, candidate, "10"),
     createCandidateSubSkillField(pokemonId, candidate, "25"),
     createCandidateSubSkillField(pokemonId, candidate, "50"),
+    createCandidateSubSkillField(pokemonId, candidate, "75"),
+    createCandidateSubSkillField(pokemonId, candidate, "100"),
     createCandidateMemo(pokemonId, candidate),
   );
   return card;
@@ -2541,6 +2543,21 @@ function getSubSkillClass(skill) {
 }
 
 function createCandidateIngredientInput(pokemonId, candidate, index) {
+  if (index === 0) {
+    const detail = pokemonDetailData[pokemonId] || {};
+    const firstIngredient = Array.isArray(detail.ingredients) ? detail.ingredients[0] || "" : "";
+    const value = candidate.ingredients?.[0] || firstIngredient;
+    const output = document.createElement("output");
+    output.textContent = value || "未設定";
+    output.className = "candidate-fixed-ingredient";
+    const ingredients = Array.isArray(candidate.ingredients) ? [...candidate.ingredients] : ["", "", ""];
+    if (!ingredients[0] && firstIngredient) {
+      ingredients[0] = firstIngredient;
+      candidate.ingredients = ingredients;
+      saveCandidateChange();
+    }
+    return output;
+  }
   const select = document.createElement("select");
   select.ariaLabel = `第${index + 1}食材`;
   const detail = pokemonDetailData[pokemonId] || {};
@@ -2614,7 +2631,7 @@ function addCandidate(pokemonId) {
     label: `候補${candidates.length + 1}`,
     ingredients: Array.isArray(detail.ingredients) ? detail.ingredients.slice(0, 3) : ["", "", ""],
     nature: "",
-    subSkills: { 10: "", 25: "", 50: "" },
+    subSkills: { 10: "", 25: "", 50: "", 75: "", 100: "" },
     status: "保留",
     memo: "",
   });
@@ -3134,6 +3151,8 @@ function normalizeCandidate(candidate) {
       10: subSkills[10] || subSkills["10"] || "",
       25: subSkills[25] || subSkills["25"] || "",
       50: subSkills[50] || subSkills["50"] || "",
+      75: subSkills[75] || subSkills["75"] || "",
+      100: subSkills[100] || subSkills["100"] || "",
     },
     status: ["育成候補", "保留", "除外"].includes(candidate.status) ? candidate.status : "保留",
     memo: candidate.memo || "",

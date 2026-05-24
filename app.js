@@ -133,26 +133,26 @@ const defaultCompromiseTiers = defaultTiers.map(tier => ({
 }));
 const defaultCompromiseTierByName = new Map(defaultCompromiseTiers.map(tier => [tier.name, tier]));
 const natureOptions = [
-  ["さみしがり", "おてつだいスピード↑(1.11倍) / げんき回復量↓(0.88倍)"],
-  ["いじっぱり", "おてつだいスピード↑(1.11倍) / 食材おてつだい確率↓(0.8倍)"],
-  ["やんちゃ", "おてつだいスピード↑(1.11倍) / メインスキル発生確率↓(0.8倍)"],
-  ["ゆうかん", "おてつだいスピード↑(1.11倍) / EXP獲得量↓(0.82倍)"],
-  ["ずぶとい", "げんき回復量↑(1.2倍) / おてつだいスピード↓(0.93倍)"],
-  ["わんぱく", "げんき回復量↑(1.2倍) / 食材おてつだい確率↓(0.8倍)"],
-  ["のうてんき", "げんき回復量↑(1.2倍) / メインスキル発生確率↓(0.8倍)"],
-  ["のんき", "げんき回復量↑(1.2倍) / EXP獲得量↓(0.82倍)"],
-  ["ひかえめ", "食材おてつだい確率↑(1.2倍) / おてつだいスピード↓(0.93倍)"],
-  ["おっとり", "食材おてつだい確率↑(1.2倍) / げんき回復量↓(0.88倍)"],
-  ["うっかりや", "食材おてつだい確率↑(1.2倍) / メインスキル発生確率↓(0.8倍)"],
-  ["れいせい", "食材おてつだい確率↑(1.2倍) / EXP獲得量↓(0.82倍)"],
-  ["おだやか", "メインスキル発生確率↑(1.2倍) / おてつだいスピード↓(0.93倍)"],
-  ["おとなしい", "メインスキル発生確率↑(1.2倍) / げんき回復量↓(0.88倍)"],
-  ["しんちょう", "メインスキル発生確率↑(1.2倍) / 食材おてつだい確率↓(0.8倍)"],
-  ["なまいき", "メインスキル発生確率↑(1.2倍) / EXP獲得量↓(0.82倍)"],
-  ["おくびょう", "EXP獲得量↑(1.18倍) / おてつだいスピード↓(0.93倍)"],
-  ["せっかち", "EXP獲得量↑(1.18倍) / げんき回復量↓(0.88倍)"],
-  ["ようき", "EXP獲得量↑(1.18倍) / 食材おてつだい確率↓(0.8倍)"],
-  ["むじゃき", "EXP獲得量↑(1.18倍) / メインスキル発生確率↓(0.8倍)"],
+  ["さみしがり", "おてつだいスピード↑ 1.11倍 / げんき回復量↓ 0.88倍"],
+  ["いじっぱり", "おてつだいスピード↑ 1.11倍 / 食材おてつだい確率↓ 0.8倍"],
+  ["やんちゃ", "おてつだいスピード↑ 1.11倍 / メインスキル発生確率↓ 0.8倍"],
+  ["ゆうかん", "おてつだいスピード↑ 1.11倍 / EXP獲得量↓ 0.82倍"],
+  ["ずぶとい", "げんき回復量↑ 1.2倍 / おてつだいスピード↓ 0.93倍"],
+  ["わんぱく", "げんき回復量↑ 1.2倍 / 食材おてつだい確率↓ 0.8倍"],
+  ["のうてんき", "げんき回復量↑ 1.2倍 / メインスキル発生確率↓ 0.8倍"],
+  ["のんき", "げんき回復量↑ 1.2倍 / EXP獲得量↓ 0.82倍"],
+  ["ひかえめ", "食材おてつだい確率↑ 1.2倍 / おてつだいスピード↓ 0.93倍"],
+  ["おっとり", "食材おてつだい確率↑ 1.2倍 / げんき回復量↓ 0.88倍"],
+  ["うっかりや", "食材おてつだい確率↑ 1.2倍 / メインスキル発生確率↓ 0.8倍"],
+  ["れいせい", "食材おてつだい確率↑ 1.2倍 / EXP獲得量↓ 0.82倍"],
+  ["おだやか", "メインスキル発生確率↑ 1.2倍 / おてつだいスピード↓ 0.93倍"],
+  ["おとなしい", "メインスキル発生確率↑ 1.2倍 / げんき回復量↓ 0.88倍"],
+  ["しんちょう", "メインスキル発生確率↑ 1.2倍 / 食材おてつだい確率↓ 0.8倍"],
+  ["なまいき", "メインスキル発生確率↑ 1.2倍 / EXP獲得量↓ 0.82倍"],
+  ["おくびょう", "EXP獲得量↑ 1.18倍 / おてつだいスピード↓ 0.93倍"],
+  ["せっかち", "EXP獲得量↑ 1.18倍 / げんき回復量↓ 0.88倍"],
+  ["ようき", "EXP獲得量↑ 1.18倍 / 食材おてつだい確率↓ 0.8倍"],
+  ["むじゃき", "EXP獲得量↑ 1.18倍 / メインスキル発生確率↓ 0.8倍"],
   ["てれや", "無補正"],
   ["がんばりや", "無補正"],
   ["すなお", "無補正"],
@@ -2503,7 +2503,7 @@ function createCandidateNatureField(pokemonId, candidate) {
   select.ariaLabel = "性格";
   appendSelectOption(select, "", "性格を選択");
   natureOptions.forEach(([name, effect]) => {
-    appendSelectOption(select, name, `${name} (${effect})`);
+    appendSelectOption(select, name, name);
   });
   if (candidate.nature && !natureOptions.some(([name]) => name === candidate.nature)) {
     appendSelectOption(select, candidate.nature, candidate.nature);
@@ -2512,8 +2512,12 @@ function createCandidateNatureField(pokemonId, candidate) {
   select.addEventListener("change", () => {
     candidate.nature = select.value;
     saveCandidateChange();
+    renderCandidatePanel(pokemonId);
   });
-  field.append(span, select);
+  const effect = document.createElement("small");
+  effect.className = "candidate-effect";
+  effect.textContent = getNatureEffect(candidate.nature);
+  field.append(span, select, effect);
   return field;
 }
 
@@ -2529,7 +2533,7 @@ function createCandidateSubSkillField(pokemonId, candidate, level) {
   subSkillGroups.forEach(group => {
     const optgroup = document.createElement("optgroup");
     optgroup.label = `${group.label}サブスキル`;
-    group.skills.forEach(skill => appendSelectOption(optgroup, skill, formatSubSkillOptionText(skill)));
+    group.skills.forEach(skill => appendSelectOption(optgroup, skill, skill));
     select.append(optgroup);
   });
   if (candidate.subSkills?.[level] && !getSubSkillColor(candidate.subSkills[level])) {
@@ -2540,8 +2544,12 @@ function createCandidateSubSkillField(pokemonId, candidate, level) {
     candidate.subSkills = { ...candidate.subSkills, [level]: select.value };
     select.className = `subskill-select ${getSubSkillClass(select.value)}`;
     saveCandidateChange();
+    renderCandidatePanel(pokemonId);
   });
-  field.append(span, select);
+  const effect = document.createElement("small");
+  effect.className = "candidate-effect";
+  effect.textContent = subSkillEffects[candidate.subSkills?.[level]] || "";
+  field.append(span, select, effect);
   return field;
 }
 
@@ -2552,9 +2560,8 @@ function appendSelectOption(parent, value, text) {
   parent.append(option);
 }
 
-function formatSubSkillOptionText(skill) {
-  const effect = subSkillEffects[skill];
-  return effect ? `${skill} (${effect})` : skill;
+function getNatureEffect(nature) {
+  return natureOptions.find(([name]) => name === nature)?.[1] || "";
 }
 
 function getSubSkillColor(skill) {

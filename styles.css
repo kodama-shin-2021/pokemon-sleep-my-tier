@@ -660,16 +660,28 @@ button:active {
   font-weight: 800;
 }
 
+.candidate-count {
+  width: fit-content;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 10px;
+  font-weight: 800;
+}
+
 .drop-hover {
   outline: 3px solid rgba(37, 111, 143, 0.28);
   outline-offset: -4px;
 }
 
 dialog {
-  width: min(460px, calc(100% - 24px));
+  width: min(780px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
   border: 0;
   border-radius: 8px;
   padding: 0;
+  overflow: auto;
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.24);
 }
 
@@ -751,6 +763,112 @@ dialog h2 {
   color: var(--muted);
   font-size: 12px;
   font-weight: 800;
+}
+
+.candidate-panel {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.candidate-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.candidate-panel h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.candidate-panel-head button {
+  min-height: 34px;
+  padding: 0 10px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.candidate-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.candidate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.candidate-card {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fbfa;
+}
+
+.candidate-card-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 92px 34px;
+  gap: 6px;
+  align-items: center;
+}
+
+.candidate-card-head button {
+  min-height: 34px;
+  padding: 0;
+  color: var(--danger);
+}
+
+.candidate-field {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.candidate-field span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.candidate-field input,
+.candidate-field textarea,
+.candidate-card select,
+.candidate-card-head input {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 8px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+}
+
+.candidate-field textarea {
+  min-height: 56px;
+  padding: 8px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.candidate-ingredients {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.candidate-ingredients span {
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 860px) {
@@ -844,5 +962,9 @@ dialog h2 {
 
   .move-targets button {
     min-height: 46px;
+  }
+
+  .candidate-grid {
+    grid-template-columns: 1fr;
   }
 }

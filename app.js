@@ -2661,62 +2661,207 @@ function createCandidateSection(title, className, children) {
 }
 
 function createCandidateNatureField(pokemonId, candidate) {
-  const field = document.createElement("label");
+  const field = document.createElement("div");
   field.className = "candidate-field";
   const span = document.createElement("span");
   span.textContent = "性格";
-  const select = document.createElement("select");
-  select.ariaLabel = "性格";
-  appendSelectOption(select, "", "性格を選択");
-  natureOptions.forEach(([name, effect]) => {
-    appendSelectOption(select, name, name);
-  });
-  if (candidate.nature && !natureOptions.some(([name]) => name === candidate.nature)) {
-    appendSelectOption(select, candidate.nature, candidate.nature);
-  }
-  select.value = candidate.nature || "";
-  select.addEventListener("change", () => {
-    candidate.nature = select.value;
-    saveCandidateChange();
-    renderCandidatePanel(pokemonId);
+  const button = createPickerButton(candidate.nature || "性格を選択", !candidate.nature);
+  button.addEventListener("click", () => {
+    openNaturePicker(candidate.nature, value => {
+      candidate.nature = value;
+      saveCandidateChange();
+      renderCandidatePanel(pokemonId);
+    });
   });
   const effect = document.createElement("small");
   effect.className = "candidate-effect";
   effect.textContent = getNatureEffect(candidate.nature);
-  field.append(span, select, effect);
+  field.append(span, button, effect);
   return field;
 }
 
 function createCandidateSubSkillField(pokemonId, candidate, level) {
-  const field = document.createElement("label");
+  const field = document.createElement("div");
   field.className = "candidate-field";
   const span = document.createElement("span");
   span.textContent = `サブスキル Lv${level}`;
-  const select = document.createElement("select");
-  select.ariaLabel = `サブスキル Lv${level}`;
-  select.className = `subskill-select ${getSubSkillClass(candidate.subSkills?.[level] || "")}`;
-  appendSelectOption(select, "", "サブスキルを選択");
-  subSkillGroups.forEach(group => {
-    const optgroup = document.createElement("optgroup");
-    optgroup.label = `${group.label}サブスキル`;
-    group.skills.forEach(skill => appendSelectOption(optgroup, skill, skill));
-    select.append(optgroup);
-  });
-  if (candidate.subSkills?.[level] && !getSubSkillColor(candidate.subSkills[level])) {
-    appendSelectOption(select, candidate.subSkills[level], candidate.subSkills[level]);
-  }
-  select.value = candidate.subSkills?.[level] || "";
-  select.addEventListener("change", () => {
-    candidate.subSkills = { ...candidate.subSkills, [level]: select.value };
-    select.className = `subskill-select ${getSubSkillClass(select.value)}`;
-    saveCandidateChange();
-    renderCandidatePanel(pokemonId);
+  const skill = candidate.subSkills?.[level] || "";
+  const button = createPickerButton(skill || "サブスキルを選択", !skill);
+  button.className = `candidate-picker-button subskill-select ${getSubSkillClass(skill)}`;
+  button.classList.toggle("is-placeholder", !skill);
+  button.addEventListener("click", () => {
+    openSubSkillPicker(candidate, level, value => {
+      candidate.subSkills = { ...candidate.subSkills, [level]: value };
+      saveCandidateChange();
+      renderCandidatePanel(pokemonId);
+    });
   });
   const effect = document.createElement("small");
   effect.className = "candidate-effect";
-  effect.textContent = subSkillEffects[candidate.subSkills?.[level]] || "";
-  field.append(span, select, effect);
+  effect.textContent = subSkillEffects[skill] || "";
+  field.append(span, button, effect);
   return field;
+}
+
+function createPickerButton(text, isPlaceholder = false) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "candidate-picker-button";
+  button.textContent = text;
+  button.classList.toggle("is-placeholder", isPlaceholder);
+  return button;
+}
+
+function openNaturePicker(currentValue, onSelect) {
+  openChoicePanel("せいかくを選択してください", panel => {
+    getNatureChoiceGroups().forEach(group => {
+      const section = createChoiceSection(group.title, group.isNeutral ? "" : "▲▲");
+      group.options.forEach(([name]) => {
+        section.body.append(createChoiceButton(name, {
+          selected: name === currentValue,
+          onClick: close => {
+            onSelect(name);
+            close();
+          },
+        }));
+      });
+      panel.append(section.element);
+    });
+  }, {
+    clearLabel: "クリア",
+    onClear: close => {
+      onSelect("");
+      close();
+    },
+  });
+}
+
+function openSubSkillPicker(candidate, level, onSelect) {
+  openChoicePanel(`レベル ${level} のサブスキルを選択してください`, panel => {
+    subSkillGroups.forEach(group => {
+      const section = createChoiceSection(`${group.label}色サブスキル`);
+      group.skills.forEach(skill => {
+        const selectedLevels = Object.entries(candidate.subSkills || {})
+          .filter(([, selectedSkill]) => selectedSkill === skill)
+          .map(([selectedLevel]) => selectedLevel);
+        section.body.append(createChoiceButton(skill, {
+          selected: candidate.subSkills?.[level] === skill,
+          className: `subskill-choice subskill-${group.color}`,
+          badges: selectedLevels,
+          onClick: close => {
+            onSelect(skill);
+            close();
+          },
+        }));
+      });
+      panel.append(section.element);
+    });
+  }, {
+    clearLabel: "クリア",
+    onClear: close => {
+      onSelect("");
+      close();
+    },
+  });
+}
+
+function getNatureChoiceGroups() {
+  const groups = [
+    { key: "無補正", title: "せいかくによる特徴なし", isNeutral: true, options: [] },
+    { key: "おてつだいスピード", title: "おてつだいスピード", options: [] },
+    { key: "メインスキル発生確率", title: "メインスキル発生率", options: [] },
+    { key: "食材おてつだい確率", title: "食材おてつだい確率", options: [] },
+    { key: "EXP獲得量", title: "EXP獲得量", options: [] },
+    { key: "げんき回復量", title: "げんき回復量", options: [] },
+  ];
+  natureOptions.forEach(option => {
+    const [, effect] = option;
+    const group = groups.find(item => effect === "無補正" ? item.key === "無補正" : effect.includes(`${item.key}↑`));
+    if (group) group.options.push(option);
+  });
+  return groups.filter(group => group.options.length);
+}
+
+function createChoiceSection(title, marker = "") {
+  const element = document.createElement("section");
+  element.className = "choice-panel-section";
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+  if (marker) {
+    const markerElement = document.createElement("span");
+    markerElement.textContent = marker;
+    heading.append(markerElement);
+  }
+  const body = document.createElement("div");
+  body.className = "choice-panel-grid";
+  element.append(heading, body);
+  return { element, body };
+}
+
+function createChoiceButton(text, { selected = false, className = "", badges = [], onClick }) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = `choice-panel-button ${className}`;
+  button.classList.toggle("is-selected", selected);
+  const label = document.createElement("span");
+  label.textContent = text;
+  button.append(label);
+  badges.forEach(badge => {
+    const badgeElement = document.createElement("small");
+    badgeElement.textContent = badge;
+    button.append(badgeElement);
+  });
+  button.addEventListener("click", () => onClick?.(closeChoicePanel));
+  return button;
+}
+
+function openChoicePanel(title, renderBody, { clearLabel = "", onClear = null } = {}) {
+  closeChoicePanel();
+  const overlay = document.createElement("div");
+  overlay.className = "choice-panel-overlay";
+  overlay.addEventListener("click", event => {
+    if (event.target === overlay) closeChoicePanel();
+  });
+
+  const dialog = document.createElement("div");
+  dialog.className = "choice-panel";
+  dialog.setAttribute("role", "dialog");
+  dialog.setAttribute("aria-modal", "true");
+
+  const heading = document.createElement("h2");
+  heading.textContent = title;
+  const body = document.createElement("div");
+  body.className = "choice-panel-body";
+  renderBody(body);
+
+  const footer = document.createElement("div");
+  footer.className = "choice-panel-footer";
+  if (onClear) {
+    const clearButton = document.createElement("button");
+    clearButton.type = "button";
+    clearButton.textContent = clearLabel;
+    clearButton.addEventListener("click", () => onClear(closeChoicePanel));
+    footer.append(clearButton);
+  }
+  const closeButton = document.createElement("button");
+  closeButton.type = "button";
+  closeButton.textContent = "閉じる";
+  closeButton.addEventListener("click", closeChoicePanel);
+  footer.append(closeButton);
+
+  dialog.append(heading, body, footer);
+  overlay.append(dialog);
+  document.body.append(overlay);
+  document.addEventListener("keydown", closeChoicePanelOnEscape);
+}
+
+function closeChoicePanelOnEscape(event) {
+  if (event.key === "Escape") closeChoicePanel();
+}
+
+function closeChoicePanel() {
+  document.querySelector(".choice-panel-overlay")?.remove();
+  document.removeEventListener("keydown", closeChoicePanelOnEscape);
 }
 
 function appendSelectOption(parent, value, text) {

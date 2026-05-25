@@ -2690,8 +2690,7 @@ function createCandidateSubSkillField(pokemonId, candidate, level) {
   button.className = `candidate-picker-button subskill-select ${getSubSkillClass(skill)}`;
   button.classList.toggle("is-placeholder", !skill);
   button.addEventListener("click", () => {
-    openSubSkillPicker(candidate, level, value => {
-      candidate.subSkills = { ...candidate.subSkills, [level]: value };
+    openSubSkillPicker(candidate, level, () => {
       saveCandidateChange();
       renderCandidatePanel(pokemonId);
     });
@@ -2738,33 +2737,80 @@ function openNaturePicker(currentValue, onSelect) {
   });
 }
 
-function openSubSkillPicker(candidate, level, onSelect) {
-  openChoicePanel(`レベル ${level} のサブスキルを選択してください`, panel => {
-    subSkillGroups.forEach(group => {
-      const section = createChoiceSection(`${group.label}色サブスキル`);
-      group.skills.forEach(skill => {
-        const selectedLevels = Object.entries(candidate.subSkills || {})
-          .filter(([, selectedSkill]) => selectedSkill === skill)
-          .map(([selectedLevel]) => selectedLevel);
-        section.body.append(createChoiceButton(skill, {
-          selected: candidate.subSkills?.[level] === skill,
-          className: `subskill-choice subskill-${group.color}`,
-          badges: selectedLevels,
-          onClick: close => {
-            onSelect(skill);
-            close();
-          },
+function openSubSkillPicker(candidate, initialLevel, onChange) {
+  let activeLevel = String(initialLevel);
+  let rerenderSubSkillPanel = () => {};
+  openChoicePanel("サブスキルを選択してください", panel => {
+    const renderPanel = () => {
+      panel.innerHTML = "";
+      const levelBar = document.createElement("div");
+      levelBar.className = "subskill-level-bar";
+      CANDIDATE_LEVELS.forEach(level => {
+        levelBar.append(createSubSkillLevelButton(candidate, level, level === activeLevel, () => {
+          activeLevel = level;
+          renderPanel();
         }));
       });
-      panel.append(section.element);
-    });
+      panel.append(levelBar);
+
+      subSkillGroups.forEach(group => {
+        const section = createChoiceSection(`${group.label}色サブスキル`);
+        group.skills.forEach(skill => {
+          const selectedLevels = getSelectedSubSkillLevels(candidate, skill);
+          section.body.append(createChoiceButton(skill, {
+            selected: selectedLevels.length > 0,
+            className: `subskill-choice subskill-${group.color}`,
+            badges: selectedLevels,
+            onClick: () => {
+              const selectedLevel = selectedLevels[0];
+              if (selectedLevel) {
+                candidate.subSkills = { ...candidate.subSkills, [selectedLevel]: "" };
+                activeLevel = selectedLevel;
+              } else {
+                candidate.subSkills = { ...candidate.subSkills, [activeLevel]: skill };
+                activeLevel = getNextSubSkillLevel(activeLevel);
+              }
+              onChange();
+              renderPanel();
+            },
+          }));
+        });
+        panel.append(section.element);
+      });
+    };
+    rerenderSubSkillPanel = renderPanel;
+    renderPanel();
   }, {
-    clearLabel: "クリア",
-    onClear: close => {
-      onSelect("");
-      close();
+    clearLabel: "選択中Lvをクリア",
+    onClear: () => {
+      candidate.subSkills = { ...candidate.subSkills, [activeLevel]: "" };
+      onChange();
+      rerenderSubSkillPanel();
     },
   });
+}
+
+function createSubSkillLevelButton(candidate, level, isActive, onClick) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "subskill-level-button";
+  button.classList.toggle("is-active", isActive);
+  const levelLabel = document.createElement("span");
+  levelLabel.textContent = `Lv${level}`;
+  const skillLabel = document.createElement("small");
+  skillLabel.textContent = candidate.subSkills?.[level] || "未選択";
+  button.append(levelLabel, skillLabel);
+  button.addEventListener("click", onClick);
+  return button;
+}
+
+function getSelectedSubSkillLevels(candidate, skill) {
+  return CANDIDATE_LEVELS.filter(level => candidate.subSkills?.[level] === skill);
+}
+
+function getNextSubSkillLevel(currentLevel) {
+  const currentIndex = CANDIDATE_LEVELS.indexOf(String(currentLevel));
+  return CANDIDATE_LEVELS[Math.min(currentIndex + 1, CANDIDATE_LEVELS.length - 1)] || CANDIDATE_LEVELS[0];
 }
 
 function getNatureChoiceGroups() {

@@ -109,6 +109,13 @@ button:active {
   font-weight: 700;
 }
 
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
 .primary-button {
   background: var(--accent);
   border-color: var(--accent);
@@ -118,6 +125,20 @@ button:active {
 .primary-button:hover {
   background: var(--accent-strong);
   border-color: var(--accent-strong);
+}
+
+.share-button {
+  min-height: 46px;
+  padding: 0 18px;
+  border-color: #d18d47;
+  background: #d8893c;
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(198, 124, 63, 0.22);
+}
+
+.share-button:hover {
+  border-color: #b96d2c;
+  background: #c8752f;
 }
 
 .danger-button {

@@ -23,10 +23,17 @@
             使い方: ポケモンをクリックして、妥協個体ありや厳選完了に移すことで厳選状況を管理できます。また、Tierの変更もできます。
             編集内容はこの端末内に保存され、JSONでバックアップできます。
             <br />
+            共有URLを作ると、Tier配置や厳選候補の個体情報をそのまま他の人に見せられます。
+            <br />
             Tierの元情報は
             <a href="https://game8.jp/pokemonsleep/542600" target="_blank" rel="noopener">Game8の最強ポケモンランキングTier表</a>
             から取得しています。自分用に置き換えてください。
           </p>
+          <div class="header-actions">
+            <button id="shareUrlButton" class="share-button" type="button">
+              厳選状況を共有
+            </button>
+          </div>
         </div>
       </header>
 
@@ -124,7 +131,6 @@
 
       <div class="page-actions">
         <button id="exportButton" class="primary-button" type="button">画像保存</button>
-        <button id="shareUrlButton" type="button">共有URL生成</button>
         <button id="exportDataButton" type="button">JSON保存</button>
         <button id="importDataButton" type="button">JSON復元</button>
         <input id="importDataInput" type="file" accept="application/json,.json" hidden />
@@ -182,6 +188,6 @@
       </form>
     </dialog>
 
-    <script src="app.js?v=20260525-15"></script>
+    <script src="app.js?v=20260525-16"></script>
   </body>
 </html>

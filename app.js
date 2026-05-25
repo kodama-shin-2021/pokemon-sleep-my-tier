@@ -9,7 +9,8 @@ const LEGACY_STORAGE_KEYS = [
 const STATUS_TYPES = ["compromise", "finished"];
 const CANDIDATE_LEVELS = ["10", "25", "50", "75", "100"];
 const CANDIDATE_SUMMARY_LEVELS = ["50", "75", "100"];
-const CANDIDATE_STATUSES = ["育成候補", "保留", "除外"];
+const CANDIDATE_STATUSES = ["育成済み", "育成中", "育成候補", "保留", "除外"];
+const DEFAULT_CANDIDATE_STATUS = "育成候補";
 const CANDIDATE_INGREDIENT_INDEXES = [0, 1, 2];
 
 const finalPokemon = [
@@ -2783,7 +2784,7 @@ function addCandidate(pokemonId) {
     ingredients: Array.isArray(detail.ingredients) ? detail.ingredients.slice(0, 3) : ["", "", ""],
     nature: "",
     subSkills: { 10: "", 25: "", 50: "", 75: "", 100: "" },
-    status: "保留",
+    status: DEFAULT_CANDIDATE_STATUS,
     memo: "",
   });
   state.candidateNotes[pokemonId] = candidates;
@@ -3290,7 +3291,7 @@ function normalizeCandidate(candidate) {
     ingredients: normalizeCandidateIngredients(candidate.ingredients),
     nature: candidate.nature || "",
     subSkills: Object.fromEntries(CANDIDATE_LEVELS.map(level => [level, subSkills[level] || ""])),
-    status: CANDIDATE_STATUSES.includes(candidate.status) ? candidate.status : "保留",
+    status: CANDIDATE_STATUSES.includes(candidate.status) ? candidate.status : DEFAULT_CANDIDATE_STATUS,
     memo: candidate.memo || "",
   };
 }

@@ -2627,30 +2627,37 @@ function createCandidateCard(pokemonId, candidate, index) {
   card.className = "candidate-card";
   const head = document.createElement("div");
   head.className = "candidate-card-head";
-  head.append(
+  const titleFields = document.createElement("div");
+  titleFields.className = "candidate-title-fields";
+  titleFields.append(
     createCandidateInput(pokemonId, candidate, "label", candidate.label || `候補${index + 1}`, "候補名"),
     createCandidateSelect(pokemonId, candidate, "status", CANDIDATE_STATUSES, "判定"),
-    iconButton("×", () => removeCandidate(pokemonId, candidate.id), "候補削除"),
   );
+  head.append(titleFields, iconButton("×", () => removeCandidate(pokemonId, candidate.id), "候補削除"));
   card.append(head);
 
-  const ingredientRow = document.createElement("div");
-  ingredientRow.className = "candidate-field candidate-ingredients";
-  const ingredientLabel = document.createElement("span");
-  ingredientLabel.textContent = "食材";
-  ingredientRow.append(ingredientLabel);
-  CANDIDATE_INGREDIENT_INDEXES.forEach(ingredientIndex => {
-    ingredientRow.append(createCandidateIngredientInput(pokemonId, candidate, ingredientIndex));
-  });
-  card.append(ingredientRow);
-
   card.append(
-    createCandidateNatureField(pokemonId, candidate),
-    ...CANDIDATE_LEVELS.map(level => createCandidateSubSkillField(pokemonId, candidate, level)),
-    createCandidateTotals(candidate),
+    createCandidateSection("食材構成", "candidate-ingredient-grid", CANDIDATE_INGREDIENT_INDEXES.map(ingredientIndex => (
+      createCandidateIngredientField(pokemonId, candidate, ingredientIndex)
+    ))),
+    createCandidateSection("性格", "candidate-single-grid", [createCandidateNatureField(pokemonId, candidate)]),
+    createCandidateSection("サブスキル", "candidate-subskill-grid", CANDIDATE_LEVELS.map(level => createCandidateSubSkillField(pokemonId, candidate, level))),
+    createCandidateSection("合計補正", "candidate-single-grid", [createCandidateTotals(candidate)]),
     createCandidateMemo(pokemonId, candidate),
   );
   return card;
+}
+
+function createCandidateSection(title, className, children) {
+  const section = document.createElement("div");
+  section.className = `candidate-card-section ${className}`;
+  const heading = document.createElement("h4");
+  heading.textContent = title;
+  const body = document.createElement("div");
+  body.className = "candidate-card-section-body";
+  body.append(...children);
+  section.append(heading, body);
+  return section;
 }
 
 function createCandidateNatureField(pokemonId, candidate) {
@@ -2809,6 +2816,15 @@ function getSubSkillColor(skill) {
 function getSubSkillClass(skill) {
   const color = getSubSkillColor(skill);
   return color ? `subskill-${color}` : "";
+}
+
+function createCandidateIngredientField(pokemonId, candidate, index) {
+  const field = document.createElement("label");
+  field.className = "candidate-field";
+  const span = document.createElement("span");
+  span.textContent = ["第1食材", "第2食材", "第3食材"][index];
+  field.append(span, createCandidateIngredientInput(pokemonId, candidate, index));
+  return field;
 }
 
 function createCandidateIngredientInput(pokemonId, candidate, index) {

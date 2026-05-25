@@ -927,31 +927,68 @@ dialog h2 {
 
 .candidate-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   gap: 12px;
 }
 
 .candidate-card {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #f8fbfa;
+  background: #ffffff;
 }
 
 .candidate-card-head {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 92px 34px;
-  gap: 6px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) 34px;
+  gap: 8px;
+  align-items: start;
 }
 
 .candidate-card-head button {
   min-height: 34px;
   padding: 0;
   color: var(--danger);
+}
+
+.candidate-title-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 112px;
+  gap: 8px;
+}
+
+.candidate-card-section {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #dde8e4;
+  border-radius: 8px;
+  background: #f8fbfa;
+}
+
+.candidate-card-section h4 {
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.candidate-card-section-body {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.candidate-ingredient-grid .candidate-card-section-body {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.candidate-subskill-grid .candidate-card-section-body {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .candidate-field {
@@ -967,7 +1004,7 @@ dialog h2 {
 }
 
 .candidate-effect {
-  min-height: 16px;
+  min-height: 15px;
   color: var(--muted);
   font-size: 11px;
   font-weight: 700;
@@ -1001,31 +1038,38 @@ dialog h2 {
 
 .candidate-totals {
   display: grid;
-  gap: 6px;
-  padding: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0;
   border: 1px solid #cfe0dc;
   border-radius: 8px;
-  background: #eef7f5;
+  background: #ffffff;
+  overflow: hidden;
 }
 
 .candidate-total-row {
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
-  gap: 6px;
+  gap: 4px;
   align-items: start;
   min-width: 0;
+  padding: 8px;
+  background: #eef7f5;
 }
 
 .candidate-total-level {
-  color: var(--muted);
+  width: fit-content;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .candidate-total-row p {
   margin: 0;
   color: var(--accent-strong);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   line-height: 1.45;
 }
@@ -1050,14 +1094,6 @@ dialog h2 {
 .subskill-select.subskill-white {
   border-color: #c9d1d6;
   background: #ffffff;
-}
-
-.candidate-ingredients {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.candidate-ingredients span {
-  grid-column: 1 / -1;
 }
 
 .dialog-footer {
@@ -1170,6 +1206,13 @@ dialog h2 {
   }
 
   .candidate-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .candidate-title-fields,
+  .candidate-ingredient-grid .candidate-card-section-body,
+  .candidate-subskill-grid .candidate-card-section-body,
+  .candidate-totals {
     grid-template-columns: 1fr;
   }
 }

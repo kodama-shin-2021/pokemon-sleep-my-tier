@@ -222,7 +222,8 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
         ]
     },
     "charizard": {
@@ -235,7 +236,9 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟"
+            "トープ洞窟",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "butterfree": {
@@ -249,7 +252,9 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "raticate": {
@@ -280,7 +285,8 @@ const pokemonDetailData = {
             "シアンの砂浜",
             "トープ洞窟",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷"
         ]
     },
     "pikachu-halloween": {
@@ -291,12 +297,7 @@ const pokemonDetailData = {
             "あったかジンジャー"
         ],
         "baseGauge": "7",
-        "fields": [
-            "ワカクサ本島",
-            "シアンの砂浜",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
-        ]
+        "fields": []
     },
     "pikachu-holiday": {
         "mainSkill": "ゆめのかけらゲットS",
@@ -306,12 +307,7 @@ const pokemonDetailData = {
             "あったかジンジャー"
         ],
         "baseGauge": "7",
-        "fields": [
-            "ワカクサ本島",
-            "シアンの砂浜",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
-        ]
+        "fields": []
     },
     "raichu": {
         "mainSkill": "エナジーチャージS",
@@ -323,7 +319,9 @@ const pokemonDetailData = {
         "baseGauge": "7",
         "fields": [
             "ワカクサ本島",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "clefable": {
@@ -340,7 +338,9 @@ const pokemonDetailData = {
             "トープ洞窟",
             "ウノハナ雪原",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "wigglytuff": {
@@ -382,7 +382,8 @@ const pokemonDetailData = {
         "baseGauge": "12",
         "fields": [
             "ワカクサ本島",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
         ]
     },
     "golduck": {
@@ -426,7 +427,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟"
+            "トープ洞窟",
+            "ワカクサ本島EX"
         ]
     },
     "victreebel": {
@@ -485,7 +487,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "dodrio": {
@@ -498,7 +501,8 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
         ]
     },
     "gengar": {
@@ -526,7 +530,7 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "トープ洞窟",
-            "ワカクサ本島"
+            "ワカクサ本島EX"
         ]
     },
     "marowak": {
@@ -539,7 +543,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "ワカクサ本島EX"
         ]
     },
     "kangaskhan": {
@@ -552,7 +557,9 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜"
+            "シアンの砂浜",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "mr-mime": {
@@ -578,7 +585,9 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜"
+            "シアンの砂浜",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "eevee-holiday": {
@@ -588,14 +597,7 @@ const pokemonDetailData = {
             "リラックスカカオ"
         ],
         "baseGauge": "5",
-        "fields": [
-            "ワカクサ本島",
-            "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
-        ]
+        "fields": []
     },
     "eevee-halloween": {
         "mainSkill": "食材ゲットS",
@@ -605,14 +607,7 @@ const pokemonDetailData = {
             "マメミート"
         ],
         "baseGauge": "5",
-        "fields": [
-            "ワカクサ本島",
-            "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
-        ]
+        "fields": []
     },
     "vaporeon": {
         "mainSkill": "食材ゲットS",
@@ -628,7 +623,9 @@ const pokemonDetailData = {
             "トープ洞窟",
             "ウノハナ雪原",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "jolteon": {
@@ -645,7 +642,9 @@ const pokemonDetailData = {
             "トープ洞窟",
             "ウノハナ雪原",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "flareon": {
@@ -662,7 +661,9 @@ const pokemonDetailData = {
             "トープ洞窟",
             "ウノハナ雪原",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "dragonite": {
@@ -674,7 +675,6 @@ const pokemonDetailData = {
         ],
         "baseGauge": "5",
         "fields": [
-            "ワカクサ本島",
             "ラピスラズリ湖畔"
         ]
     },
@@ -689,7 +689,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
         ]
     },
     "typhlosion": {
@@ -702,7 +703,8 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟"
+            "トープ洞窟",
+            "ワカクサ本島EX"
         ]
     },
     "feraligatr": {
@@ -714,7 +716,8 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜"
+            "シアンの砂浜",
+            "ワカクサ本島EX"
         ]
     },
     "xatu": {
@@ -727,7 +730,9 @@ const pokemonDetailData = {
         "baseGauge": "12",
         "fields": [
             "ワカクサ本島",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "ampharos": {
@@ -740,7 +745,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ウノハナ雪原",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "sudowoodo": {
@@ -753,7 +759,8 @@ const pokemonDetailData = {
         "baseGauge": "7",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜"
+            "シアンの砂浜",
+            "ワカクサ本島EX"
         ]
     },
     "espeon": {
@@ -770,7 +777,9 @@ const pokemonDetailData = {
             "トープ洞窟",
             "ウノハナ雪原",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "umbreon": {
@@ -787,7 +796,9 @@ const pokemonDetailData = {
             "トープ洞窟",
             "ウノハナ雪原",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "slowking": {
@@ -830,7 +841,7 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "トープ洞窟",
-            "ワカクサ本島"
+            "ワカクサ本島EX"
         ]
     },
     "shuckle": {
@@ -844,7 +855,9 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟"
+            "トープ洞窟",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "heracross": {
@@ -857,7 +870,9 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜"
+            "シアンの砂浜",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "weavile": {
@@ -870,7 +885,8 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "ワカクサ本島EX"
         ]
     },
     "delibird": {
@@ -883,7 +899,8 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "ワカクサ本島EX"
         ]
     },
     "houndoom": {
@@ -896,7 +913,8 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟"
+            "トープ洞窟",
+            "ワカクサ本島EX"
         ]
     },
     "raikou": {
@@ -909,7 +927,8 @@ const pokemonDetailData = {
         "baseGauge": "30",
         "fields": [
             "ワカクサ本島",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "entei": {
@@ -922,7 +941,9 @@ const pokemonDetailData = {
         "baseGauge": "30",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟"
+            "トープ洞窟",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "suicune": {
@@ -936,7 +957,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
         ]
     },
     "spheal-holiday": {
@@ -947,11 +969,7 @@ const pokemonDetailData = {
             "あったかジンジャー"
         ],
         "baseGauge": "5",
-        "fields": [
-            "ワカクサ本島",
-            "シアンの砂浜",
-            "ウノハナ雪原"
-        ]
+        "fields": []
     },
     "sceptile": {
         "mainSkill": "きのみバースト",
@@ -965,7 +983,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "blaziken": {
@@ -979,7 +998,9 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "swampert": {
@@ -993,7 +1014,9 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟"
+            "トープ洞窟",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "slaking": {
@@ -1006,7 +1029,8 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "ワカクサ本島EX"
         ]
     },
     "aggron": {
@@ -1018,8 +1042,8 @@ const pokemonDetailData = {
         ],
         "baseGauge": "5",
         "fields": [
-            "ワカクサ本島",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "plusle": {
@@ -1032,7 +1056,9 @@ const pokemonDetailData = {
         "baseGauge": "10",
         "fields": [
             "ワカクサ本島",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "swalot": {
@@ -1060,7 +1086,9 @@ const pokemonDetailData = {
         "baseGauge": "10",
         "fields": [
             "ワカクサ本島",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "flygon": {
@@ -1072,7 +1100,8 @@ const pokemonDetailData = {
         ],
         "baseGauge": "20",
         "fields": [
-            "トープ洞窟"
+            "トープ洞窟",
+            "アンバー渓谷"
         ]
     },
     "altaria": {
@@ -1086,7 +1115,9 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ウノハナ雪原",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "banette": {
@@ -1100,7 +1131,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "absol": {
@@ -1113,7 +1145,8 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "ワカクサ本島EX"
         ]
     },
     "walrein": {
@@ -1127,7 +1160,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "ワカクサ本島EX"
         ]
     },
     "salamence": {
@@ -1151,7 +1185,6 @@ const pokemonDetailData = {
         ],
         "baseGauge": "5",
         "fields": [
-            "ワカクサ本島",
             "ゴールド旧発電所"
         ]
     },
@@ -1165,7 +1198,8 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "honchkrow": {
@@ -1179,7 +1213,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ウノハナ雪原",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "spiritomb": {
@@ -1193,7 +1228,9 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ウノハナ雪原",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "lucario": {
@@ -1234,8 +1271,8 @@ const pokemonDetailData = {
         ],
         "baseGauge": "5",
         "fields": [
-            "ワカクサ本島",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "ワカクサ本島EX"
         ]
     },
     "magnezone": {
@@ -1247,7 +1284,8 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "togekiss": {
@@ -1274,8 +1312,8 @@ const pokemonDetailData = {
         ],
         "baseGauge": "5",
         "fields": [
-            "ワカクサ本島",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
         ]
     },
     "cresselia": {
@@ -1288,11 +1326,9 @@ const pokemonDetailData = {
         "baseGauge": "30",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "トープ洞窟",
-            "ゴールド旧発電所",
             "ウノハナ雪原",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
         ]
     },
     "darkrai": {
@@ -1314,7 +1350,9 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "crustle": {
@@ -1340,7 +1378,9 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "sylveon": {
@@ -1357,7 +1397,9 @@ const pokemonDetailData = {
             "トープ洞窟",
             "ウノハナ雪原",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "dedenne": {
@@ -1371,7 +1413,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "gourgeist": {
@@ -1384,7 +1427,9 @@ const pokemonDetailData = {
         "baseGauge": "20",
         "fields": [
             "ワカクサ本島",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "vikavolt": {
@@ -1396,7 +1441,6 @@ const pokemonDetailData = {
         ],
         "baseGauge": "5",
         "fields": [
-            "ワカクサ本島",
             "ゴールド旧発電所"
         ]
     },
@@ -1409,7 +1453,6 @@ const pokemonDetailData = {
         ],
         "baseGauge": "5",
         "fields": [
-            "ワカクサ本島",
             "ラピスラズリ湖畔"
         ]
     },
@@ -1424,7 +1467,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
         ]
     },
     "mimikyu": {
@@ -1437,7 +1481,8 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "cramorant": {
@@ -1451,7 +1496,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "ワカクサ本島EX"
         ]
     },
     "toxtricity-low": {
@@ -1464,7 +1510,9 @@ const pokemonDetailData = {
         "baseGauge": "20",
         "fields": [
             "ワカクサ本島",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "toxtricity-amped": {
@@ -1477,7 +1525,9 @@ const pokemonDetailData = {
         "baseGauge": "20",
         "fields": [
             "ワカクサ本島",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "meowscarada": {
@@ -1491,7 +1541,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "skeledirge": {
@@ -1506,7 +1557,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "トープ洞窟",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "quaquaval": {
@@ -1521,7 +1573,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "pawmot": {
@@ -1535,7 +1588,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ウノハナ雪原",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "ワカクサ本島EX"
         ]
     },
     "clodsire": {
@@ -1548,9 +1602,9 @@ const pokemonDetailData = {
         "baseGauge": "12",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
             "トープ洞窟",
-            "ゴールド旧発電所"
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "blastoise": {
@@ -1564,7 +1618,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
         ]
     },
     "sandslash": {
@@ -1578,8 +1633,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ワカクサ本島EX",
-            "アンバー渓谷"
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "ninetales": {
@@ -1593,7 +1648,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ウノハナ雪原"
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "ninetales-alola": {
@@ -1605,9 +1661,8 @@ const pokemonDetailData = {
         "mainSkill": "おてつだいサポートS",
         "baseGauge": "5",
         "fields": [
-            "ワカクサ本島",
-            "トープ洞窟",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "ワカクサ本島EX"
         ]
     },
     "ditto": {
@@ -1624,7 +1679,9 @@ const pokemonDetailData = {
             "トープ洞窟",
             "ウノハナ雪原",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "mew": {
@@ -1662,7 +1719,9 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ウノハナ雪原"
+            "ウノハナ雪原",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "tyranitar": {
@@ -1675,7 +1734,9 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟"
+            "トープ洞窟",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "gardevoir": {
@@ -1687,8 +1748,8 @@ const pokemonDetailData = {
         "mainSkill": "げんきオールS",
         "baseGauge": "5",
         "fields": [
-            "ワカクサ本島",
-            "ラピスラズリ湖畔"
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
         ]
     },
     "sableye": {
@@ -1701,7 +1762,7 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "トープ洞窟",
-            "ワカクサ本島"
+            "ワカクサ本島EX"
         ]
     },
     "mawile": {
@@ -1715,8 +1776,9 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "latias": {
@@ -1730,8 +1792,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ラピスラズリ湖畔",
-            "ワカクサ本島EX",
-            "アンバー渓谷"
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "leafeon": {
@@ -1748,7 +1810,9 @@ const pokemonDetailData = {
             "トープ洞窟",
             "ウノハナ雪原",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "glaceon": {
@@ -1765,7 +1829,9 @@ const pokemonDetailData = {
             "トープ洞窟",
             "ウノハナ雪原",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "tyrantrum": {
@@ -1779,8 +1845,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ワカクサ本島EX",
-            "アンバー渓谷"
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "noivern": {
@@ -1794,8 +1860,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ワカクサ本島EX",
-            "アンバー渓谷"
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "ribombee": {
@@ -1810,8 +1876,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "ラピスラズリ湖畔",
-            "ワカクサ本島EX",
-            "アンバー渓谷"
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "togedemaru": {
@@ -1826,8 +1892,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "ウノハナ雪原",
             "ゴールド旧発電所",
-            "ワカクサ本島EX",
-            "アンバー渓谷"
+            "アンバー渓谷",
+            "ワカクサ本島EX"
         ]
     },
     "cetitan": {

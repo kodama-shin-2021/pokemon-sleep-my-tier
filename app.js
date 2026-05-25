@@ -6,6 +6,11 @@ const LEGACY_STORAGE_KEYS = [
   "pokesuri-tier-maker-state-v2",
   "pokesuri-tier-maker-state-v1",
 ];
+const STATUS_TYPES = ["compromise", "finished"];
+const CANDIDATE_LEVELS = ["10", "25", "50", "75", "100"];
+const CANDIDATE_SUMMARY_LEVELS = ["50", "75", "100"];
+const CANDIDATE_STATUSES = ["育成候補", "保留", "除外"];
+const CANDIDATE_INGREDIENT_INDEXES = [0, 1, 2];
 
 const finalPokemon = [
   ["venusaur", "フシギバナ", 3, "食材", "くさ"], ["charizard", "リザードン", 6, "食材", "ほのお"],
@@ -132,6 +137,16 @@ const defaultCompromiseTiers = defaultTiers.map(tier => ({
   pokemonIds: [],
 }));
 const defaultCompromiseTierByName = new Map(defaultCompromiseTiers.map(tier => [tier.name, tier]));
+const statusTierConfig = {
+  compromise: {
+    stateKey: "compromiseTiers",
+    defaultByName: defaultCompromiseTierByName,
+  },
+  finished: {
+    stateKey: "finishedTiers",
+    defaultByName: defaultFinishedTierByName,
+  },
+};
 const natureOptions = [
   ["さみしがり", "おてつだいスピード↑ 1.11倍 / げんき回復量↓ 0.88倍"],
   ["いじっぱり", "おてつだいスピード↑ 1.11倍 / 食材おてつだい確率↓ 0.8倍"],
@@ -2496,7 +2511,7 @@ function createCandidateCard(pokemonId, candidate, index) {
   head.className = "candidate-card-head";
   head.append(
     createCandidateInput(pokemonId, candidate, "label", candidate.label || `候補${index + 1}`, "候補名"),
-    createCandidateSelect(pokemonId, candidate, "status", ["育成候補", "保留", "除外"], "判定"),
+    createCandidateSelect(pokemonId, candidate, "status", CANDIDATE_STATUSES, "判定"),
     iconButton("×", () => removeCandidate(pokemonId, candidate.id), "候補削除"),
   );
   card.append(head);
@@ -2506,32 +2521,18 @@ function createCandidateCard(pokemonId, candidate, index) {
   const ingredientLabel = document.createElement("span");
   ingredientLabel.textContent = "食材";
   ingredientRow.append(ingredientLabel);
-  for (let ingredientIndex = 0; ingredientIndex < 3; ingredientIndex += 1) {
+  CANDIDATE_INGREDIENT_INDEXES.forEach(ingredientIndex => {
     ingredientRow.append(createCandidateIngredientInput(pokemonId, candidate, ingredientIndex));
-  }
+  });
   card.append(ingredientRow);
 
   card.append(
     createCandidateNatureField(pokemonId, candidate),
-    createCandidateSubSkillField(pokemonId, candidate, "10"),
-    createCandidateSubSkillField(pokemonId, candidate, "25"),
-    createCandidateSubSkillField(pokemonId, candidate, "50"),
-    createCandidateSubSkillField(pokemonId, candidate, "75"),
-    createCandidateSubSkillField(pokemonId, candidate, "100"),
+    ...CANDIDATE_LEVELS.map(level => createCandidateSubSkillField(pokemonId, candidate, level)),
     createCandidateTotals(candidate),
     createCandidateMemo(pokemonId, candidate),
   );
   return card;
-}
-
-function createCandidateField(pokemonId, candidate, key, label, placeholder) {
-  const field = document.createElement("label");
-  field.className = "candidate-field";
-  const span = document.createElement("span");
-  span.textContent = label;
-  const input = createCandidateInput(pokemonId, candidate, key, candidate[key] || "", placeholder);
-  field.append(span, input);
-  return field;
 }
 
 function createCandidateNatureField(pokemonId, candidate) {
@@ -2607,7 +2608,7 @@ function getNatureEffect(nature) {
 function createCandidateTotals(candidate) {
   const box = document.createElement("div");
   box.className = "candidate-totals";
-  ["50", "75", "100"].forEach(level => {
+  CANDIDATE_SUMMARY_LEVELS.forEach(level => {
     const totals = calculateCandidateTotals(candidate, Number(level));
     const row = document.createElement("div");
     row.className = "candidate-total-row";
@@ -2851,14 +2852,9 @@ function formatPokemonDetailValue(key, value) {
 
 function appendStatusMoveButtons(pokemonId, status, label) {
   getStatusTiers(status).forEach(tier => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = `${label} ${tier.name}`;
-    button.addEventListener("click", () => {
+    appendMoveAction(`${label} ${tier.name}`, () => {
       movePokemonToStatus(pokemonId, status, tier.id);
-      moveDialog.close();
     });
-    moveTargets.append(button);
   });
 }
 
@@ -2877,11 +2873,7 @@ function movePokemon(pokemonId, targetTierId, beforePokemonId = null) {
   if (!pokemonId) return;
   removePokemonFromAllLists(pokemonId);
   const tier = state.tiers.find(item => item.id === targetTierId);
-  if (tier) {
-    const beforeIndex = tier.pokemonIds.indexOf(beforePokemonId);
-    if (beforeIndex >= 0) tier.pokemonIds.splice(beforeIndex, 0, pokemonId);
-    else tier.pokemonIds.push(pokemonId);
-  }
+  insertPokemonIntoTier(tier, pokemonId, beforePokemonId);
   render();
 }
 
@@ -2889,22 +2881,19 @@ function movePokemonToStatus(pokemonId, status, targetTierId, beforePokemonId = 
   if (!pokemonId) return;
   removePokemonFromAllLists(pokemonId);
   const tier = getStatusTiers(status).find(item => item.id === targetTierId);
-  if (tier) {
-    const beforeIndex = tier.pokemonIds.indexOf(beforePokemonId);
-    if (beforeIndex >= 0) tier.pokemonIds.splice(beforeIndex, 0, pokemonId);
-    else tier.pokemonIds.push(pokemonId);
-  }
+  insertPokemonIntoTier(tier, pokemonId, beforePokemonId);
   render();
 }
 
+function insertPokemonIntoTier(tier, pokemonId, beforePokemonId = null) {
+  if (!tier) return;
+  const beforeIndex = tier.pokemonIds.indexOf(beforePokemonId);
+  if (beforeIndex >= 0) tier.pokemonIds.splice(beforeIndex, 0, pokemonId);
+  else tier.pokemonIds.push(pokemonId);
+}
+
 function removePokemonFromAllLists(pokemonId) {
-  state.tiers.forEach(tier => {
-    tier.pokemonIds = tier.pokemonIds.filter(id => id !== pokemonId);
-  });
-  state.finishedTiers.forEach(tier => {
-    tier.pokemonIds = tier.pokemonIds.filter(id => id !== pokemonId);
-  });
-  state.compromiseTiers.forEach(tier => {
+  getAllTierLists().flat().forEach(tier => {
     tier.pokemonIds = tier.pokemonIds.filter(id => id !== pokemonId);
   });
 }
@@ -2912,9 +2901,12 @@ function removePokemonFromAllLists(pokemonId) {
 function getUsedPokemonIds() {
   return new Set([
     ...state.tiers.flatMap(tier => tier.pokemonIds),
-    ...getStatusPokemonIds("compromise"),
-    ...getStatusPokemonIds("finished"),
+    ...STATUS_TYPES.flatMap(getStatusPokemonIds),
   ]);
+}
+
+function getAllTierLists() {
+  return [state.tiers, ...STATUS_TYPES.map(getStatusTiers)];
 }
 
 function getStatusPokemonIds(status) {
@@ -2922,13 +2914,14 @@ function getStatusPokemonIds(status) {
 }
 
 function getStatusTiers(status) {
-  return status === "compromise" ? state.compromiseTiers : state.finishedTiers;
+  const config = statusTierConfig[status];
+  return config ? state[config.stateKey] : [];
 }
 
 function parseStatusTierId(value) {
   if (!value) return null;
   const [status, tierId] = value.split(":");
-  if (!["compromise", "finished"].includes(status) || !tierId) return null;
+  if (!STATUS_TYPES.includes(status) || !tierId) return null;
   return { status, tierId };
 }
 
@@ -3257,14 +3250,13 @@ function normalizeFinishedTiers(parsed) {
 }
 
 function normalizeStatusTiers(parsed, status) {
-  const sourceKey = status === "compromise" ? "compromiseTiers" : "finishedTiers";
-  const defaultByName = status === "compromise" ? defaultCompromiseTierByName : defaultFinishedTierByName;
-  const savedTiers = Array.isArray(parsed[sourceKey]) ? parsed[sourceKey] : [];
+  const config = statusTierConfig[status];
+  const savedTiers = Array.isArray(parsed[config.stateKey]) ? parsed[config.stateKey] : [];
   const savedByName = new Map(savedTiers.map(tier => [tier.name, tier]));
   const knownIds = getKnownPokemonIds();
   return parsed.tiers.map(tier => {
     const saved = savedByName.get(tier.name);
-    const defaultTier = defaultByName.get(tier.name);
+    const defaultTier = config.defaultByName.get(tier.name);
     return {
       id: saved?.id || defaultTier?.id || createId(),
       name: tier.name || " ",
@@ -3297,21 +3289,15 @@ function normalizeCandidate(candidate) {
     label: candidate.label || "候補",
     ingredients: normalizeCandidateIngredients(candidate.ingredients),
     nature: candidate.nature || "",
-    subSkills: {
-      10: subSkills[10] || subSkills["10"] || "",
-      25: subSkills[25] || subSkills["25"] || "",
-      50: subSkills[50] || subSkills["50"] || "",
-      75: subSkills[75] || subSkills["75"] || "",
-      100: subSkills[100] || subSkills["100"] || "",
-    },
-    status: ["育成候補", "保留", "除外"].includes(candidate.status) ? candidate.status : "保留",
+    subSkills: Object.fromEntries(CANDIDATE_LEVELS.map(level => [level, subSkills[level] || ""])),
+    status: CANDIDATE_STATUSES.includes(candidate.status) ? candidate.status : "保留",
     memo: candidate.memo || "",
   };
 }
 
 function normalizeCandidateIngredients(ingredients) {
   const values = Array.isArray(ingredients) ? ingredients : [];
-  return [0, 1, 2].map(index => values[index] || "");
+  return CANDIDATE_INGREDIENT_INDEXES.map(index => values[index] || "");
 }
 
 function uniqueKnownIds(idsValue, knownIds) {

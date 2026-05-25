@@ -2767,8 +2767,14 @@ function openSubSkillPicker(candidate, initialLevel, onChange) {
                 candidate.subSkills = { ...candidate.subSkills, [selectedLevel]: "" };
                 activeLevel = selectedLevel;
               } else {
+                const assignedLevel = activeLevel;
                 candidate.subSkills = { ...candidate.subSkills, [activeLevel]: skill };
                 activeLevel = getNextSubSkillLevel(activeLevel);
+                if (assignedLevel === CANDIDATE_LEVELS[CANDIDATE_LEVELS.length - 1]) {
+                  onChange();
+                  closeChoicePanel();
+                  return;
+                }
               }
               onChange();
               renderPanel();

@@ -1914,6 +1914,8 @@ const pokemonDetailData = {
 const newPokemonIds = new Set([]);
 
 let state = loadState();
+const sharedState = loadSharedStateFromUrl();
+if (sharedState) state = sharedState;
 let activePokemonId = null;
 
 const tierBoard = document.querySelector("#tierBoard");
@@ -1949,6 +1951,7 @@ const FILTER_PANEL_OPEN_KEY = "pokesuri-tier-maker-filters-open";
 document.querySelector("#addTierButton").addEventListener("click", addTier);
 document.querySelector("#resetButton").addEventListener("click", resetState);
 document.querySelector("#exportButton").addEventListener("click", exportPng);
+document.querySelector("#shareUrlButton").addEventListener("click", shareUrl);
 document.querySelector("#exportDataButton").addEventListener("click", exportJson);
 document.querySelector("#importDataButton").addEventListener("click", () => document.querySelector("#importDataInput").click());
 document.querySelector("#importDataInput").addEventListener("change", importJson);
@@ -1981,6 +1984,11 @@ initializeIngredientFilter();
 initializeFilterPanel();
 render();
 registerServiceWorker();
+if (sharedState) {
+  setTimeout(() => {
+    alert("共有URLの内容を表示しています。編集すると、この端末に保存されます。");
+  }, 0);
+}
 
 function loadState() {
   const saved = loadStoredState();
@@ -1996,6 +2004,49 @@ function loadState() {
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(serializeState(state)));
+}
+
+function loadSharedStateFromUrl() {
+  const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  const shareValue = params.get("share");
+  if (!shareValue) return null;
+  try {
+    return migrateState(JSON.parse(decodeBase64Url(shareValue)));
+  } catch {
+    setTimeout(() => {
+      alert("共有URLを読み込めませんでした。URLが途中で切れていないか確認してください。");
+    }, 0);
+    return null;
+  }
+}
+
+async function shareUrl() {
+  const shareValue = encodeBase64Url(JSON.stringify(serializeState(state)));
+  const url = new URL(window.location.href);
+  url.hash = `share=${shareValue}`;
+  const shareText = url.href;
+  try {
+    await navigator.clipboard.writeText(shareText);
+    alert("共有URLをコピーしました。");
+  } catch {
+    window.prompt("共有URLをコピーしてください。", shareText);
+  }
+}
+
+function encodeBase64Url(value) {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  bytes.forEach(byte => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+function decodeBase64Url(value) {
+  const padded = value.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(value.length / 4) * 4, "=");
+  const binary = atob(padded);
+  const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
 }
 
 function initializeFilterPanel() {

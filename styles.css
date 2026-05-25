@@ -712,6 +712,7 @@ dialog::backdrop {
 }
 
 dialog form {
+  position: relative;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr) auto;
   gap: 14px;
@@ -1114,13 +1115,17 @@ dialog h2 {
 }
 
 .choice-panel-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 2147483647;
   display: grid;
   place-items: center;
   padding: 16px;
   background: rgba(18, 22, 27, 0.46);
+}
+
+.choice-panel-overlay.is-global {
+  position: fixed;
 }
 
 .choice-panel {

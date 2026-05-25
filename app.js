@@ -2817,8 +2817,10 @@ function createChoiceButton(text, { selected = false, className = "", badges = [
 
 function openChoicePanel(title, renderBody, { clearLabel = "", onClear = null } = {}) {
   closeChoicePanel();
+  const container = moveDialog.open ? moveDialog.querySelector("form") : document.body;
   const overlay = document.createElement("div");
   overlay.className = "choice-panel-overlay";
+  overlay.classList.toggle("is-global", container === document.body);
   overlay.addEventListener("click", event => {
     if (event.target === overlay) closeChoicePanel();
   });
@@ -2851,7 +2853,7 @@ function openChoicePanel(title, renderBody, { clearLabel = "", onClear = null } 
 
   dialog.append(heading, body, footer);
   overlay.append(dialog);
-  document.body.append(overlay);
+  container.append(overlay);
   document.addEventListener("keydown", closeChoicePanelOnEscape);
 }
 

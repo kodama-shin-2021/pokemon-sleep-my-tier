@@ -2716,9 +2716,11 @@ function openNaturePicker(currentValue, onSelect) {
   openChoicePanel("せいかくを選択してください", panel => {
     getNatureChoiceGroups().forEach(group => {
       const section = createChoiceSection(group.title, group.isNeutral ? "" : "▲▲");
-      group.options.forEach(([name]) => {
+      group.options.forEach(([name, effect]) => {
         section.body.append(createChoiceButton(name, {
           selected: name === currentValue,
+          className: "nature-choice",
+          description: getNatureDownSummary(effect),
           onClick: close => {
             onSelect(name);
             close();
@@ -2782,6 +2784,20 @@ function getNatureChoiceGroups() {
   return groups.filter(group => group.options.length);
 }
 
+function getNatureDownSummary(effect) {
+  if (effect === "無補正") return "";
+  const match = effect.match(/\/ (.+?)↓/);
+  if (!match) return "";
+  const labels = {
+    "おてつだいスピード": "おてスピ",
+    "食材おてつだい確率": "食材",
+    "メインスキル発生確率": "スキル",
+    "EXP獲得量": "EXP",
+    "げんき回復量": "げんき",
+  };
+  return `${labels[match[1]] || match[1]}↓`;
+}
+
 function createChoiceSection(title, marker = "") {
   const element = document.createElement("section");
   element.className = "choice-panel-section";
@@ -2798,7 +2814,7 @@ function createChoiceSection(title, marker = "") {
   return { element, body };
 }
 
-function createChoiceButton(text, { selected = false, className = "", badges = [], onClick }) {
+function createChoiceButton(text, { selected = false, className = "", description = "", badges = [], onClick }) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = `choice-panel-button ${className}`;
@@ -2806,6 +2822,11 @@ function createChoiceButton(text, { selected = false, className = "", badges = [
   const label = document.createElement("span");
   label.textContent = text;
   button.append(label);
+  if (description) {
+    const descriptionElement = document.createElement("em");
+    descriptionElement.textContent = description;
+    button.append(descriptionElement);
+  }
   badges.forEach(badge => {
     const badgeElement = document.createElement("small");
     badgeElement.textContent = badge;

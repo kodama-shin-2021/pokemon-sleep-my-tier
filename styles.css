@@ -1199,6 +1199,20 @@ dialog h2 {
   white-space: nowrap;
 }
 
+.choice-panel-button em {
+  flex: 0 0 auto;
+  color: #ef6464;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.choice-panel-button.nature-choice {
+  justify-content: space-between;
+  gap: 10px;
+}
+
 .choice-panel-button small {
   position: absolute;
   top: -9px;

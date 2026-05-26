@@ -95,31 +95,31 @@ const defaultTiers = [
   {
     id: createId(),
     name: "SS",
-    color: "#f6b1a4",
+    color: "#1d4ed8",
     pokemonIds: ids("walrein feraligatr typhlosion meganium raichu blastoise venusaur steelix gardevoir dragonite raikou entei suicune vikavolt aggron weavile ninetales-alola pawmot blissey swampert blaziken sceptile gourgeist salamence flygon shuckle"),
   },
   {
     id: createId(),
     name: "S",
-    color: "#f4d27e",
+    color: "#3b82f6",
     pokemonIds: ids("magnezone altaria tyranitar espeon ampharos gengar dodrio victreebel golduck butterfree charizard banette delibird bewear dedenne ninetales cramorant quaquaval skeledirge meowscarada luxray clodsire cresselia mawile farfetchd xatu cetitan noivern tyrantrum"),
   },
   {
     id: createId(),
     name: "A",
-    color: "#b8d98b",
+    color: "#93c5fd",
     pokemonIds: ids("sylveon glaceon toxicroak swalot houndoom flareon golem primeape dugtrio wigglytuff arbok mr-mime abomasnow quagsire mimikyu braviary darkrai plusle crustle spheal-holiday ribombee latias sandslash onix"),
   },
   {
     id: createId(),
     name: "B",
-    color: "#91cbd3",
+    color: "#dbeafe",
     pokemonIds: ids("lucario absol heracross vaporeon ditto pinsir kangaskhan marowak raticate clefable pikachu-halloween comfey eevee-holiday musharna minun toxtricity-low toxtricity-amped eevee-halloween spiritomb togedemaru mew"),
   },
   {
     id: createId(),
     name: "C",
-    color: "#b9b4dd",
+    color: "#eff6ff",
     pokemonIds: ids("leafeon togekiss sableye slaking wobbuffet slowking umbreon sudowoodo jolteon slowbro arcanine persian pikachu-holiday gallade drifblim honchkrow"),
   },
 ];
@@ -2146,11 +2146,18 @@ function renderTiers() {
     input.addEventListener("input", () => {
       const previousName = tier.name;
       tier.name = input.value || " ";
+      tier.color = getTierLabelColor(tier.name);
       renameSnackCellRuleTier(previousName, tier.name);
       const finishedTier = state.finishedTiers.find(item => item.name === previousName);
-      if (finishedTier) finishedTier.name = tier.name;
+      if (finishedTier) {
+        finishedTier.name = tier.name;
+        finishedTier.color = tier.color;
+      }
       const compromiseTier = state.compromiseTiers.find(item => item.name === previousName);
-      if (compromiseTier) compromiseTier.name = tier.name;
+      if (compromiseTier) {
+        compromiseTier.name = tier.name;
+        compromiseTier.color = tier.color;
+      }
       saveState();
       render();
     });
@@ -3441,9 +3448,8 @@ function removeTier(tierId) {
 }
 
 function addTier() {
-  const palette = ["#f6b1a4", "#f4d27e", "#b8d98b", "#91cbd3", "#b9b4dd", "#d5dce5"];
   const tierName = "新規";
-  const tierColor = palette[state.tiers.length % palette.length];
+  const tierColor = getTierLabelColor(tierName);
   state.tiers.push({
     id: createId(),
     name: tierName,
@@ -3759,7 +3765,7 @@ function normalizeTiers(tiers) {
   return tiers.map(tier => ({
     id: tier.id || createId(),
     name: tier.name || " ",
-    color: tier.color || "#d5dce5",
+    color: getTierLabelColor(tier.name),
     pokemonIds: uniqueKnownIds(tier.pokemonIds, knownIds),
   }));
 }
@@ -3786,7 +3792,7 @@ function normalizeStatusTiers(parsed, status) {
     return {
       id: saved?.id || defaultTier?.id || createId(),
       name: tier.name || " ",
-      color: tier.color || "#d5dce5",
+      color: getTierLabelColor(tier.name),
       pokemonIds: uniqueKnownIds(saved?.pokemonIds, knownIds),
     };
   });
@@ -3850,6 +3856,16 @@ function uniqueKnownIds(idsValue, knownIds) {
 
 function getKnownPokemonIds() {
   return new Set(finalPokemon.map(pokemon => pokemon.id));
+}
+
+function getTierLabelColor(tierName) {
+  return {
+    SS: "#1d4ed8",
+    S: "#3b82f6",
+    A: "#93c5fd",
+    B: "#dbeafe",
+    C: "#eff6ff",
+  }[tierName] || "#f8fbff";
 }
 
 function ids(value) {

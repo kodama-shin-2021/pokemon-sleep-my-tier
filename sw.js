@@ -1,4 +1,4 @@
-const CACHE_NAME = "pokesuri-note-v14";
+const CACHE_NAME = "pokesuri-note-v15";
 const CACHE_URLS = [
   "./",
   "./index.html",

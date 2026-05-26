@@ -87,35 +87,35 @@ const defaultTiers = [
   {
     id: createId(),
     name: "SS",
-    description: "限界までサブレを投げる",
+    description: "",
     color: "#f6b1a4",
     pokemonIds: ids("walrein feraligatr typhlosion meganium raichu blastoise venusaur steelix gardevoir dragonite raikou entei suicune vikavolt aggron weavile ninetales-alola pawmot blissey swampert blaziken sceptile gourgeist salamence flygon shuckle"),
   },
   {
     id: createId(),
     name: "S",
-    description: "ポケサブレは投げる",
+    description: "",
     color: "#f4d27e",
     pokemonIds: ids("magnezone altaria tyranitar espeon ampharos gengar dodrio victreebel golduck butterfree charizard banette delibird bewear dedenne ninetales cramorant quaquaval skeledirge meowscarada luxray clodsire cresselia mawile farfetchd xatu cetitan noivern tyrantrum"),
   },
   {
     id: createId(),
     name: "A",
-    description: "ボナサブ要員",
+    description: "",
     color: "#b8d98b",
     pokemonIds: ids("sylveon glaceon toxicroak swalot houndoom flareon golem primeape dugtrio wigglytuff arbok mr-mime abomasnow quagsire mimikyu braviary darkrai plusle crustle spheal-holiday ribombee latias sandslash onix"),
   },
   {
     id: createId(),
     name: "B",
-    description: "基本投げない",
+    description: "",
     color: "#91cbd3",
     pokemonIds: ids("lucario absol heracross vaporeon ditto pinsir kangaskhan marowak raticate clefable pikachu-halloween comfey eevee-holiday musharna minun toxtricity-low toxtricity-amped eevee-halloween spiritomb togedemaru mew"),
   },
   {
     id: createId(),
     name: "C",
-    description: "絶対に投げない",
+    description: "",
     color: "#b9b4dd",
     pokemonIds: ids("leafeon togekiss sableye slaking wobbuffet slowking umbreon sudowoodo jolteon slowbro arcanine persian pikachu-holiday gallade drifblim honchkrow"),
   },
@@ -3670,7 +3670,7 @@ function getDefaultTierDescription(name) {
 function normalizeTierDescription(name, description) {
   const fallback = getDefaultTierDescription(name);
   if (!description) return fallback;
-  if (name === "A" && description === "誰もいないときボナサブを投げる") return "ボナサブ要員";
+  if (["限界までサブレを投げる", "ポケサブレは投げる", "ボナサブ要員", "誰もいないときボナサブを投げる", "基本投げない", "絶対に投げない"].includes(description)) return "";
   return description;
 }
 

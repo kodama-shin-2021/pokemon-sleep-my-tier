@@ -1,6 +1,7 @@
 const STORAGE_KEY = "pokesuri-tier-maker-state";
-const STORAGE_SCHEMA_VERSION = 6;
+const STORAGE_SCHEMA_VERSION = 7;
 const LEGACY_STORAGE_KEYS = [
+  "pokesuri-tier-maker-state-v6",
   "pokesuri-tier-maker-state-v5",
   "pokesuri-tier-maker-state-v4",
   "pokesuri-tier-maker-state-v3",
@@ -8,8 +9,8 @@ const LEGACY_STORAGE_KEYS = [
   "pokesuri-tier-maker-state-v1",
 ];
 const STATUS_TYPES = ["compromise", "finished"];
-const SNACK_COLOR_STATUSES = ["unfinished", "compromise", "finished"];
-const SNACK_COLOR_STATUS_LABELS = {
+const SNACK_RULE_STATUSES = ["unfinished", "compromise", "finished"];
+const SNACK_RULE_STATUS_LABELS = {
   unfinished: "厳選未完了",
   compromise: "妥協個体あり",
   finished: "厳選完了",
@@ -148,38 +149,44 @@ const statusTierConfig = {
     defaultByName: defaultFinishedTierByName,
   },
 };
-const DEFAULT_SNACK_COLOR_PRESET = "free";
-const SNACK_COLOR_PRESETS = {
+const DEFAULT_SNACK_RULE_PRESET = "free";
+const SNACK_RULE_OPTIONS = {
+  limit: { label: "限界まで投げる", color: "#2563eb" },
+  bonus: { label: "ボナサブのみ", color: "#bfdbfe" },
+  chance: { label: "チャンスがつけばあり", color: "#eff6ff" },
+  none: { label: "投げない", color: "#ffffff" },
+};
+const SNACK_RULE_PRESETS = {
   free: {
     label: "無課金",
-    colors: {
-      unfinished: { SS: "#2563eb", S: "#93c5fd", A: "#eff6ff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
-      compromise: { SS: "#dbeafe", S: "#eff6ff", A: "#ffffff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
-      finished: { SS: "#fbfdff", S: "#fbfdff", A: "#ffffff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+    rules: {
+      unfinished: { SS: "limit", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
+      compromise: { SS: "bonus", S: "chance", A: "none", B: "none", C: "none", default: "none" },
+      finished: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
     },
   },
   light: {
     label: "微課金",
-    colors: {
-      unfinished: { SS: "#2563eb", S: "#4f8ff7", A: "#bfdbfe", B: "#eff6ff", C: "#ffffff", default: "#ffffff" },
-      compromise: { SS: "#bfdbfe", S: "#dbeafe", A: "#eff6ff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
-      finished: { SS: "#fbfdff", S: "#fbfdff", A: "#fcfdff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+    rules: {
+      unfinished: { SS: "limit", S: "limit", A: "bonus", B: "chance", C: "none", default: "none" },
+      compromise: { SS: "bonus", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
+      finished: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
     },
   },
   heavy: {
     label: "重課金",
-    colors: {
-      unfinished: { SS: "#1d4ed8", S: "#2563eb", A: "#60a5fa", B: "#dbeafe", C: "#ffffff", default: "#ffffff" },
-      compromise: { SS: "#93c5fd", S: "#bfdbfe", A: "#dbeafe", B: "#eff6ff", C: "#ffffff", default: "#ffffff" },
-      finished: { SS: "#eff6ff", S: "#fbfdff", A: "#fcfdff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+    rules: {
+      unfinished: { SS: "limit", S: "limit", A: "limit", B: "bonus", C: "chance", default: "none" },
+      compromise: { SS: "limit", S: "bonus", A: "bonus", B: "chance", C: "none", default: "none" },
+      finished: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
     },
   },
   whale: {
     label: "廃課金",
-    colors: {
-      unfinished: { SS: "#172554", S: "#1d4ed8", A: "#2563eb", B: "#60a5fa", C: "#dbeafe", default: "#ffffff" },
-      compromise: { SS: "#2563eb", S: "#60a5fa", A: "#bfdbfe", B: "#dbeafe", C: "#eff6ff", default: "#ffffff" },
-      finished: { SS: "#eff6ff", S: "#fbfdff", A: "#fcfdff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+    rules: {
+      unfinished: { SS: "limit", S: "limit", A: "limit", B: "limit", C: "bonus", default: "none" },
+      compromise: { SS: "limit", S: "limit", A: "bonus", B: "bonus", C: "chance", default: "none" },
+      finished: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
     },
   },
 };
@@ -2139,7 +2146,7 @@ function renderTiers() {
     input.addEventListener("input", () => {
       const previousName = tier.name;
       tier.name = input.value || " ";
-      renameSnackCellColorTier(previousName, tier.name);
+      renameSnackCellRuleTier(previousName, tier.name);
       const finishedTier = state.finishedTiers.find(item => item.name === previousName);
       if (finishedTier) finishedTier.name = tier.name;
       const compromiseTier = state.compromiseTiers.find(item => item.name === previousName);
@@ -2203,10 +2210,11 @@ function createSnackLegend() {
   const text = document.createElement("span");
   text.textContent = "セル色はサブレを投げる優先度の目安です";
   legend.append(text);
-  getSnackLegendItems().forEach(item => {
+  Object.entries(SNACK_RULE_OPTIONS).forEach(([key, item]) => {
     const chip = document.createElement("span");
     chip.className = "snack-legend-chip";
     chip.style.setProperty("--legend-color", item.color);
+    chip.dataset.snackRule = key;
     chip.textContent = item.label;
     legend.append(chip);
   });
@@ -2215,38 +2223,42 @@ function createSnackLegend() {
   const presetText = document.createElement("span");
   presetText.textContent = "プリセット";
   const presetSelect = document.createElement("select");
-  Object.entries(SNACK_COLOR_PRESETS).forEach(([value, preset]) => {
+  Object.entries(SNACK_RULE_PRESETS).forEach(([value, preset]) => {
     appendSelectOption(presetSelect, value, preset.label);
   });
   appendSelectOption(presetSelect, "custom", "カスタム");
-  presetSelect.value = state.snackColorPreset || "custom";
+  presetSelect.value = state.snackRulePreset || "custom";
   presetSelect.addEventListener("change", () => {
-    state.snackColorPreset = presetSelect.value;
-    if (SNACK_COLOR_PRESETS[presetSelect.value]) {
-      state.snackCellColors = clone(SNACK_COLOR_PRESETS[presetSelect.value].colors);
+    state.snackRulePreset = presetSelect.value;
+    if (SNACK_RULE_PRESETS[presetSelect.value]) {
+      state.snackCellRules = clone(SNACK_RULE_PRESETS[presetSelect.value].rules);
     }
     render();
   });
   presetLabel.append(presetText, presetSelect);
-  legend.append(presetLabel, createSnackColorEditor());
+  legend.append(presetLabel, createSnackRuleEditor());
   return legend;
 }
 
 function getSnackCellColor(status, tierName) {
-  const colors = state.snackCellColors?.[status] || SNACK_COLOR_PRESETS[DEFAULT_SNACK_COLOR_PRESET].colors[status];
-  return colors?.[tierName] || colors?.default || "#ffffff";
+  return SNACK_RULE_OPTIONS[getSnackCellRule(status, tierName)]?.color || SNACK_RULE_OPTIONS.none.color;
 }
 
-function createSnackColorEditor() {
+function getSnackCellRule(status, tierName) {
+  const rules = state.snackCellRules?.[status] || SNACK_RULE_PRESETS[DEFAULT_SNACK_RULE_PRESET].rules[status];
+  return rules?.[tierName] || rules?.default || "none";
+}
+
+function createSnackRuleEditor() {
   const details = document.createElement("details");
-  details.className = "snack-color-editor";
+  details.className = "snack-rule-editor";
   const summary = document.createElement("summary");
-  summary.textContent = "セル色を編集";
+  summary.textContent = "セル基準を編集";
   const grid = document.createElement("div");
-  grid.className = "snack-color-grid";
-  ["Tier", ...SNACK_COLOR_STATUSES.map(status => SNACK_COLOR_STATUS_LABELS[status])].forEach(text => {
+  grid.className = "snack-rule-grid";
+  ["Tier", ...SNACK_RULE_STATUSES.map(status => SNACK_RULE_STATUS_LABELS[status])].forEach(text => {
     const header = document.createElement("span");
-    header.className = "snack-color-grid-head";
+    header.className = "snack-rule-grid-head";
     header.textContent = text;
     grid.append(header);
   });
@@ -2254,41 +2266,44 @@ function createSnackColorEditor() {
     const tierLabel = document.createElement("strong");
     tierLabel.textContent = tier.name;
     grid.append(tierLabel);
-    SNACK_COLOR_STATUSES.forEach(status => {
-      const input = document.createElement("input");
-      input.type = "color";
-      input.ariaLabel = `${SNACK_COLOR_STATUS_LABELS[status]} ${tier.name} のセル色`;
-      input.value = getSnackCellColor(status, tier.name);
-      input.addEventListener("input", () => {
-        setSnackCellColor(status, tier.name, input.value);
+    SNACK_RULE_STATUSES.forEach(status => {
+      const select = document.createElement("select");
+      select.ariaLabel = `${SNACK_RULE_STATUS_LABELS[status]} ${tier.name} のサブレ基準`;
+      Object.entries(SNACK_RULE_OPTIONS).forEach(([value, option]) => {
+        appendSelectOption(select, value, option.label);
       });
-      grid.append(input);
+      select.value = getSnackCellRule(status, tier.name);
+      select.addEventListener("change", () => {
+        setSnackCellRule(status, tier.name, select.value);
+      });
+      grid.append(select);
     });
   });
   details.append(summary, grid);
   return details;
 }
 
-function setSnackCellColor(status, tierName, color) {
-  if (!state.snackCellColors) state.snackCellColors = clone(SNACK_COLOR_PRESETS[DEFAULT_SNACK_COLOR_PRESET].colors);
-  if (!state.snackCellColors[status]) state.snackCellColors[status] = {};
-  state.snackCellColors[status][tierName] = color;
-  state.snackColorPreset = "custom";
+function setSnackCellRule(status, tierName, rule) {
+  if (!SNACK_RULE_OPTIONS[rule]) return;
+  if (!state.snackCellRules) state.snackCellRules = clone(SNACK_RULE_PRESETS[DEFAULT_SNACK_RULE_PRESET].rules);
+  if (!state.snackCellRules[status]) state.snackCellRules[status] = {};
+  state.snackCellRules[status][tierName] = rule;
+  state.snackRulePreset = "custom";
   saveState();
   document.querySelector(".snack-preset-field select").value = "custom";
   document.querySelectorAll("[data-snack-status]").forEach(dropzone => {
     if (dropzone.dataset.snackStatus === status && dropzone.dataset.snackTier === tierName) {
-      dropzone.style.setProperty("--snack-cell-color", color);
+      dropzone.style.setProperty("--snack-cell-color", getSnackCellColor(status, tierName));
     }
   });
 }
 
-function renameSnackCellColorTier(previousName, nextName) {
-  if (!state.snackCellColors || previousName === nextName) return;
-  SNACK_COLOR_STATUSES.forEach(status => {
-    if (!state.snackCellColors[status] || !Object.prototype.hasOwnProperty.call(state.snackCellColors[status], previousName)) return;
-    state.snackCellColors[status][nextName] = state.snackCellColors[status][previousName];
-    delete state.snackCellColors[status][previousName];
+function renameSnackCellRuleTier(previousName, nextName) {
+  if (!state.snackCellRules || previousName === nextName) return;
+  SNACK_RULE_STATUSES.forEach(status => {
+    if (!state.snackCellRules[status] || !Object.prototype.hasOwnProperty.call(state.snackCellRules[status], previousName)) return;
+    state.snackCellRules[status][nextName] = state.snackCellRules[status][previousName];
+    delete state.snackCellRules[status][previousName];
   });
 }
 
@@ -3573,11 +3588,7 @@ function drawExportSnackLegend(ctx, x, y) {
 }
 
 function getSnackLegendItems() {
-  return [
-    { label: "優先してサブレ", color: getSnackCellColor("unfinished", "SS") },
-    { label: "状況次第", color: getSnackCellColor("unfinished", "A") },
-    { label: "基本投げない・完了済み", color: getSnackCellColor("finished", "default") },
-  ];
+  return Object.values(SNACK_RULE_OPTIONS);
 }
 
 function drawExportSnackCell(ctx, status, tierName, x, y, width, height) {
@@ -3706,8 +3717,8 @@ function createDefaultState() {
     tiers: clone(defaultTiers),
     compromiseTiers: clone(defaultCompromiseTiers),
     finishedTiers: clone(defaultFinishedTiers),
-    snackColorPreset: DEFAULT_SNACK_COLOR_PRESET,
-    snackCellColors: clone(SNACK_COLOR_PRESETS[DEFAULT_SNACK_COLOR_PRESET].colors),
+    snackRulePreset: DEFAULT_SNACK_RULE_PRESET,
+    snackCellRules: clone(SNACK_RULE_PRESETS[DEFAULT_SNACK_RULE_PRESET].rules),
     candidateNotes: {},
   };
 }
@@ -3724,8 +3735,8 @@ function serializeState(value) {
     tiers: normalizeTiers(value.tiers),
     compromiseTiers: normalizeStatusTiers(value, "compromise"),
     finishedTiers: normalizeFinishedTiers(value),
-    snackColorPreset: normalizeSnackColorPreset(value.snackColorPreset),
-    snackCellColors: normalizeSnackCellColors(value.snackCellColors),
+    snackRulePreset: normalizeSnackRulePreset(value.snackRulePreset),
+    snackCellRules: normalizeSnackCellRules(value.snackCellRules),
     candidateNotes: normalizeCandidateNotes(value.candidateNotes),
   };
 }
@@ -3737,8 +3748,8 @@ function migrateState(parsed) {
     tiers: normalizeTiers(parsed.tiers),
     compromiseTiers: normalizeStatusTiers(parsed, "compromise"),
     finishedTiers: normalizeFinishedTiers(parsed),
-    snackColorPreset: normalizeSnackColorPreset(parsed.snackColorPreset),
-    snackCellColors: normalizeSnackCellColors(parsed.snackCellColors),
+    snackRulePreset: normalizeSnackRulePreset(parsed.snackRulePreset),
+    snackCellRules: normalizeSnackCellRules(parsed.snackCellRules),
     candidateNotes: normalizeCandidateNotes(parsed.candidateNotes),
   };
 }
@@ -3814,26 +3825,22 @@ function normalizeCandidateIngredients(ingredients) {
   return CANDIDATE_INGREDIENT_INDEXES.map(index => values[index] || "");
 }
 
-function normalizeSnackColorPreset(preset) {
-  if (!preset) return DEFAULT_SNACK_COLOR_PRESET;
-  return SNACK_COLOR_PRESETS[preset] ? preset : "custom";
+function normalizeSnackRulePreset(preset) {
+  if (!preset) return DEFAULT_SNACK_RULE_PRESET;
+  return SNACK_RULE_PRESETS[preset] ? preset : "custom";
 }
 
-function normalizeSnackCellColors(colors) {
-  const normalized = clone(SNACK_COLOR_PRESETS[DEFAULT_SNACK_COLOR_PRESET].colors);
-  if (!colors || typeof colors !== "object") return normalized;
-  SNACK_COLOR_STATUSES.forEach(status => {
-    const source = colors[status];
+function normalizeSnackCellRules(rules) {
+  const normalized = clone(SNACK_RULE_PRESETS[DEFAULT_SNACK_RULE_PRESET].rules);
+  if (!rules || typeof rules !== "object") return normalized;
+  SNACK_RULE_STATUSES.forEach(status => {
+    const source = rules[status];
     if (!source || typeof source !== "object") return;
-    Object.entries(source).forEach(([tierName, color]) => {
-      if (typeof tierName === "string" && isHexColor(color)) normalized[status][tierName] = color;
+    Object.entries(source).forEach(([tierName, rule]) => {
+      if (typeof tierName === "string" && SNACK_RULE_OPTIONS[rule]) normalized[status][tierName] = rule;
     });
   });
   return normalized;
-}
-
-function isHexColor(value) {
-  return typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value);
 }
 
 function uniqueKnownIds(idsValue, knownIds) {

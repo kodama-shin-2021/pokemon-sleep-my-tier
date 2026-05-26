@@ -351,11 +351,11 @@ button:active {
   background: var(--legend-color);
 }
 
-.snack-color-editor {
+.snack-rule-editor {
   flex-basis: 100%;
 }
 
-.snack-color-editor summary {
+.snack-rule-editor summary {
   width: fit-content;
   cursor: pointer;
   color: var(--accent);
@@ -363,7 +363,7 @@ button:active {
   font-weight: 900;
 }
 
-.snack-color-grid {
+.snack-rule-grid {
   display: grid;
   grid-template-columns: minmax(52px, 0.8fr) repeat(3, minmax(76px, 1fr));
   gap: 6px;
@@ -375,26 +375,28 @@ button:active {
   background: #ffffff;
 }
 
-.snack-color-grid-head {
+.snack-rule-grid-head {
   color: var(--muted);
   font-size: 11px;
   font-weight: 900;
   text-align: center;
 }
 
-.snack-color-grid strong {
+.snack-rule-grid strong {
   color: var(--ink);
   font-size: 12px;
   text-align: center;
 }
 
-.snack-color-grid input[type="color"] {
+.snack-rule-grid select {
   width: 100%;
   min-height: 30px;
-  padding: 2px;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
 }
 
 .tier-table-header {
@@ -1447,7 +1449,7 @@ dialog h2 {
     margin-left: 0;
   }
 
-  .snack-color-grid {
+  .snack-rule-grid {
     grid-template-columns: minmax(44px, 0.7fr) repeat(3, minmax(64px, 1fr));
   }
 

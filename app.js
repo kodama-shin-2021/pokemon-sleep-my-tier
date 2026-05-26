@@ -94,35 +94,30 @@ const defaultTiers = [
   {
     id: createId(),
     name: "SS",
-    description: "",
     color: "#f6b1a4",
     pokemonIds: ids("walrein feraligatr typhlosion meganium raichu blastoise venusaur steelix gardevoir dragonite raikou entei suicune vikavolt aggron weavile ninetales-alola pawmot blissey swampert blaziken sceptile gourgeist salamence flygon shuckle"),
   },
   {
     id: createId(),
     name: "S",
-    description: "",
     color: "#f4d27e",
     pokemonIds: ids("magnezone altaria tyranitar espeon ampharos gengar dodrio victreebel golduck butterfree charizard banette delibird bewear dedenne ninetales cramorant quaquaval skeledirge meowscarada luxray clodsire cresselia mawile farfetchd xatu cetitan noivern tyrantrum"),
   },
   {
     id: createId(),
     name: "A",
-    description: "",
     color: "#b8d98b",
     pokemonIds: ids("sylveon glaceon toxicroak swalot houndoom flareon golem primeape dugtrio wigglytuff arbok mr-mime abomasnow quagsire mimikyu braviary darkrai plusle crustle spheal-holiday ribombee latias sandslash onix"),
   },
   {
     id: createId(),
     name: "B",
-    description: "",
     color: "#91cbd3",
     pokemonIds: ids("lucario absol heracross vaporeon ditto pinsir kangaskhan marowak raticate clefable pikachu-halloween comfey eevee-holiday musharna minun toxtricity-low toxtricity-amped eevee-halloween spiritomb togedemaru mew"),
   },
   {
     id: createId(),
     name: "C",
-    description: "",
     color: "#b9b4dd",
     pokemonIds: ids("leafeon togekiss sableye slaking wobbuffet slowking umbreon sudowoodo jolteon slowbro arcanine persian pikachu-holiday gallade drifblim honchkrow"),
   },
@@ -131,7 +126,6 @@ const defaultTiers = [
 const defaultFinishedTiers = defaultTiers.map(tier => ({
   id: createId(),
   name: tier.name,
-  description: tier.description,
   color: tier.color,
   pokemonIds: [],
 }));
@@ -140,7 +134,6 @@ const defaultFinishedTierByName = new Map(defaultFinishedTiers.map(tier => [tier
 const defaultCompromiseTiers = defaultTiers.map(tier => ({
   id: createId(),
   name: tier.name,
-  description: tier.description,
   color: tier.color,
   pokemonIds: [],
 }));
@@ -2154,17 +2147,7 @@ function renderTiers() {
       saveState();
       render();
     });
-    const descriptionInput = document.createElement("textarea");
-    descriptionInput.className = "tier-description-input";
-    descriptionInput.value = tier.description || "";
-    descriptionInput.ariaLabel = "Tier説明";
-    descriptionInput.placeholder = "説明";
-    descriptionInput.rows = 2;
-    descriptionInput.addEventListener("input", () => {
-      tier.description = descriptionInput.value;
-      saveState();
-    });
-    label.append(input, descriptionInput);
+    label.append(input);
 
     const unfinishedDropzone = document.createElement("div");
     unfinishedDropzone.className = "tier-dropzone";
@@ -2336,10 +2319,7 @@ function renderStatusBoard(status) {
     label.className = "tier-label";
     const text = document.createElement("strong");
     text.textContent = tier.name;
-    const description = document.createElement("span");
-    description.className = "finished-description";
-    description.textContent = tier.description || "";
-    label.append(text, description);
+    label.append(text);
 
     const dropzone = document.createElement("div");
     dropzone.className = "tier-dropzone";
@@ -3452,21 +3432,18 @@ function addTier() {
   state.tiers.push({
     id: createId(),
     name: tierName,
-    description: "",
     color: tierColor,
     pokemonIds: [],
   });
   state.finishedTiers.push({
     id: createId(),
     name: tierName,
-    description: "",
     color: tierColor,
     pokemonIds: [],
   });
   state.compromiseTiers.push({
     id: createId(),
     name: tierName,
-    description: "",
     color: tierColor,
     pokemonIds: [],
   });
@@ -3560,10 +3537,6 @@ async function exportPng() {
     ctx.font = "800 34px system-ui, sans-serif";
     ctx.textAlign = "center";
     ctx.fillText(tier.name, tableX + labelWidth / 2, y + 48);
-    if (tier.description) {
-      ctx.font = "700 13px system-ui, sans-serif";
-      wrapText(ctx, tier.description, tableX + labelWidth / 2, y + 68, labelWidth - 16, 14);
-    }
     await drawExportCards(ctx, tier.pokemonIds, tableX + labelWidth, y, statusColumnWidth, cardWidth, cardHeight, gap);
     await drawExportCards(ctx, compromiseTier.pokemonIds, tableX + labelWidth + statusColumnWidth, y, statusColumnWidth, cardWidth, cardHeight, gap);
     await drawExportCards(ctx, finishedTier.pokemonIds, tableX + labelWidth + statusColumnWidth * 2, y, statusColumnWidth, cardWidth, cardHeight, gap);
@@ -3775,7 +3748,6 @@ function normalizeTiers(tiers) {
   return tiers.map(tier => ({
     id: tier.id || createId(),
     name: tier.name || " ",
-    description: normalizeTierDescription(tier.name, tier.description),
     color: tier.color || "#d5dce5",
     pokemonIds: uniqueKnownIds(tier.pokemonIds, knownIds),
   }));
@@ -3803,7 +3775,6 @@ function normalizeStatusTiers(parsed, status) {
     return {
       id: saved?.id || defaultTier?.id || createId(),
       name: tier.name || " ",
-      description: normalizeTierDescription(tier.name, tier.description),
       color: tier.color || "#d5dce5",
       pokemonIds: uniqueKnownIds(saved?.pokemonIds, knownIds),
     };
@@ -3872,17 +3843,6 @@ function uniqueKnownIds(idsValue, knownIds) {
 
 function getKnownPokemonIds() {
   return new Set(finalPokemon.map(pokemon => pokemon.id));
-}
-
-function getDefaultTierDescription(name) {
-  return defaultTiers.find(tier => tier.name === name)?.description || "";
-}
-
-function normalizeTierDescription(name, description) {
-  const fallback = getDefaultTierDescription(name);
-  if (!description) return fallback;
-  if (["限界までサブレを投げる", "ポケサブレは投げる", "ボナサブ要員", "誰もいないときボナサブを投げる", "基本投げない", "絶対に投げない"].includes(description)) return "";
-  return description;
 }
 
 function ids(value) {

@@ -148,6 +148,37 @@ const statusTierConfig = {
     defaultByName: defaultFinishedTierByName,
   },
 };
+const SNACK_CELL_COLORS = {
+  unfinished: {
+    SS: "#2563eb",
+    S: "#4f8ff7",
+    A: "#93c5fd",
+    B: "#dbeafe",
+    C: "#ffffff",
+    default: "#ffffff",
+  },
+  compromise: {
+    SS: "#bfdbfe",
+    S: "#dbeafe",
+    A: "#eff6ff",
+    B: "#f8fbff",
+    C: "#ffffff",
+    default: "#ffffff",
+  },
+  finished: {
+    SS: "#fbfdff",
+    S: "#fbfdff",
+    A: "#fcfdff",
+    B: "#ffffff",
+    C: "#ffffff",
+    default: "#ffffff",
+  },
+};
+const SNACK_LEGEND_ITEMS = [
+  { label: "優先してサブレ", color: SNACK_CELL_COLORS.unfinished.SS },
+  { label: "状況次第", color: SNACK_CELL_COLORS.unfinished.A },
+  { label: "基本投げない・完了済み", color: SNACK_CELL_COLORS.finished.default },
+];
 const natureOptions = [
   ["さみしがり", "おてつだいスピード↑ 1.11倍 / げんき回復量↓ 0.88倍"],
   ["いじっぱり", "おてつだいスピード↑ 1.11倍 / 食材おてつだい確率↓ 0.8倍"],
@@ -2077,6 +2108,7 @@ function render() {
 
 function renderTiers() {
   tierBoard.innerHTML = "";
+  tierBoard.append(createSnackLegend());
   const header = document.createElement("div");
   header.className = "tier-table-header";
   ["Tier", "厳選未完了", "妥協個体あり", "厳選完了", "操作"].forEach(text => {
@@ -2124,6 +2156,7 @@ function renderTiers() {
 
     const unfinishedDropzone = document.createElement("div");
     unfinishedDropzone.className = "tier-dropzone";
+    unfinishedDropzone.style.setProperty("--snack-cell-color", getSnackCellColor("unfinished", tier.name));
     unfinishedDropzone.addEventListener("dragover", allowDrop);
     unfinishedDropzone.addEventListener("dragleave", clearDropHover);
     unfinishedDropzone.addEventListener("drop", event => dropPokemon(event, tier.id));
@@ -2152,6 +2185,7 @@ function createStatusDropzone(status, tier) {
   const dropzone = document.createElement("div");
   dropzone.className = "tier-dropzone status-dropzone";
   if (!tier) return dropzone;
+  dropzone.style.setProperty("--snack-cell-color", getSnackCellColor(status, tier.name));
   dropzone.addEventListener("dragover", allowDrop);
   dropzone.addEventListener("dragleave", clearDropHover);
   dropzone.addEventListener("drop", event => dropStatusPokemon(event, status, tier.id));
@@ -2162,6 +2196,27 @@ function createStatusDropzone(status, tier) {
     }
   });
   return dropzone;
+}
+
+function createSnackLegend() {
+  const legend = document.createElement("div");
+  legend.className = "snack-legend";
+  const text = document.createElement("span");
+  text.textContent = "セル色はサブレを投げる優先度の目安です";
+  legend.append(text);
+  SNACK_LEGEND_ITEMS.forEach(item => {
+    const chip = document.createElement("span");
+    chip.className = "snack-legend-chip";
+    chip.style.setProperty("--legend-color", item.color);
+    chip.textContent = item.label;
+    legend.append(chip);
+  });
+  return legend;
+}
+
+function getSnackCellColor(status, tierName) {
+  const colors = SNACK_CELL_COLORS[status] || SNACK_CELL_COLORS.finished;
+  return colors[tierName] || colors.default;
 }
 
 function renderPool() {
@@ -3348,6 +3403,7 @@ async function exportPng() {
   const tableX = 20;
   const tableWidth = width - tableX * 2;
   const statusColumnWidth = Math.floor((tableWidth - labelWidth) / 3);
+  const legendHeight = 44;
   const headerHeight = 44;
   const cardsPerLine = Math.max(1, Math.floor((statusColumnWidth - gap * 2) / (cardWidth + gap)));
   const rowHeights = state.tiers.map((tier, index) => {
@@ -3361,7 +3417,7 @@ async function exportPng() {
     );
     return 24 + maxLineCount * cardHeight + (maxLineCount - 1) * 6;
   });
-  const height = 74 + headerHeight + rowHeights.reduce((total, rowHeight) => total + rowHeight, 0) + 24;
+  const height = 74 + legendHeight + headerHeight + rowHeights.reduce((total, rowHeight) => total + rowHeight, 0) + 24;
   const canvas = document.createElement("canvas");
   canvas.width = width * scale;
   canvas.height = height * scale;
@@ -3379,6 +3435,8 @@ async function exportPng() {
   ctx.fillText(new Date().toLocaleDateString("ja-JP"), 24, 64);
 
   let y = 74;
+  drawExportSnackLegend(ctx, 24, y + 12);
+  y += legendHeight;
   const headers = ["Tier", "厳選未完了", "妥協個体あり", "厳選完了"];
   const headerWidths = [labelWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth];
   let headerX = tableX;
@@ -3405,6 +3463,9 @@ async function exportPng() {
     ctx.fillStyle = tier.color;
     roundedRect(ctx, tableX, y, labelWidth, rowHeight - 8, 8);
     ctx.fill();
+    drawExportSnackCell(ctx, "unfinished", tier.name, tableX + labelWidth, y, statusColumnWidth, rowHeight - 8);
+    drawExportSnackCell(ctx, "compromise", compromiseTier.name || tier.name, tableX + labelWidth + statusColumnWidth, y, statusColumnWidth, rowHeight - 8);
+    drawExportSnackCell(ctx, "finished", finishedTier.name || tier.name, tableX + labelWidth + statusColumnWidth * 2, y, statusColumnWidth, rowHeight - 8);
     ctx.fillStyle = "#17202a";
     ctx.font = "800 34px system-ui, sans-serif";
     ctx.textAlign = "center";
@@ -3427,6 +3488,30 @@ async function exportPng() {
   link.download = "pokesuri-tier.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
+}
+
+function drawExportSnackLegend(ctx, x, y) {
+  ctx.fillStyle = "#5d6977";
+  ctx.font = "800 14px system-ui, sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText("セル色はサブレを投げる優先度の目安です", x, y + 14);
+  let chipX = x + 300;
+  SNACK_LEGEND_ITEMS.forEach(item => {
+    ctx.fillStyle = item.color;
+    roundedRect(ctx, chipX, y - 2, 20, 20, 4);
+    ctx.fill();
+    ctx.strokeStyle = "#b8c9c5";
+    ctx.stroke();
+    ctx.fillStyle = "#17202a";
+    ctx.font = "800 13px system-ui, sans-serif";
+    ctx.fillText(item.label, chipX + 28, y + 14);
+    chipX += ctx.measureText(item.label).width + 68;
+  });
+}
+
+function drawExportSnackCell(ctx, status, tierName, x, y, width, height) {
+  ctx.fillStyle = getSnackCellColor(status, tierName);
+  ctx.fillRect(x, y, width, height);
 }
 
 function exportJson() {

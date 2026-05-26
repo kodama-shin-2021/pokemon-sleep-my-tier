@@ -288,6 +288,41 @@ button:active {
   padding: 0;
 }
 
+.snack-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  background: #f8fbfa;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.snack-legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 0 8px;
+  border: 1px solid #cfdbd8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.snack-legend-chip::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 1px solid #b8c9c5;
+  border-radius: 4px;
+  background: var(--legend-color);
+}
+
 .tier-table-header {
   display: grid;
   grid-template-columns: var(--tier-label-width) minmax(220px, 1fr) minmax(220px, 1fr) minmax(220px, 1fr) 36px;
@@ -494,7 +529,7 @@ button:active {
   min-height: 104px;
   padding: 8px;
   border-right: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.38);
+  background: var(--snack-cell-color, rgba(255, 255, 255, 0.38));
 }
 
 .tier-actions {

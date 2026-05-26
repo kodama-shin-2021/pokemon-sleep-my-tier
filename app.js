@@ -1,12 +1,19 @@
 const STORAGE_KEY = "pokesuri-tier-maker-state";
-const STORAGE_SCHEMA_VERSION = 5;
+const STORAGE_SCHEMA_VERSION = 6;
 const LEGACY_STORAGE_KEYS = [
+  "pokesuri-tier-maker-state-v5",
   "pokesuri-tier-maker-state-v4",
   "pokesuri-tier-maker-state-v3",
   "pokesuri-tier-maker-state-v2",
   "pokesuri-tier-maker-state-v1",
 ];
 const STATUS_TYPES = ["compromise", "finished"];
+const SNACK_COLOR_STATUSES = ["unfinished", "compromise", "finished"];
+const SNACK_COLOR_STATUS_LABELS = {
+  unfinished: "厳選未完了",
+  compromise: "妥協個体あり",
+  finished: "厳選完了",
+};
 const CANDIDATE_LEVELS = ["10", "25", "50", "75", "100"];
 const CANDIDATE_SUMMARY_LEVELS = ["50", "75", "100"];
 const CANDIDATE_STATUSES = ["育成済み", "育成中", "育成候補", "保留", "除外"];
@@ -148,37 +155,41 @@ const statusTierConfig = {
     defaultByName: defaultFinishedTierByName,
   },
 };
-const SNACK_CELL_COLORS = {
-  unfinished: {
-    SS: "#2563eb",
-    S: "#4f8ff7",
-    A: "#93c5fd",
-    B: "#dbeafe",
-    C: "#ffffff",
-    default: "#ffffff",
+const DEFAULT_SNACK_COLOR_PRESET = "free";
+const SNACK_COLOR_PRESETS = {
+  free: {
+    label: "無課金",
+    colors: {
+      unfinished: { SS: "#2563eb", S: "#93c5fd", A: "#eff6ff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+      compromise: { SS: "#dbeafe", S: "#eff6ff", A: "#ffffff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+      finished: { SS: "#fbfdff", S: "#fbfdff", A: "#ffffff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+    },
   },
-  compromise: {
-    SS: "#bfdbfe",
-    S: "#dbeafe",
-    A: "#eff6ff",
-    B: "#f8fbff",
-    C: "#ffffff",
-    default: "#ffffff",
+  light: {
+    label: "微課金",
+    colors: {
+      unfinished: { SS: "#2563eb", S: "#4f8ff7", A: "#bfdbfe", B: "#eff6ff", C: "#ffffff", default: "#ffffff" },
+      compromise: { SS: "#bfdbfe", S: "#dbeafe", A: "#eff6ff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+      finished: { SS: "#fbfdff", S: "#fbfdff", A: "#fcfdff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+    },
   },
-  finished: {
-    SS: "#fbfdff",
-    S: "#fbfdff",
-    A: "#fcfdff",
-    B: "#ffffff",
-    C: "#ffffff",
-    default: "#ffffff",
+  heavy: {
+    label: "重課金",
+    colors: {
+      unfinished: { SS: "#1d4ed8", S: "#2563eb", A: "#60a5fa", B: "#dbeafe", C: "#ffffff", default: "#ffffff" },
+      compromise: { SS: "#93c5fd", S: "#bfdbfe", A: "#dbeafe", B: "#eff6ff", C: "#ffffff", default: "#ffffff" },
+      finished: { SS: "#eff6ff", S: "#fbfdff", A: "#fcfdff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+    },
+  },
+  whale: {
+    label: "廃課金",
+    colors: {
+      unfinished: { SS: "#172554", S: "#1d4ed8", A: "#2563eb", B: "#60a5fa", C: "#dbeafe", default: "#ffffff" },
+      compromise: { SS: "#2563eb", S: "#60a5fa", A: "#bfdbfe", B: "#dbeafe", C: "#eff6ff", default: "#ffffff" },
+      finished: { SS: "#eff6ff", S: "#fbfdff", A: "#fcfdff", B: "#ffffff", C: "#ffffff", default: "#ffffff" },
+    },
   },
 };
-const SNACK_LEGEND_ITEMS = [
-  { label: "優先してサブレ", color: SNACK_CELL_COLORS.unfinished.SS },
-  { label: "状況次第", color: SNACK_CELL_COLORS.unfinished.A },
-  { label: "基本投げない・完了済み", color: SNACK_CELL_COLORS.finished.default },
-];
 const natureOptions = [
   ["さみしがり", "おてつだいスピード↑ 1.11倍 / げんき回復量↓ 0.88倍"],
   ["いじっぱり", "おてつだいスピード↑ 1.11倍 / 食材おてつだい確率↓ 0.8倍"],
@@ -2135,6 +2146,7 @@ function renderTiers() {
     input.addEventListener("input", () => {
       const previousName = tier.name;
       tier.name = input.value || " ";
+      renameSnackCellColorTier(previousName, tier.name);
       const finishedTier = state.finishedTiers.find(item => item.name === previousName);
       if (finishedTier) finishedTier.name = tier.name;
       const compromiseTier = state.compromiseTiers.find(item => item.name === previousName);
@@ -2156,6 +2168,8 @@ function renderTiers() {
 
     const unfinishedDropzone = document.createElement("div");
     unfinishedDropzone.className = "tier-dropzone";
+    unfinishedDropzone.dataset.snackStatus = "unfinished";
+    unfinishedDropzone.dataset.snackTier = tier.name;
     unfinishedDropzone.style.setProperty("--snack-cell-color", getSnackCellColor("unfinished", tier.name));
     unfinishedDropzone.addEventListener("dragover", allowDrop);
     unfinishedDropzone.addEventListener("dragleave", clearDropHover);
@@ -2185,6 +2199,8 @@ function createStatusDropzone(status, tier) {
   const dropzone = document.createElement("div");
   dropzone.className = "tier-dropzone status-dropzone";
   if (!tier) return dropzone;
+  dropzone.dataset.snackStatus = status;
+  dropzone.dataset.snackTier = tier.name;
   dropzone.style.setProperty("--snack-cell-color", getSnackCellColor(status, tier.name));
   dropzone.addEventListener("dragover", allowDrop);
   dropzone.addEventListener("dragleave", clearDropHover);
@@ -2204,19 +2220,93 @@ function createSnackLegend() {
   const text = document.createElement("span");
   text.textContent = "セル色はサブレを投げる優先度の目安です";
   legend.append(text);
-  SNACK_LEGEND_ITEMS.forEach(item => {
+  getSnackLegendItems().forEach(item => {
     const chip = document.createElement("span");
     chip.className = "snack-legend-chip";
     chip.style.setProperty("--legend-color", item.color);
     chip.textContent = item.label;
     legend.append(chip);
   });
+  const presetLabel = document.createElement("label");
+  presetLabel.className = "snack-preset-field";
+  const presetText = document.createElement("span");
+  presetText.textContent = "プリセット";
+  const presetSelect = document.createElement("select");
+  Object.entries(SNACK_COLOR_PRESETS).forEach(([value, preset]) => {
+    appendSelectOption(presetSelect, value, preset.label);
+  });
+  appendSelectOption(presetSelect, "custom", "カスタム");
+  presetSelect.value = state.snackColorPreset || "custom";
+  presetSelect.addEventListener("change", () => {
+    state.snackColorPreset = presetSelect.value;
+    if (SNACK_COLOR_PRESETS[presetSelect.value]) {
+      state.snackCellColors = clone(SNACK_COLOR_PRESETS[presetSelect.value].colors);
+    }
+    render();
+  });
+  presetLabel.append(presetText, presetSelect);
+  legend.append(presetLabel, createSnackColorEditor());
   return legend;
 }
 
 function getSnackCellColor(status, tierName) {
-  const colors = SNACK_CELL_COLORS[status] || SNACK_CELL_COLORS.finished;
-  return colors[tierName] || colors.default;
+  const colors = state.snackCellColors?.[status] || SNACK_COLOR_PRESETS[DEFAULT_SNACK_COLOR_PRESET].colors[status];
+  return colors?.[tierName] || colors?.default || "#ffffff";
+}
+
+function createSnackColorEditor() {
+  const details = document.createElement("details");
+  details.className = "snack-color-editor";
+  const summary = document.createElement("summary");
+  summary.textContent = "セル色を編集";
+  const grid = document.createElement("div");
+  grid.className = "snack-color-grid";
+  ["Tier", ...SNACK_COLOR_STATUSES.map(status => SNACK_COLOR_STATUS_LABELS[status])].forEach(text => {
+    const header = document.createElement("span");
+    header.className = "snack-color-grid-head";
+    header.textContent = text;
+    grid.append(header);
+  });
+  state.tiers.forEach(tier => {
+    const tierLabel = document.createElement("strong");
+    tierLabel.textContent = tier.name;
+    grid.append(tierLabel);
+    SNACK_COLOR_STATUSES.forEach(status => {
+      const input = document.createElement("input");
+      input.type = "color";
+      input.ariaLabel = `${SNACK_COLOR_STATUS_LABELS[status]} ${tier.name} のセル色`;
+      input.value = getSnackCellColor(status, tier.name);
+      input.addEventListener("input", () => {
+        setSnackCellColor(status, tier.name, input.value);
+      });
+      grid.append(input);
+    });
+  });
+  details.append(summary, grid);
+  return details;
+}
+
+function setSnackCellColor(status, tierName, color) {
+  if (!state.snackCellColors) state.snackCellColors = clone(SNACK_COLOR_PRESETS[DEFAULT_SNACK_COLOR_PRESET].colors);
+  if (!state.snackCellColors[status]) state.snackCellColors[status] = {};
+  state.snackCellColors[status][tierName] = color;
+  state.snackColorPreset = "custom";
+  saveState();
+  document.querySelector(".snack-preset-field select").value = "custom";
+  document.querySelectorAll("[data-snack-status]").forEach(dropzone => {
+    if (dropzone.dataset.snackStatus === status && dropzone.dataset.snackTier === tierName) {
+      dropzone.style.setProperty("--snack-cell-color", color);
+    }
+  });
+}
+
+function renameSnackCellColorTier(previousName, nextName) {
+  if (!state.snackCellColors || previousName === nextName) return;
+  SNACK_COLOR_STATUSES.forEach(status => {
+    if (!state.snackCellColors[status] || !Object.prototype.hasOwnProperty.call(state.snackCellColors[status], previousName)) return;
+    state.snackCellColors[status][nextName] = state.snackCellColors[status][previousName];
+    delete state.snackCellColors[status][previousName];
+  });
 }
 
 function renderPool() {
@@ -3496,7 +3586,7 @@ function drawExportSnackLegend(ctx, x, y) {
   ctx.textAlign = "left";
   ctx.fillText("セル色はサブレを投げる優先度の目安です", x, y + 14);
   let chipX = x + 300;
-  SNACK_LEGEND_ITEMS.forEach(item => {
+  getSnackLegendItems().forEach(item => {
     ctx.fillStyle = item.color;
     roundedRect(ctx, chipX, y - 2, 20, 20, 4);
     ctx.fill();
@@ -3507,6 +3597,14 @@ function drawExportSnackLegend(ctx, x, y) {
     ctx.fillText(item.label, chipX + 28, y + 14);
     chipX += ctx.measureText(item.label).width + 68;
   });
+}
+
+function getSnackLegendItems() {
+  return [
+    { label: "優先してサブレ", color: getSnackCellColor("unfinished", "SS") },
+    { label: "状況次第", color: getSnackCellColor("unfinished", "A") },
+    { label: "基本投げない・完了済み", color: getSnackCellColor("finished", "default") },
+  ];
 }
 
 function drawExportSnackCell(ctx, status, tierName, x, y, width, height) {
@@ -3635,6 +3733,8 @@ function createDefaultState() {
     tiers: clone(defaultTiers),
     compromiseTiers: clone(defaultCompromiseTiers),
     finishedTiers: clone(defaultFinishedTiers),
+    snackColorPreset: DEFAULT_SNACK_COLOR_PRESET,
+    snackCellColors: clone(SNACK_COLOR_PRESETS[DEFAULT_SNACK_COLOR_PRESET].colors),
     candidateNotes: {},
   };
 }
@@ -3651,6 +3751,8 @@ function serializeState(value) {
     tiers: normalizeTiers(value.tiers),
     compromiseTiers: normalizeStatusTiers(value, "compromise"),
     finishedTiers: normalizeFinishedTiers(value),
+    snackColorPreset: normalizeSnackColorPreset(value.snackColorPreset),
+    snackCellColors: normalizeSnackCellColors(value.snackCellColors),
     candidateNotes: normalizeCandidateNotes(value.candidateNotes),
   };
 }
@@ -3662,6 +3764,8 @@ function migrateState(parsed) {
     tiers: normalizeTiers(parsed.tiers),
     compromiseTiers: normalizeStatusTiers(parsed, "compromise"),
     finishedTiers: normalizeFinishedTiers(parsed),
+    snackColorPreset: normalizeSnackColorPreset(parsed.snackColorPreset),
+    snackCellColors: normalizeSnackCellColors(parsed.snackCellColors),
     candidateNotes: normalizeCandidateNotes(parsed.candidateNotes),
   };
 }
@@ -3737,6 +3841,28 @@ function normalizeCandidate(candidate) {
 function normalizeCandidateIngredients(ingredients) {
   const values = Array.isArray(ingredients) ? ingredients : [];
   return CANDIDATE_INGREDIENT_INDEXES.map(index => values[index] || "");
+}
+
+function normalizeSnackColorPreset(preset) {
+  if (!preset) return DEFAULT_SNACK_COLOR_PRESET;
+  return SNACK_COLOR_PRESETS[preset] ? preset : "custom";
+}
+
+function normalizeSnackCellColors(colors) {
+  const normalized = clone(SNACK_COLOR_PRESETS[DEFAULT_SNACK_COLOR_PRESET].colors);
+  if (!colors || typeof colors !== "object") return normalized;
+  SNACK_COLOR_STATUSES.forEach(status => {
+    const source = colors[status];
+    if (!source || typeof source !== "object") return;
+    Object.entries(source).forEach(([tierName, color]) => {
+      if (typeof tierName === "string" && isHexColor(color)) normalized[status][tierName] = color;
+    });
+  });
+  return normalized;
+}
+
+function isHexColor(value) {
+  return typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value);
 }
 
 function uniqueKnownIds(idsValue, knownIds) {

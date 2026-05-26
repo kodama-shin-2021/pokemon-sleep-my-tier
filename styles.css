@@ -151,6 +151,15 @@ button:active {
   max-width: 860px;
 }
 
+.site-guide {
+  max-width: none;
+  margin-top: 18px;
+}
+
+.site-guide section {
+  box-shadow: none;
+}
+
 .content-page section {
   background: var(--surface);
   border: 1px solid var(--line);

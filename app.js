@@ -2140,9 +2140,17 @@ function renderTiers() {
   tierBoard.append(createSnackLegend());
   const header = document.createElement("div");
   header.className = "tier-table-header";
-  ["Tier", "厳選未完了", "妥協個体あり", "育成中", "育成完了", "操作"].forEach(text => {
+  [
+    ["Tier", "Tier"],
+    ["厳選未完了", "未完了"],
+    ["妥協個体あり", "妥協"],
+    ["育成中", "育成"],
+    ["育成完了", "完了"],
+    ["操作", "操"],
+  ].forEach(([text, shortText]) => {
     const cell = document.createElement("div");
     cell.textContent = text;
+    cell.dataset.short = shortText;
     header.append(cell);
   });
   tierBoard.append(header);

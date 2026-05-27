@@ -151,9 +151,9 @@ const statusTierConfig = {
 };
 const DEFAULT_SNACK_RULE_PRESET = "free";
 const SNACK_RULE_OPTIONS = {
-  limit: { label: "限界まで投げる", color: "#2563eb" },
-  bonus: { label: "ボナサブのみ", color: "#bfdbfe" },
-  chance: { label: "チャンスがつけばあり", color: "#eff6ff" },
+  limit: { label: "限界まで投げる", color: "#93c5fd" },
+  bonus: { label: "ボナサブのみ", color: "#dbeafe" },
+  chance: { label: "チャンスがつけばあり", color: "#f8fbff" },
   none: { label: "投げない", color: "#ffffff" },
 };
 const SNACK_RULE_PRESETS = {

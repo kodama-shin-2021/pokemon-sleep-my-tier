@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="ポケモンスリープの厳選状況をTier、妥協個体あり、厳選完了に分けて端末保存できる非公式管理ツールです。" />
+    <meta name="description" content="ポケモンスリープの厳選状況をTier、妥協個体あり、育成中、育成完了に分けて端末保存できる非公式管理ツールです。" />
     <meta name="theme-color" content="#2b6f6a" />
     <title>ポケスリ厳選ノート</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="manifest.webmanifest" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2435857317231554" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="styles.css?v=20260527-1" />
+    <link rel="stylesheet" href="styles.css?v=20260527-2" />
   </head>
   <body>
     <div class="app-shell">
@@ -21,7 +21,7 @@
             自分の厳選状況を整理して端末に保存できます。
             整理することで、サブレの無駄遣いを減らすための判断に役立てられます。
             <br />
-            使い方: ポケモンをクリックして、妥協個体ありや厳選完了に移すことで厳選状況を管理できます。また、Tierの変更もできます。
+            使い方: ポケモンをクリックして、妥協個体あり、育成中、育成完了に移すことで厳選状況を管理できます。また、Tierの変更もできます。
             編集内容はこの端末内に保存され、JSONでバックアップできます。
             <br />
             共有URLを作ると、Tier配置や厳選候補の個体情報をそのまま他の人に見せられます。
@@ -118,14 +118,24 @@
             <div id="compromisePool" class="compact-board"></div>
           </section>
 
-          <section class="compact-panel finished-panel" aria-label="厳選完了ポケモン">
+          <section class="compact-panel training-panel" aria-label="育成中ポケモン">
             <div class="panel-head">
               <div>
-                <h2>厳選完了</h2>
-                <span id="finishedCount"></span>
+                <h2>育成中</h2>
+                <span id="trainingCount"></span>
               </div>
             </div>
-            <div id="finishedPool" class="compact-board"></div>
+            <div id="trainingPool" class="compact-board"></div>
+          </section>
+
+          <section class="compact-panel trained-panel" aria-label="育成完了ポケモン">
+            <div class="panel-head">
+              <div>
+                <h2>育成完了</h2>
+                <span id="trainedCount"></span>
+              </div>
+            </div>
+            <div id="trainedPool" class="compact-board"></div>
           </section>
         </aside>
       </main>
@@ -144,7 +154,7 @@
           <h2>ポケスリ厳選ノートでできること</h2>
           <p>
             ポケスリ厳選ノートは、ポケモンスリープで厳選したいポケモンを
-            「厳選未完了」「妥協個体あり」「厳選完了」に分けて整理するための非公式管理ツールです。
+            「厳選未完了」「妥協個体あり」「育成中」「育成完了」に分けて整理するための非公式管理ツールです。
             Tier表をそのまま眺めるだけでなく、自分の手持ちやプレイ方針に合わせて並べ替え、次に確認したいポケモンを見失いにくくできます。
           </p>
           <p>
@@ -157,7 +167,7 @@
           <h2>厳選状況を分けて管理する理由</h2>
           <p>
             ポケモンスリープでは、同じポケモンでも性格、サブスキル、食材構成、出現フィールドによって育成優先度が変わります。
-            まだ捕まえたいポケモン、妥協個体を持っているポケモン、すでに厳選完了したポケモンを分けることで、サブレを使う候補を整理しやすくなります。
+            まだ捕まえたいポケモン、妥協個体を持っているポケモン、育成中のポケモン、育成完了したポケモンを分けることで、サブレを使う候補を整理しやすくなります。
           </p>
           <p>
             セルの色は「限界まで投げる」「ボナサブのみ」「チャンスがあれば」「投げない」の4種類です。
@@ -242,6 +252,6 @@
       </form>
     </dialog>
 
-    <script src="app.js?v=20260527-6"></script>
+    <script src="app.js?v=20260527-7"></script>
   </body>
 </html>

@@ -8,12 +8,13 @@ const LEGACY_STORAGE_KEYS = [
   "pokesuri-tier-maker-state-v2",
   "pokesuri-tier-maker-state-v1",
 ];
-const STATUS_TYPES = ["compromise", "finished"];
-const SNACK_RULE_STATUSES = ["unfinished", "compromise", "finished"];
+const STATUS_TYPES = ["compromise", "training", "trained"];
+const SNACK_RULE_STATUSES = ["unfinished", "compromise", "training", "trained"];
 const SNACK_RULE_STATUS_LABELS = {
   unfinished: "厳選未完了",
   compromise: "妥協個体あり",
-  finished: "厳選完了",
+  training: "育成中",
+  trained: "育成完了",
 };
 const CANDIDATE_LEVELS = ["10", "25", "50", "75", "100"];
 const CANDIDATE_SUMMARY_LEVELS = ["50", "75", "100"];
@@ -124,14 +125,21 @@ const defaultTiers = [
   },
 ];
 
-const defaultFinishedTiers = defaultTiers.map(tier => ({
+const defaultTrainingTiers = defaultTiers.map(tier => ({
+  id: createId(),
+  name: tier.name,
+  color: tier.color,
+  pokemonIds: [],
+}));
+const defaultTrainedTiers = defaultTiers.map(tier => ({
   id: createId(),
   name: tier.name,
   color: tier.color,
   pokemonIds: [],
 }));
 
-const defaultFinishedTierByName = new Map(defaultFinishedTiers.map(tier => [tier.name, tier]));
+const defaultTrainingTierByName = new Map(defaultTrainingTiers.map(tier => [tier.name, tier]));
+const defaultTrainedTierByName = new Map(defaultTrainedTiers.map(tier => [tier.name, tier]));
 const defaultCompromiseTiers = defaultTiers.map(tier => ({
   id: createId(),
   name: tier.name,
@@ -144,9 +152,13 @@ const statusTierConfig = {
     stateKey: "compromiseTiers",
     defaultByName: defaultCompromiseTierByName,
   },
-  finished: {
-    stateKey: "finishedTiers",
-    defaultByName: defaultFinishedTierByName,
+  training: {
+    stateKey: "trainingTiers",
+    defaultByName: defaultTrainingTierByName,
+  },
+  trained: {
+    stateKey: "trainedTiers",
+    defaultByName: defaultTrainedTierByName,
   },
 };
 const DEFAULT_SNACK_RULE_PRESET = "free";
@@ -162,7 +174,8 @@ const SNACK_RULE_PRESETS = {
     rules: {
       unfinished: { SS: "limit", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
       compromise: { SS: "bonus", S: "chance", A: "none", B: "none", C: "none", default: "none" },
-      finished: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
+      training: { SS: "bonus", S: "chance", A: "none", B: "none", C: "none", default: "none" },
+      trained: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
     },
   },
   light: {
@@ -170,7 +183,8 @@ const SNACK_RULE_PRESETS = {
     rules: {
       unfinished: { SS: "limit", S: "limit", A: "bonus", B: "chance", C: "none", default: "none" },
       compromise: { SS: "bonus", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
-      finished: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
+      training: { SS: "bonus", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
+      trained: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
     },
   },
   heavy: {
@@ -178,7 +192,8 @@ const SNACK_RULE_PRESETS = {
     rules: {
       unfinished: { SS: "limit", S: "limit", A: "limit", B: "bonus", C: "chance", default: "none" },
       compromise: { SS: "limit", S: "bonus", A: "bonus", B: "chance", C: "none", default: "none" },
-      finished: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
+      training: { SS: "limit", S: "bonus", A: "bonus", B: "chance", C: "none", default: "none" },
+      trained: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
     },
   },
   whale: {
@@ -186,7 +201,8 @@ const SNACK_RULE_PRESETS = {
     rules: {
       unfinished: { SS: "limit", S: "limit", A: "limit", B: "limit", C: "bonus", default: "none" },
       compromise: { SS: "limit", S: "limit", A: "bonus", B: "bonus", C: "chance", default: "none" },
-      finished: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
+      training: { SS: "limit", S: "limit", A: "bonus", B: "bonus", C: "chance", default: "none" },
+      trained: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
     },
   },
 };
@@ -1965,8 +1981,10 @@ const pokemonPool = document.querySelector("#pokemonPool");
 const poolCount = document.querySelector("#poolCount");
 const compromisePool = document.querySelector("#compromisePool");
 const compromiseCount = document.querySelector("#compromiseCount");
-const finishedPool = document.querySelector("#finishedPool");
-const finishedCount = document.querySelector("#finishedCount");
+const trainingPool = document.querySelector("#trainingPool");
+const trainingCount = document.querySelector("#trainingCount");
+const trainedPool = document.querySelector("#trainedPool");
+const trainedCount = document.querySelector("#trainedCount");
 const searchInput = document.querySelector("#searchInput");
 const specialtyFilter = document.querySelector("#specialtyFilter");
 const typeFilter = document.querySelector("#typeFilter");
@@ -2122,7 +2140,7 @@ function renderTiers() {
   tierBoard.append(createSnackLegend());
   const header = document.createElement("div");
   header.className = "tier-table-header";
-  ["Tier", "厳選未完了", "妥協個体あり", "厳選完了", "操作"].forEach(text => {
+  ["Tier", "厳選未完了", "妥協個体あり", "育成中", "育成完了", "操作"].forEach(text => {
     const cell = document.createElement("div");
     cell.textContent = text;
     header.append(cell);
@@ -2136,7 +2154,8 @@ function renderTiers() {
     row.dataset.tierId = tier.id;
     row.dataset.tierIndex = String(index);
     const compromiseTier = state.compromiseTiers[index];
-    const finishedTier = state.finishedTiers[index];
+    const trainingTier = state.trainingTiers[index];
+    const trainedTier = state.trainedTiers[index];
 
     const label = document.createElement("div");
     label.className = "tier-label";
@@ -2148,16 +2167,13 @@ function renderTiers() {
       tier.name = input.value || " ";
       tier.color = getTierLabelColor(tier.name);
       renameSnackCellRuleTier(previousName, tier.name);
-      const finishedTier = state.finishedTiers.find(item => item.name === previousName);
-      if (finishedTier) {
-        finishedTier.name = tier.name;
-        finishedTier.color = tier.color;
-      }
-      const compromiseTier = state.compromiseTiers.find(item => item.name === previousName);
-      if (compromiseTier) {
-        compromiseTier.name = tier.name;
-        compromiseTier.color = tier.color;
-      }
+      STATUS_TYPES.map(getStatusTiers).forEach(statusTiers => {
+        const statusTier = statusTiers.find(item => item.name === previousName);
+        if (statusTier) {
+          statusTier.name = tier.name;
+          statusTier.color = tier.color;
+        }
+      });
       saveState();
       render();
     });
@@ -2177,7 +2193,8 @@ function renderTiers() {
     });
 
     const compromiseDropzone = createStatusDropzone("compromise", compromiseTier);
-    const finishedDropzone = createStatusDropzone("finished", finishedTier);
+    const trainingDropzone = createStatusDropzone("training", trainingTier);
+    const trainedDropzone = createStatusDropzone("trained", trainedTier);
 
     const actions = document.createElement("div");
     actions.className = "tier-actions";
@@ -2187,7 +2204,7 @@ function renderTiers() {
       iconButton("×", () => removeTier(tier.id), "削除"),
     );
 
-    row.append(label, unfinishedDropzone, compromiseDropzone, finishedDropzone, actions);
+    row.append(label, unfinishedDropzone, compromiseDropzone, trainingDropzone, trainedDropzone, actions);
     tierBoard.append(row);
   });
 }
@@ -2325,8 +2342,19 @@ function renderPool() {
 
 function renderStatusBoard(status) {
   const tiers = getStatusTiers(status);
-  const board = status === "compromise" ? compromisePool : finishedPool;
-  const count = status === "compromise" ? compromiseCount : finishedCount;
+  const boardByStatus = {
+    compromise: compromisePool,
+    training: trainingPool,
+    trained: trainedPool,
+  };
+  const countByStatus = {
+    compromise: compromiseCount,
+    training: trainingCount,
+    trained: trainedCount,
+  };
+  const board = boardByStatus[status];
+  const count = countByStatus[status];
+  if (!board || !count) return;
   const allIds = getStatusPokemonIds(status);
   const visibleCount = allIds.map(getPokemon).filter(Boolean).filter(matchesCurrentFilters).length;
   count.textContent = `${visibleCount} / ${allIds.length}匹`;
@@ -2361,7 +2389,7 @@ function renderStatusBoard(status) {
 }
 
 function syncTierRowHeights() {
-  const rowCount = Math.max(state.tiers.length, state.compromiseTiers.length, state.finishedTiers.length);
+  const rowCount = Math.max(state.tiers.length, state.compromiseTiers.length, state.trainingTiers.length, state.trainedTiers.length);
   for (let index = 0; index < rowCount; index += 1) {
     const rows = document.querySelectorAll(`[data-tier-index="${index}"]`);
     rows.forEach(row => {
@@ -2672,30 +2700,28 @@ function appendStatusChangeActions(pokemonId, currentTierId, currentStatus, curr
       });
     }
 
-    const nextStatus = currentStatus.status === "compromise" ? "finished" : "compromise";
-    const nextStatusTier = getStatusTiers(nextStatus).find(tier => tier.name === currentStatusTier?.name);
-    if (nextStatusTier) {
-      appendMoveAction(nextStatus === "compromise" ? "妥協個体ありへ" : "厳選完了へ", () => {
-        movePokemonToStatus(pokemonId, nextStatus, nextStatusTier.id);
+    STATUS_TYPES.filter(status => status !== currentStatus.status).forEach(status => {
+      const nextStatusTier = getStatusTiers(status).find(tier => tier.name === currentStatusTier?.name);
+      if (!nextStatusTier) return;
+      appendMoveAction(`${SNACK_RULE_STATUS_LABELS[status]}へ`, () => {
+        movePokemonToStatus(pokemonId, status, nextStatusTier.id);
       });
-    }
+    });
   } else {
-    const linkedCompromiseTier = getLinkedStatusTier("compromise", currentTierId);
-    if (linkedCompromiseTier) {
-      appendMoveAction("妥協個体ありへ", () => {
-        movePokemonToStatus(pokemonId, "compromise", linkedCompromiseTier.id);
+    let hasLinkedStatusTier = false;
+    STATUS_TYPES.forEach(status => {
+      const linkedStatusTier = getLinkedStatusTier(status, currentTierId);
+      if (!linkedStatusTier) return;
+      hasLinkedStatusTier = true;
+      appendMoveAction(`${SNACK_RULE_STATUS_LABELS[status]}へ`, () => {
+        movePokemonToStatus(pokemonId, status, linkedStatusTier.id);
       });
-    }
-    const linkedFinishedTier = getLinkedStatusTier("finished", currentTierId);
-    if (linkedFinishedTier) {
-      appendMoveAction("厳選完了へ", () => {
-        movePokemonToStatus(pokemonId, "finished", linkedFinishedTier.id);
-      });
-    }
+    });
 
-    if (!linkedCompromiseTier && !linkedFinishedTier) {
+    if (!hasLinkedStatusTier) {
       appendStatusMoveButtons(pokemonId, "compromise", "妥協");
-      appendStatusMoveButtons(pokemonId, "finished", "完了");
+      appendStatusMoveButtons(pokemonId, "training", "育成中");
+      appendStatusMoveButtons(pokemonId, "trained", "育成完了");
     }
   }
 }
@@ -3431,10 +3457,10 @@ function moveTier(index, direction) {
   if (nextIndex < 0 || nextIndex >= state.tiers.length) return;
   const [tier] = state.tiers.splice(index, 1);
   state.tiers.splice(nextIndex, 0, tier);
-  const [finishedTier] = state.finishedTiers.splice(index, 1);
-  state.finishedTiers.splice(nextIndex, 0, finishedTier);
-  const [compromiseTier] = state.compromiseTiers.splice(index, 1);
-  state.compromiseTiers.splice(nextIndex, 0, compromiseTier);
+  STATUS_TYPES.map(getStatusTiers).forEach(statusTiers => {
+    const [statusTier] = statusTiers.splice(index, 1);
+    statusTiers.splice(nextIndex, 0, statusTier);
+  });
   render();
 }
 
@@ -3442,8 +3468,12 @@ function removeTier(tierId) {
   if (state.tiers.length <= 1) return;
   const tier = state.tiers.find(item => item.id === tierId);
   state.tiers = state.tiers.filter(tier => tier.id !== tierId);
-  if (tier) state.finishedTiers = state.finishedTiers.filter(item => item.name !== tier.name);
-  if (tier) state.compromiseTiers = state.compromiseTiers.filter(item => item.name !== tier.name);
+  if (tier) {
+    STATUS_TYPES.forEach(status => {
+      const config = statusTierConfig[status];
+      state[config.stateKey] = state[config.stateKey].filter(item => item.name !== tier.name);
+    });
+  }
   render();
 }
 
@@ -3456,17 +3486,13 @@ function addTier() {
     color: tierColor,
     pokemonIds: [],
   });
-  state.finishedTiers.push({
-    id: createId(),
-    name: tierName,
-    color: tierColor,
-    pokemonIds: [],
-  });
-  state.compromiseTiers.push({
-    id: createId(),
-    name: tierName,
-    color: tierColor,
-    pokemonIds: [],
+  STATUS_TYPES.forEach(status => {
+    state[statusTierConfig[status].stateKey].push({
+      id: createId(),
+      name: tierName,
+      color: tierColor,
+      pokemonIds: [],
+    });
   });
   render();
 }
@@ -3490,18 +3516,20 @@ async function exportPng() {
   const width = 1600;
   const tableX = 20;
   const tableWidth = width - tableX * 2;
-  const statusColumnWidth = Math.floor((tableWidth - labelWidth) / 3);
+  const statusColumnWidth = Math.floor((tableWidth - labelWidth) / 4);
   const legendHeight = 44;
   const headerHeight = 44;
   const cardsPerLine = Math.max(1, Math.floor((statusColumnWidth - gap * 2) / (cardWidth + gap)));
   const rowHeights = state.tiers.map((tier, index) => {
     const compromiseTier = state.compromiseTiers[index] || { pokemonIds: [] };
-    const finishedTier = state.finishedTiers[index] || { pokemonIds: [] };
+    const trainingTier = state.trainingTiers[index] || { pokemonIds: [] };
+    const trainedTier = state.trainedTiers[index] || { pokemonIds: [] };
     const maxLineCount = Math.max(
       1,
       Math.ceil(tier.pokemonIds.length / cardsPerLine),
       Math.ceil(compromiseTier.pokemonIds.length / cardsPerLine),
-      Math.ceil(finishedTier.pokemonIds.length / cardsPerLine),
+      Math.ceil(trainingTier.pokemonIds.length / cardsPerLine),
+      Math.ceil(trainedTier.pokemonIds.length / cardsPerLine),
     );
     return 24 + maxLineCount * cardHeight + (maxLineCount - 1) * 6;
   });
@@ -3525,8 +3553,8 @@ async function exportPng() {
   let y = 74;
   drawExportSnackLegend(ctx, 24, y + 12);
   y += legendHeight;
-  const headers = ["Tier", "厳選未完了", "妥協個体あり", "厳選完了"];
-  const headerWidths = [labelWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth];
+  const headers = ["Tier", "厳選未完了", "妥協個体あり", "育成中", "育成完了"];
+  const headerWidths = [labelWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth];
   let headerX = tableX;
   ctx.fillStyle = "#5d5850";
   roundedRect(ctx, tableX, y, tableWidth, headerHeight, 8);
@@ -3543,7 +3571,8 @@ async function exportPng() {
   for (let rowIndex = 0; rowIndex < state.tiers.length; rowIndex += 1) {
     const tier = state.tiers[rowIndex];
     const compromiseTier = state.compromiseTiers[rowIndex] || { pokemonIds: [] };
-    const finishedTier = state.finishedTiers[rowIndex] || { pokemonIds: [] };
+    const trainingTier = state.trainingTiers[rowIndex] || { pokemonIds: [] };
+    const trainedTier = state.trainedTiers[rowIndex] || { pokemonIds: [] };
     const rowHeight = rowHeights[rowIndex];
     ctx.fillStyle = rowIndex % 2 === 0 ? "#ffffff" : "#fbfdfc";
     roundedRect(ctx, tableX, y, tableWidth, rowHeight - 8, 8);
@@ -3553,14 +3582,16 @@ async function exportPng() {
     ctx.fill();
     drawExportSnackCell(ctx, "unfinished", tier.name, tableX + labelWidth, y, statusColumnWidth, rowHeight - 8);
     drawExportSnackCell(ctx, "compromise", compromiseTier.name || tier.name, tableX + labelWidth + statusColumnWidth, y, statusColumnWidth, rowHeight - 8);
-    drawExportSnackCell(ctx, "finished", finishedTier.name || tier.name, tableX + labelWidth + statusColumnWidth * 2, y, statusColumnWidth, rowHeight - 8);
+    drawExportSnackCell(ctx, "training", trainingTier.name || tier.name, tableX + labelWidth + statusColumnWidth * 2, y, statusColumnWidth, rowHeight - 8);
+    drawExportSnackCell(ctx, "trained", trainedTier.name || tier.name, tableX + labelWidth + statusColumnWidth * 3, y, statusColumnWidth, rowHeight - 8);
     ctx.fillStyle = "#433f38";
     ctx.font = "800 34px system-ui, sans-serif";
     ctx.textAlign = "center";
     ctx.fillText(tier.name, tableX + labelWidth / 2, y + 48);
     await drawExportCards(ctx, tier.pokemonIds, tableX + labelWidth, y, statusColumnWidth, cardWidth, cardHeight, gap);
     await drawExportCards(ctx, compromiseTier.pokemonIds, tableX + labelWidth + statusColumnWidth, y, statusColumnWidth, cardWidth, cardHeight, gap);
-    await drawExportCards(ctx, finishedTier.pokemonIds, tableX + labelWidth + statusColumnWidth * 2, y, statusColumnWidth, cardWidth, cardHeight, gap);
+    await drawExportCards(ctx, trainingTier.pokemonIds, tableX + labelWidth + statusColumnWidth * 2, y, statusColumnWidth, cardWidth, cardHeight, gap);
+    await drawExportCards(ctx, trainedTier.pokemonIds, tableX + labelWidth + statusColumnWidth * 3, y, statusColumnWidth, cardWidth, cardHeight, gap);
     y += rowHeight;
   }
   ctx.fillStyle = "#5d6977";
@@ -3722,7 +3753,8 @@ function createDefaultState() {
     schemaVersion: STORAGE_SCHEMA_VERSION,
     tiers: clone(defaultTiers),
     compromiseTiers: clone(defaultCompromiseTiers),
-    finishedTiers: clone(defaultFinishedTiers),
+    trainingTiers: clone(defaultTrainingTiers),
+    trainedTiers: clone(defaultTrainedTiers),
     snackRulePreset: DEFAULT_SNACK_RULE_PRESET,
     snackCellRules: clone(SNACK_RULE_PRESETS[DEFAULT_SNACK_RULE_PRESET].rules),
     candidateNotes: {},
@@ -3740,7 +3772,8 @@ function serializeState(value) {
     schemaVersion: STORAGE_SCHEMA_VERSION,
     tiers: normalizeTiers(value.tiers),
     compromiseTiers: normalizeStatusTiers(value, "compromise"),
-    finishedTiers: normalizeFinishedTiers(value),
+    trainingTiers: normalizeStatusTiers(value, "training"),
+    trainedTiers: normalizeStatusTiers(value, "trained"),
     snackRulePreset: normalizeSnackRulePreset(value.snackRulePreset),
     snackCellRules: normalizeSnackCellRules(value.snackCellRules),
     candidateNotes: normalizeCandidateNotes(value.candidateNotes),
@@ -3753,7 +3786,8 @@ function migrateState(parsed) {
     schemaVersion: STORAGE_SCHEMA_VERSION,
     tiers: normalizeTiers(parsed.tiers),
     compromiseTiers: normalizeStatusTiers(parsed, "compromise"),
-    finishedTiers: normalizeFinishedTiers(parsed),
+    trainingTiers: normalizeStatusTiers(parsed, "training"),
+    trainedTiers: normalizeStatusTiers(parsed, "trained"),
     snackRulePreset: normalizeSnackRulePreset(parsed.snackRulePreset),
     snackCellRules: normalizeSnackCellRules(parsed.snackCellRules),
     candidateNotes: normalizeCandidateNotes(parsed.candidateNotes),
@@ -3768,17 +3802,6 @@ function normalizeTiers(tiers) {
     color: getTierLabelColor(tier.name),
     pokemonIds: uniqueKnownIds(tier.pokemonIds, knownIds),
   }));
-}
-
-function normalizeFinishedTiers(parsed) {
-  const normalized = normalizeStatusTiers(parsed, "finished");
-
-  if (Array.isArray(parsed.finishedIds) && parsed.finishedIds.length && normalized[0]) {
-    const knownIds = getKnownPokemonIds();
-    normalized[0].pokemonIds = uniqueKnownIds([...normalized[0].pokemonIds, ...parsed.finishedIds], knownIds);
-  }
-
-  return normalized;
 }
 
 function normalizeStatusTiers(parsed, status) {

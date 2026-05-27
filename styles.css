@@ -253,7 +253,7 @@ button:active {
 
 .board-column {
   display: block;
-  min-width: 980px;
+  min-width: 1240px;
 }
 
 .tier-panel,
@@ -365,7 +365,7 @@ button:active {
 
 .snack-rule-grid {
   display: grid;
-  grid-template-columns: minmax(52px, 0.8fr) repeat(3, minmax(76px, 1fr));
+  grid-template-columns: minmax(52px, 0.8fr) repeat(4, minmax(76px, 1fr));
   gap: 6px;
   align-items: center;
   margin-top: 8px;
@@ -401,7 +401,7 @@ button:active {
 
 .tier-table-header {
   display: grid;
-  grid-template-columns: var(--tier-label-width) minmax(220px, 1fr) minmax(220px, 1fr) minmax(220px, 1fr) 36px;
+  grid-template-columns: var(--tier-label-width) repeat(4, minmax(190px, 1fr)) 36px;
   min-height: 42px;
   border-bottom: 1px solid var(--line);
   background: #5d5850;
@@ -541,7 +541,7 @@ button:active {
 
 .tier-row {
   display: grid;
-  grid-template-columns: var(--tier-label-width) minmax(220px, 1fr) minmax(220px, 1fr) minmax(220px, 1fr) 36px;
+  grid-template-columns: var(--tier-label-width) repeat(4, minmax(190px, 1fr)) 36px;
   min-height: 104px;
   border: 1px solid var(--line);
   border-width: 0 0 1px;
@@ -620,7 +620,8 @@ button:active {
 
 #poolCount,
 #compromiseCount,
-#finishedCount {
+#trainingCount,
+#trainedCount {
   color: var(--muted);
   font-size: 13px;
 }
@@ -1433,7 +1434,8 @@ dialog h2 {
   }
 
   .status-column,
-  .finished-panel,
+  .training-panel,
+  .trained-panel,
   .compromise-panel {
     position: relative;
     top: auto;
@@ -1450,11 +1452,11 @@ dialog h2 {
   }
 
   .snack-rule-grid {
-    grid-template-columns: minmax(44px, 0.7fr) repeat(3, minmax(64px, 1fr));
+    grid-template-columns: minmax(44px, 0.7fr) repeat(4, minmax(64px, 1fr));
   }
 
   .tier-row {
-    grid-template-columns: var(--tier-label-width) minmax(190px, 1fr) minmax(190px, 1fr) minmax(190px, 1fr) 36px;
+    grid-template-columns: var(--tier-label-width) repeat(4, minmax(180px, 1fr)) 36px;
     min-height: 104px;
   }
 

@@ -95,31 +95,31 @@ const defaultTiers = [
   {
     id: createId(),
     name: "SS",
-    color: "#f2efe9",
+    color: "#f6b1a4",
     pokemonIds: ids("walrein feraligatr typhlosion meganium raichu blastoise venusaur steelix gardevoir dragonite raikou entei suicune vikavolt aggron weavile ninetales-alola pawmot blissey swampert blaziken sceptile gourgeist salamence flygon shuckle"),
   },
   {
     id: createId(),
     name: "S",
-    color: "#f2efe9",
+    color: "#f4d27e",
     pokemonIds: ids("magnezone altaria tyranitar espeon ampharos gengar dodrio victreebel golduck butterfree charizard banette delibird bewear dedenne ninetales cramorant quaquaval skeledirge meowscarada luxray clodsire cresselia mawile farfetchd xatu cetitan noivern tyrantrum"),
   },
   {
     id: createId(),
     name: "A",
-    color: "#f2efe9",
+    color: "#b8d98b",
     pokemonIds: ids("sylveon glaceon toxicroak swalot houndoom flareon golem primeape dugtrio wigglytuff arbok mr-mime abomasnow quagsire mimikyu braviary darkrai plusle crustle spheal-holiday ribombee latias sandslash onix"),
   },
   {
     id: createId(),
     name: "B",
-    color: "#f2efe9",
+    color: "#91cbd3",
     pokemonIds: ids("lucario absol heracross vaporeon ditto pinsir kangaskhan marowak raticate clefable pikachu-halloween comfey eevee-holiday musharna minun toxtricity-low toxtricity-amped eevee-halloween spiritomb togedemaru mew"),
   },
   {
     id: createId(),
     name: "C",
-    color: "#f2efe9",
+    color: "#b9b4dd",
     pokemonIds: ids("leafeon togekiss sableye slaking wobbuffet slowking umbreon sudowoodo jolteon slowbro arcanine persian pikachu-holiday gallade drifblim honchkrow"),
   },
 ];
@@ -3860,12 +3860,12 @@ function getKnownPokemonIds() {
 
 function getTierLabelColor(tierName) {
   return {
-    SS: "#f2efe9",
-    S: "#f2efe9",
-    A: "#f2efe9",
-    B: "#f2efe9",
-    C: "#f2efe9",
-  }[tierName] || "#f2efe9";
+    SS: "#f6b1a4",
+    S: "#f4d27e",
+    A: "#b8d98b",
+    B: "#91cbd3",
+    C: "#b9b4dd",
+  }[tierName] || "#d5dce5";
 }
 
 function ids(value) {

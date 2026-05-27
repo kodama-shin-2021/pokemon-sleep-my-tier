@@ -95,31 +95,31 @@ const defaultTiers = [
   {
     id: createId(),
     name: "SS",
-    color: "#fecaca",
+    color: "#f2efe9",
     pokemonIds: ids("walrein feraligatr typhlosion meganium raichu blastoise venusaur steelix gardevoir dragonite raikou entei suicune vikavolt aggron weavile ninetales-alola pawmot blissey swampert blaziken sceptile gourgeist salamence flygon shuckle"),
   },
   {
     id: createId(),
     name: "S",
-    color: "#fee2e2",
+    color: "#f2efe9",
     pokemonIds: ids("magnezone altaria tyranitar espeon ampharos gengar dodrio victreebel golduck butterfree charizard banette delibird bewear dedenne ninetales cramorant quaquaval skeledirge meowscarada luxray clodsire cresselia mawile farfetchd xatu cetitan noivern tyrantrum"),
   },
   {
     id: createId(),
     name: "A",
-    color: "#ffe4e6",
+    color: "#f2efe9",
     pokemonIds: ids("sylveon glaceon toxicroak swalot houndoom flareon golem primeape dugtrio wigglytuff arbok mr-mime abomasnow quagsire mimikyu braviary darkrai plusle crustle spheal-holiday ribombee latias sandslash onix"),
   },
   {
     id: createId(),
     name: "B",
-    color: "#fff1f2",
+    color: "#f2efe9",
     pokemonIds: ids("lucario absol heracross vaporeon ditto pinsir kangaskhan marowak raticate clefable pikachu-halloween comfey eevee-holiday musharna minun toxtricity-low toxtricity-amped eevee-halloween spiritomb togedemaru mew"),
   },
   {
     id: createId(),
     name: "C",
-    color: "#fff7f8",
+    color: "#f2efe9",
     pokemonIds: ids("leafeon togekiss sableye slaking wobbuffet slowking umbreon sudowoodo jolteon slowbro arcanine persian pikachu-holiday gallade drifblim honchkrow"),
   },
 ];
@@ -151,10 +151,10 @@ const statusTierConfig = {
 };
 const DEFAULT_SNACK_RULE_PRESET = "free";
 const SNACK_RULE_OPTIONS = {
-  limit: { label: "限界まで投げる", color: "#93c5fd" },
-  bonus: { label: "ボナサブのみ", color: "#dbeafe" },
-  chance: { label: "チャンスがつけばあり", color: "#f8fbff" },
-  none: { label: "投げない", color: "#ffffff" },
+  limit: { label: "限界まで投げる", color: "#d6e6ec" },
+  bonus: { label: "ボナサブのみ", color: "#e2e9e1" },
+  chance: { label: "チャンスがあれば", color: "#f5ece1" },
+  none: { label: "投げない", color: "#eaecee" },
 };
 const SNACK_RULE_PRESETS = {
   free: {
@@ -3511,11 +3511,11 @@ async function exportPng() {
   canvas.height = height * scale;
   const ctx = canvas.getContext("2d");
   ctx.scale(scale, scale);
-  ctx.fillStyle = "#f4f6f5";
+  ctx.fillStyle = "#f8f6f0";
   ctx.fillRect(0, 0, width, height);
-  ctx.fillStyle = "#e8f1ee";
+  ctx.fillStyle = "#f1eee6";
   ctx.fillRect(0, 0, width, 74);
-  ctx.fillStyle = "#17202a";
+  ctx.fillStyle = "#433f38";
   ctx.font = "700 30px system-ui, sans-serif";
   ctx.fillText("ポケスリ厳選ノート", 24, 44);
   ctx.font = "14px system-ui, sans-serif";
@@ -3528,7 +3528,7 @@ async function exportPng() {
   const headers = ["Tier", "厳選未完了", "妥協個体あり", "厳選完了"];
   const headerWidths = [labelWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth];
   let headerX = tableX;
-  ctx.fillStyle = "#213632";
+  ctx.fillStyle = "#5d5850";
   roundedRect(ctx, tableX, y, tableWidth, headerHeight, 8);
   ctx.fill();
   ctx.fillStyle = "#f8fbfa";
@@ -3554,7 +3554,7 @@ async function exportPng() {
     drawExportSnackCell(ctx, "unfinished", tier.name, tableX + labelWidth, y, statusColumnWidth, rowHeight - 8);
     drawExportSnackCell(ctx, "compromise", compromiseTier.name || tier.name, tableX + labelWidth + statusColumnWidth, y, statusColumnWidth, rowHeight - 8);
     drawExportSnackCell(ctx, "finished", finishedTier.name || tier.name, tableX + labelWidth + statusColumnWidth * 2, y, statusColumnWidth, rowHeight - 8);
-    ctx.fillStyle = "#17202a";
+    ctx.fillStyle = "#433f38";
     ctx.font = "800 34px system-ui, sans-serif";
     ctx.textAlign = "center";
     ctx.fillText(tier.name, tableX + labelWidth / 2, y + 48);
@@ -3586,7 +3586,7 @@ function drawExportSnackLegend(ctx, x, y) {
     ctx.fill();
     ctx.strokeStyle = "#b8c9c5";
     ctx.stroke();
-    ctx.fillStyle = "#17202a";
+    ctx.fillStyle = "#433f38";
     ctx.font = "800 13px system-ui, sans-serif";
     ctx.fillText(item.label, chipX + 28, y + 14);
     chipX += ctx.measureText(item.label).width + 68;
@@ -3659,7 +3659,7 @@ async function drawExportCard(ctx, pokemon, x, y, width, height) {
     ctx.textAlign = "center";
     ctx.fillText(pokemon.name.slice(0, 1), x + width / 2, y + 35);
   }
-  ctx.fillStyle = "#17202a";
+  ctx.fillStyle = "#433f38";
   ctx.font = "700 13px system-ui, sans-serif";
   wrapText(ctx, pokemon.name, x + width / 2, y + 62, width - 8, 15);
   ctx.fillStyle = "#5d6977";
@@ -3860,12 +3860,12 @@ function getKnownPokemonIds() {
 
 function getTierLabelColor(tierName) {
   return {
-    SS: "#fecaca",
-    S: "#fee2e2",
-    A: "#ffe4e6",
-    B: "#fff1f2",
-    C: "#fff7f8",
-  }[tierName] || "#fffafa";
+    SS: "#f2efe9",
+    S: "#f2efe9",
+    A: "#f2efe9",
+    B: "#f2efe9",
+    C: "#f2efe9",
+  }[tierName] || "#f2efe9";
 }
 
 function ids(value) {

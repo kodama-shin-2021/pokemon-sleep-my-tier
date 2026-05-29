@@ -163,11 +163,11 @@ const statusTierConfig = {
 };
 const DEFAULT_SNACK_RULE_PRESET = "free";
 const SNACK_RULE_OPTIONS = {
-  limit: { label: "スパサブ・ハイサブも投げる", color: "var(--snack-limit)", lightColor: "#ffffff", darkColor: "#f7fbfa" },
-  poke: { label: "ポケサブまで", color: "var(--snack-poke)", lightColor: "#f7f8f8", darkColor: "#dfe8e5" },
-  bonus: { label: "ボナサブのみ", color: "var(--snack-bonus)", lightColor: "#eef0f1", darkColor: "#bfcfca" },
-  chance: { label: "チャンスがつけば", color: "var(--snack-chance)", lightColor: "#d9dde0", darkColor: "#879992" },
-  none: { label: "投げない", color: "var(--snack-none)", lightColor: "#c8d0d5", darkColor: "#43504b" },
+  limit: { label: "スパサブ・ハイサブも投げる", color: "var(--snack-limit)", lightColor: "#ffffff", darkColor: "#f7fbfa", lightText: "#433f38", darkText: "#18211f" },
+  poke: { label: "ポケサブまで", color: "var(--snack-poke)", lightColor: "#f7f8f8", darkColor: "#dfe8e5", lightText: "#433f38", darkText: "#18211f" },
+  bonus: { label: "ボナサブのみ", color: "var(--snack-bonus)", lightColor: "#eef0f1", darkColor: "#bfcfca", lightText: "#433f38", darkText: "#18211f" },
+  chance: { label: "チャンスがつけば", color: "var(--snack-chance)", lightColor: "#d9dde0", darkColor: "#879992", lightText: "#433f38", darkText: "#eef5f2" },
+  none: { label: "投げない", color: "var(--snack-none)", lightColor: "#c8d0d5", darkColor: "#43504b", lightText: "#433f38", darkText: "#eef5f2" },
 };
 const SNACK_RULE_PRESETS = {
   free: {
@@ -2490,7 +2490,7 @@ function createSnackRuleEditor() {
   const details = document.createElement("details");
   details.className = "snack-rule-editor";
   const summary = document.createElement("summary");
-  summary.textContent = "セル基準を編集";
+  summary.textContent = "サブレ優先度の編集";
   const grid = document.createElement("div");
   grid.className = "snack-rule-grid";
   ["Tier", ...SNACK_RULE_STATUSES.map(status => SNACK_RULE_STATUS_LABELS[status])].forEach(text => {
@@ -2509,7 +2509,7 @@ function createSnackRuleEditor() {
       Object.entries(SNACK_RULE_OPTIONS).forEach(([value, option]) => {
         const choice = appendSelectOption(select, value, option.label);
         choice.style.backgroundColor = getSnackRuleEditorColor(option);
-        choice.style.color = getComputedStyle(document.documentElement).getPropertyValue("--ink").trim() || "#433f38";
+        choice.style.color = getSnackRuleEditorTextColor(option);
       });
       select.value = getSnackCellRule(status, tier.name);
       updateSnackRuleSelectStyle(select);
@@ -2543,11 +2543,17 @@ function updateSnackRuleSelectStyle(select) {
   const option = SNACK_RULE_OPTIONS[select.value] || SNACK_RULE_OPTIONS.none;
   select.style.setProperty("--selected-snack-rule-color", option.color);
   select.style.backgroundColor = getSnackRuleEditorColor(option);
+  select.style.color = getSnackRuleEditorTextColor(option);
 }
 
 function getSnackRuleEditorColor(option) {
   const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
   return prefersDark ? option.darkColor : option.lightColor;
+}
+
+function getSnackRuleEditorTextColor(option) {
+  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
+  return prefersDark ? option.darkText : option.lightText;
 }
 
 function renameSnackCellRuleTier(previousName, nextName) {

@@ -702,8 +702,8 @@ button:active {
   width: 100%;
   border: 0;
   border-radius: 4px;
-  background: color-mix(in srgb, var(--surface) 78%, transparent);
-  color: var(--ink);
+  background: rgba(255, 255, 255, 0.76);
+  color: #433f38;
   text-align: center;
   font-size: 22px;
   font-weight: 800;
@@ -1580,10 +1580,6 @@ dialog h2 {
 
   .danger-button {
     color: #fff7f0;
-  }
-
-  .tier-label input {
-    color: #18211f;
   }
 
   .pokemon-card.new-pokemon {

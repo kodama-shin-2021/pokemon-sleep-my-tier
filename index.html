@@ -9,39 +9,23 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="manifest.webmanifest" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2435857317231554" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="styles.css?v=20260527-3" />
+    <link rel="stylesheet" href="styles.css?v=20260529-7" />
   </head>
   <body>
     <div class="app-shell">
       <header class="app-header">
-        <div>
-          <span class="app-kicker">Pokemon Sleep Selection Note</span>
-          <h1>ポケスリ厳選ノート</h1>
-          <p>
-            自分の厳選状況を整理して端末に保存できます。
-            整理することで、サブレの無駄遣いを減らすための判断に役立てられます。
-            <br />
-            使い方: ポケモンをクリックして、妥協個体あり、育成中、育成完了に移すことで厳選状況を管理できます。また、Tierの変更もできます。
-            編集内容はこの端末内に保存され、JSONでバックアップできます。
-            <br />
-            共有URLを作ると、Tier配置や厳選候補の個体情報をそのまま他の人に見せられます。
-            <br />
-            Tierの元情報は
-            <a href="https://game8.jp/pokemonsleep/542600" target="_blank" rel="noopener">Game8の最強ポケモンランキングTier表</a>
-            から取得しています。自分用に置き換えてください。
-          </p>
-          <div class="header-actions">
-            <button id="shareUrlButton" class="share-button" type="button">
-              厳選状況を共有
-            </button>
-          </div>
-        </div>
+        <h1>Pokemon Sleep Selection Note</h1>
+        <p>ポケスリ厳選ノート</p>
       </header>
 
-      <section class="filter-panel" aria-label="フィルター">
+      <section id="sharedTitleBanner" class="shared-title-banner" hidden></section>
+
+      <section id="snackRulePanel" class="snack-rule-panel" aria-label="セル色の基準"></section>
+
+      <section class="filter-panel" aria-label="フィルタ条件">
         <div class="filter-panel-head">
           <button id="filterToggleButton" class="filter-toggle-button" type="button" aria-expanded="false" aria-controls="filterPanelBody">
-            <span class="filter-toggle-label">フィルタ</span>
+            <span class="filter-toggle-label">フィルタ条件</span>
             <span class="filter-toggle-icon" aria-hidden="true"></span>
           </button>
         </div>
@@ -141,6 +125,7 @@
       </main>
 
       <div class="page-actions">
+        <button id="shareUrlButton" class="share-button" type="button">厳選状況を共有</button>
         <button id="exportButton" class="primary-button" type="button">画像保存</button>
         <button id="exportDataButton" type="button">JSON保存</button>
         <button id="importDataButton" type="button">JSON復元</button>
@@ -252,6 +237,6 @@
       </form>
     </dialog>
 
-    <script src="app.js?v=20260527-7"></script>
+    <script src="app.js?v=20260529-8"></script>
   </body>
 </html>

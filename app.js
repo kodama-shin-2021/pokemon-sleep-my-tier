@@ -163,46 +163,47 @@ const statusTierConfig = {
 };
 const DEFAULT_SNACK_RULE_PRESET = "free";
 const SNACK_RULE_OPTIONS = {
-  limit: { label: "限界まで投げる", color: "#ffffff" },
-  bonus: { label: "ボナサブのみ", color: "#eef0f1" },
-  chance: { label: "チャンスがあれば", color: "#d9dde0" },
-  none: { label: "投げない", color: "#b8bec3" },
+  limit: { label: "スパサブ・ハイサブも投げる", color: "var(--snack-limit)", lightColor: "#ffffff", darkColor: "#f7fbfa" },
+  poke: { label: "ポケサブまで", color: "var(--snack-poke)", lightColor: "#f7f8f8", darkColor: "#dfe8e5" },
+  bonus: { label: "ボナサブのみ", color: "var(--snack-bonus)", lightColor: "#eef0f1", darkColor: "#bfcfca" },
+  chance: { label: "チャンスがつけば", color: "var(--snack-chance)", lightColor: "#d9dde0", darkColor: "#879992" },
+  none: { label: "投げない", color: "var(--snack-none)", lightColor: "#c8d0d5", darkColor: "#43504b" },
 };
 const SNACK_RULE_PRESETS = {
   free: {
     label: "無課金",
     rules: {
-      unfinished: { SS: "limit", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
-      compromise: { SS: "bonus", S: "chance", A: "none", B: "none", C: "none", default: "none" },
+      unfinished: { SS: "limit", S: "poke", A: "bonus", B: "chance", C: "none", default: "none" },
+      compromise: { SS: "poke", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
       training: { SS: "bonus", S: "chance", A: "none", B: "none", C: "none", default: "none" },
-      trained: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
+      trained: { SS: "chance", S: "none", A: "none", B: "none", C: "none", default: "none" },
     },
   },
   light: {
     label: "微課金",
     rules: {
-      unfinished: { SS: "limit", S: "limit", A: "bonus", B: "chance", C: "none", default: "none" },
-      compromise: { SS: "bonus", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
-      training: { SS: "bonus", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
-      trained: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
+      unfinished: { SS: "limit", S: "limit", A: "poke", B: "bonus", C: "none", default: "none" },
+      compromise: { SS: "limit", S: "poke", A: "chance", B: "chance", C: "none", default: "none" },
+      training: { SS: "poke", S: "bonus", A: "none", B: "none", C: "none", default: "none" },
+      trained: { SS: "bonus", S: "chance", A: "none", B: "none", C: "none", default: "none" },
     },
   },
   heavy: {
     label: "重課金",
     rules: {
-      unfinished: { SS: "limit", S: "limit", A: "limit", B: "bonus", C: "chance", default: "none" },
-      compromise: { SS: "limit", S: "bonus", A: "bonus", B: "chance", C: "none", default: "none" },
-      training: { SS: "limit", S: "bonus", A: "bonus", B: "chance", C: "none", default: "none" },
-      trained: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
+      unfinished: { SS: "limit", S: "limit", A: "limit", B: "poke", C: "bonus", default: "none" },
+      compromise: { SS: "limit", S: "limit", A: "poke", B: "bonus", C: "chance", default: "none" },
+      training: { SS: "limit", S: "poke", A: "bonus", B: "chance", C: "none", default: "none" },
+      trained: { SS: "poke", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
     },
   },
   whale: {
     label: "廃課金",
     rules: {
-      unfinished: { SS: "limit", S: "limit", A: "limit", B: "limit", C: "bonus", default: "none" },
-      compromise: { SS: "limit", S: "limit", A: "bonus", B: "bonus", C: "chance", default: "none" },
-      training: { SS: "limit", S: "limit", A: "bonus", B: "bonus", C: "chance", default: "none" },
-      trained: { SS: "none", S: "none", A: "none", B: "none", C: "none", default: "none" },
+      unfinished: { SS: "limit", S: "limit", A: "limit", B: "limit", C: "poke", default: "none" },
+      compromise: { SS: "limit", S: "limit", A: "limit", B: "poke", C: "bonus", default: "none" },
+      training: { SS: "limit", S: "limit", A: "poke", B: "bonus", C: "chance", default: "none" },
+      trained: { SS: "limit", S: "poke", A: "bonus", B: "chance", C: "none", default: "none" },
     },
   },
 };
@@ -1971,12 +1972,19 @@ const pokemonDetailData = {
 };
 const newPokemonIds = new Set([]);
 
-let state = loadState();
-const sharedState = loadSharedStateFromUrl();
-if (sharedState) state = sharedState;
+const sharedPayload = loadSharedStateFromUrl();
+const isSharedView = Boolean(sharedPayload);
+let sharedTitle = sharedPayload?.title || "";
+let state = sharedPayload?.state || loadState();
 let activePokemonId = null;
+let isMoveModeActive = false;
+let moveModePokemonId = null;
+let suppressCardClickUntil = 0;
+const LONG_PRESS_MOVE_MS = 480;
 
 const tierBoard = document.querySelector("#tierBoard");
+const sharedTitleBanner = document.querySelector("#sharedTitleBanner");
+const snackRulePanel = document.querySelector("#snackRulePanel");
 const pokemonPool = document.querySelector("#pokemonPool");
 const poolCount = document.querySelector("#poolCount");
 const compromisePool = document.querySelector("#compromisePool");
@@ -2044,9 +2052,9 @@ initializeIngredientFilter();
 initializeFilterPanel();
 render();
 registerServiceWorker();
-if (sharedState) {
+if (isSharedView) {
   setTimeout(() => {
-    alert("共有URLの内容を表示しています。編集すると、この端末に保存されます。");
+    alert("共有URLの内容を表示しています。この端末の管理票は更新されません。");
   }, 0);
 }
 
@@ -2063,7 +2071,17 @@ function loadState() {
 }
 
 function saveState() {
+  if (isSharedView) return;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(serializeState(state)));
+}
+
+function adoptSharedState() {
+  if (!isSharedView) return;
+  if (!confirm("共有された厳選状況を、この端末の自分の管理票として保存しますか？現在の管理票は上書きされます。")) return;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(serializeState(state)));
+  const url = new URL(window.location.href);
+  url.hash = "";
+  window.location.href = url.href;
 }
 
 function loadSharedStateFromUrl() {
@@ -2071,7 +2089,17 @@ function loadSharedStateFromUrl() {
   const shareValue = params.get("share");
   if (!shareValue) return null;
   try {
-    return migrateState(JSON.parse(decodeBase64Url(shareValue)));
+    const parsed = JSON.parse(decodeBase64Url(shareValue));
+    if (parsed?.state) {
+      return {
+        title: typeof parsed.title === "string" ? parsed.title : "",
+        state: migrateState(parsed.state),
+      };
+    }
+    return {
+      title: "",
+      state: migrateState(parsed),
+    };
   } catch {
     setTimeout(() => {
       alert("共有URLを読み込めませんでした。URLが途中で切れていないか確認してください。");
@@ -2081,16 +2109,155 @@ function loadSharedStateFromUrl() {
 }
 
 async function shareUrl() {
-  const shareValue = encodeBase64Url(JSON.stringify(serializeState(state)));
+  const title = await requestShareTitle();
+  if (!title) return;
+  sharedTitle = title;
+  renderSharedTitleBanner();
+  const shareValue = encodeBase64Url(JSON.stringify({
+    title: sharedTitle,
+    state: serializeState(state),
+  }));
   const url = new URL(window.location.href);
   url.hash = `share=${shareValue}`;
   const shareText = url.href;
   try {
     await navigator.clipboard.writeText(shareText);
-    alert("共有URLをコピーしました。");
+    showNotice("共有URLをコピーしました。貼り付けて共有できます。");
   } catch {
-    window.prompt("共有URLをコピーしてください。", shareText);
+    showShareUrlFallback(shareText);
   }
+}
+
+function requestShareTitle() {
+  return new Promise(resolve => {
+    const timestamp = formatShareTimestamp(new Date());
+    const overlay = document.createElement("div");
+    overlay.className = "choice-panel-overlay is-global";
+
+    const dialog = document.createElement("div");
+    dialog.className = "choice-panel share-title-panel";
+    dialog.setAttribute("role", "dialog");
+    dialog.setAttribute("aria-modal", "true");
+
+    const heading = document.createElement("h2");
+    heading.textContent = "ポケスリ厳選管理ノート";
+
+    const body = document.createElement("div");
+    body.className = "choice-panel-body";
+    const field = document.createElement("label");
+    field.className = "share-title-field";
+    const label = document.createElement("span");
+    label.textContent = "共有タイトル（日時は自動で追加されます）";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = stripShareTimestamp(sharedTitle);
+    input.placeholder = "例: xxx厳選状況メモ";
+    const previewLabel = document.createElement("span");
+    previewLabel.className = "share-title-preview-label";
+    previewLabel.textContent = "作成されるタイトル";
+    const preview = document.createElement("strong");
+    const updatePreview = () => {
+      const baseTitle = input.value.trim() || "xxx厳選状況メモ";
+      preview.textContent = `${baseTitle} ${timestamp}`;
+    };
+    input.addEventListener("input", updatePreview);
+    updatePreview();
+    field.append(label, input, previewLabel, preview);
+    body.append(field);
+
+    const footer = document.createElement("div");
+    footer.className = "choice-panel-footer";
+    const cancelButton = document.createElement("button");
+    cancelButton.type = "button";
+    cancelButton.textContent = "キャンセル";
+    const submitButton = document.createElement("button");
+    submitButton.type = "button";
+    submitButton.className = "primary-button";
+    submitButton.textContent = "共有URLを作成";
+    const close = value => {
+      overlay.remove();
+      document.removeEventListener("keydown", handleKeydown);
+      resolve(value);
+    };
+    const submit = () => {
+      const baseTitle = input.value.trim() || "xxx厳選状況メモ";
+      close(`${baseTitle} ${timestamp}`);
+    };
+    const handleKeydown = event => {
+      if (event.key === "Escape") close(null);
+      if (event.key === "Enter") submit();
+    };
+    cancelButton.addEventListener("click", () => close(null));
+    submitButton.addEventListener("click", submit);
+    overlay.addEventListener("click", event => {
+      if (event.target === overlay) close(null);
+    });
+    footer.append(cancelButton, submitButton);
+    dialog.append(heading, body, footer);
+    overlay.append(dialog);
+    document.body.append(overlay);
+    document.addEventListener("keydown", handleKeydown);
+    input.focus();
+    input.select();
+  });
+}
+
+function formatShareTimestamp(date) {
+  const formatter = new Intl.DateTimeFormat("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return formatter.format(date);
+}
+
+function stripShareTimestamp(title) {
+  return title.replace(/\s+\d{4}\/\d{2}\/\d{2}\s+\d{2}:\d{2}$/, "");
+}
+
+function showNotice(message) {
+  document.querySelector(".app-notice")?.remove();
+  const notice = document.createElement("div");
+  notice.className = "app-notice";
+  notice.textContent = message;
+  document.body.append(notice);
+  window.setTimeout(() => notice.remove(), 2400);
+}
+
+function showShareUrlFallback(shareText) {
+  const overlay = document.createElement("div");
+  overlay.className = "choice-panel-overlay is-global";
+  const dialog = document.createElement("div");
+  dialog.className = "choice-panel share-url-panel";
+  dialog.setAttribute("role", "dialog");
+  dialog.setAttribute("aria-modal", "true");
+  const heading = document.createElement("h2");
+  heading.textContent = "ポケスリ厳選管理ノート";
+  const body = document.createElement("div");
+  body.className = "choice-panel-body";
+  const field = document.createElement("label");
+  field.className = "share-title-field";
+  const label = document.createElement("span");
+  label.textContent = "共有URL";
+  const textarea = document.createElement("textarea");
+  textarea.value = shareText;
+  textarea.readOnly = true;
+  field.append(label, textarea);
+  body.append(field);
+  const footer = document.createElement("div");
+  footer.className = "choice-panel-footer";
+  const closeButton = document.createElement("button");
+  closeButton.type = "button";
+  closeButton.textContent = "閉じる";
+  closeButton.addEventListener("click", () => overlay.remove());
+  footer.append(closeButton);
+  dialog.append(heading, body, footer);
+  overlay.append(dialog);
+  document.body.append(overlay);
+  textarea.focus();
+  textarea.select();
 }
 
 function encodeBase64Url(value) {
@@ -2122,31 +2289,57 @@ function setFilterPanelOpen(isOpen) {
   filterPanelBody.hidden = !isOpen;
   filterPanel.classList.toggle("is-open", isOpen);
   filterToggleButton.setAttribute("aria-expanded", String(isOpen));
-  filterToggleLabel.textContent = "フィルタ";
-  filterToggleButton.setAttribute("aria-label", isOpen ? "フィルタを閉じる" : "フィルタを開く");
+  filterToggleLabel.textContent = "フィルタ条件";
+  filterToggleButton.setAttribute("aria-label", isOpen ? "フィルタ条件を閉じる" : "フィルタ条件を開く");
   localStorage.setItem(FILTER_PANEL_OPEN_KEY, isOpen ? "1" : "0");
 }
 
 function render() {
+  renderSharedTitleBanner();
+  renderSnackRulePanel();
   renderTiers();
   renderPool();
   renderActiveFilters();
   syncTierRowHeights();
+  updateMoveModeVisuals();
   saveState();
+}
+
+function renderSharedTitleBanner() {
+  if (!sharedTitleBanner) return;
+  if (!isSharedView && !sharedTitle) {
+    sharedTitleBanner.hidden = true;
+    sharedTitleBanner.innerHTML = "";
+    return;
+  }
+  sharedTitleBanner.hidden = false;
+  sharedTitleBanner.innerHTML = "";
+  const label = document.createElement("span");
+  label.textContent = isSharedView ? "共有された厳選状況" : "共有タイトル";
+  const title = document.createElement("strong");
+  title.textContent = sharedTitle || "タイトルなし";
+  sharedTitleBanner.append(label, title);
+  if (isSharedView) {
+    const adoptButton = document.createElement("button");
+    adoptButton.type = "button";
+    adoptButton.className = "shared-adopt-button";
+    adoptButton.textContent = "自分の管理票に保存";
+    adoptButton.addEventListener("click", adoptSharedState);
+    sharedTitleBanner.append(adoptButton);
+  }
 }
 
 function renderTiers() {
   tierBoard.innerHTML = "";
-  tierBoard.append(createSnackLegend());
   const header = document.createElement("div");
   header.className = "tier-table-header";
   [
     ["Tier", "Tier"],
     ["厳選未完了", "未完了"],
-    ["妥協個体あり", "妥協"],
-    ["育成中", "育成"],
+    ["妥協個体あり", "妥協中"],
+    ["育成中", "育成中"],
     ["育成完了", "完了"],
-    ["操作", "操"],
+    ["操作", "-"],
   ].forEach(([text, shortText]) => {
     const cell = document.createElement("div");
     cell.textContent = text;
@@ -2191,10 +2384,13 @@ function renderTiers() {
     unfinishedDropzone.className = "tier-dropzone";
     unfinishedDropzone.dataset.snackStatus = "unfinished";
     unfinishedDropzone.dataset.snackTier = tier.name;
+    unfinishedDropzone.dataset.targetStatus = "unfinished";
+    unfinishedDropzone.dataset.targetTierId = tier.id;
     unfinishedDropzone.style.setProperty("--snack-cell-color", getSnackCellColor("unfinished", tier.name));
     unfinishedDropzone.addEventListener("dragover", allowDrop);
     unfinishedDropzone.addEventListener("dragleave", clearDropHover);
     unfinishedDropzone.addEventListener("drop", event => dropPokemon(event, tier.id));
+    unfinishedDropzone.addEventListener("click", event => tapMoveSelectedPokemon(event, "unfinished", tier.id));
     tier.pokemonIds.forEach(id => {
       const pokemon = getPokemon(id);
       if (pokemon && matchesCurrentFilters(pokemon)) unfinishedDropzone.append(createPokemonCard(pokemon, tier.id));
@@ -2217,16 +2413,25 @@ function renderTiers() {
   });
 }
 
+function renderSnackRulePanel() {
+  if (!snackRulePanel) return;
+  snackRulePanel.innerHTML = "";
+  snackRulePanel.append(createSnackLegend());
+}
+
 function createStatusDropzone(status, tier) {
   const dropzone = document.createElement("div");
   dropzone.className = "tier-dropzone status-dropzone";
   if (!tier) return dropzone;
   dropzone.dataset.snackStatus = status;
   dropzone.dataset.snackTier = tier.name;
+  dropzone.dataset.targetStatus = status;
+  dropzone.dataset.targetTierId = tier.id;
   dropzone.style.setProperty("--snack-cell-color", getSnackCellColor(status, tier.name));
   dropzone.addEventListener("dragover", allowDrop);
   dropzone.addEventListener("dragleave", clearDropHover);
   dropzone.addEventListener("drop", event => dropStatusPokemon(event, status, tier.id));
+  dropzone.addEventListener("click", event => tapMoveSelectedPokemon(event, status, tier.id));
   tier.pokemonIds.forEach(id => {
     const pokemon = getPokemon(id);
     if (pokemon && matchesCurrentFilters(pokemon)) {
@@ -2302,11 +2507,15 @@ function createSnackRuleEditor() {
       const select = document.createElement("select");
       select.ariaLabel = `${SNACK_RULE_STATUS_LABELS[status]} ${tier.name} のサブレ基準`;
       Object.entries(SNACK_RULE_OPTIONS).forEach(([value, option]) => {
-        appendSelectOption(select, value, option.label);
+        const choice = appendSelectOption(select, value, option.label);
+        choice.style.backgroundColor = getSnackRuleEditorColor(option);
+        choice.style.color = getComputedStyle(document.documentElement).getPropertyValue("--ink").trim() || "#433f38";
       });
       select.value = getSnackCellRule(status, tier.name);
+      updateSnackRuleSelectStyle(select);
       select.addEventListener("change", () => {
         setSnackCellRule(status, tier.name, select.value);
+        updateSnackRuleSelectStyle(select);
       });
       grid.append(select);
     });
@@ -2328,6 +2537,17 @@ function setSnackCellRule(status, tierName, rule) {
       dropzone.style.setProperty("--snack-cell-color", getSnackCellColor(status, tierName));
     }
   });
+}
+
+function updateSnackRuleSelectStyle(select) {
+  const option = SNACK_RULE_OPTIONS[select.value] || SNACK_RULE_OPTIONS.none;
+  select.style.setProperty("--selected-snack-rule-color", option.color);
+  select.style.backgroundColor = getSnackRuleEditorColor(option);
+}
+
+function getSnackRuleEditorColor(option) {
+  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
+  return prefersDark ? option.darkColor : option.lightColor;
 }
 
 function renameSnackCellRuleTier(previousName, nextName) {
@@ -2550,7 +2770,22 @@ function createPokemonCard(pokemon, currentTierId = null) {
   card.draggable = !isMobileDragDisabled();
   card.dataset.pokemonId = pokemon.id;
   card.title = `${pokemon.name} / ${pokemon.specialty} / ${pokemon.type}`;
-  card.addEventListener("click", () => openMoveDialog(pokemon.id, currentTierId));
+  card.addEventListener("click", event => {
+    if (isMoveModeActive) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (moveModePokemonId) tapMoveSelectedPokemonToCard(currentTierId, pokemon.id);
+      else selectMoveModePokemon(pokemon.id);
+      return;
+    }
+    if (Date.now() < suppressCardClickUntil) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    openMoveDialog(pokemon.id, currentTierId);
+  });
+  attachLongPressMoveMode(card, pokemon.id);
   card.addEventListener("dragstart", event => {
     if (isMobileDragDisabled()) {
       event.preventDefault();
@@ -2612,11 +2847,107 @@ function isMobileDragDisabled() {
 }
 
 function updatePokemonCardDragState() {
+  if (!isMobileDragDisabled()) exitMoveMode();
   document.querySelectorAll(".pokemon-card").forEach(card => {
     card.draggable = !isMobileDragDisabled();
     card.classList.remove("dragging", "drop-hover");
   });
   document.querySelectorAll(".drop-hover").forEach(element => element.classList.remove("drop-hover"));
+}
+
+function attachLongPressMoveMode(card, pokemonId) {
+  let timer = null;
+  let startX = 0;
+  let startY = 0;
+  const clearTimer = () => {
+    if (!timer) return;
+    clearTimeout(timer);
+    timer = null;
+  };
+
+  card.addEventListener("pointerdown", event => {
+    if (!isMobileDragDisabled() || event.pointerType === "mouse" || event.button !== 0) return;
+    startX = event.clientX;
+    startY = event.clientY;
+    clearTimer();
+    timer = window.setTimeout(() => {
+      timer = null;
+      suppressCardClickUntil = Date.now() + 700;
+      enterMoveMode(pokemonId);
+      if (navigator.vibrate) navigator.vibrate(12);
+    }, LONG_PRESS_MOVE_MS);
+  });
+  card.addEventListener("pointermove", event => {
+    if (!timer) return;
+    if (Math.abs(event.clientX - startX) > 10 || Math.abs(event.clientY - startY) > 10) clearTimer();
+  });
+  ["pointerup", "pointercancel", "pointerleave"].forEach(type => {
+    card.addEventListener(type, clearTimer);
+  });
+  card.addEventListener("contextmenu", event => {
+    if (!isMobileDragDisabled()) return;
+    event.preventDefault();
+  });
+}
+
+function enterMoveMode(pokemonId) {
+  isMoveModeActive = true;
+  selectMoveModePokemon(pokemonId);
+}
+
+function selectMoveModePokemon(pokemonId) {
+  const pokemon = getPokemon(pokemonId);
+  if (!pokemon) return;
+  moveModePokemonId = pokemonId;
+  activePokemonId = pokemonId;
+  renderMoveModeBar(pokemon);
+  updateMoveModeVisuals();
+}
+
+function exitMoveMode() {
+  isMoveModeActive = false;
+  moveModePokemonId = null;
+  const bar = document.querySelector("#moveModeBar");
+  if (bar) bar.hidden = true;
+  updateMoveModeVisuals();
+}
+
+function clearMoveModeSelection() {
+  moveModePokemonId = null;
+  activePokemonId = null;
+  renderMoveModeBar();
+  updateMoveModeVisuals();
+}
+
+function renderMoveModeBar(pokemon = null) {
+  let bar = document.querySelector("#moveModeBar");
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.id = "moveModeBar";
+    bar.className = "move-mode-bar";
+    const label = document.createElement("span");
+    label.className = "move-mode-label";
+    const cancelButton = document.createElement("button");
+    cancelButton.type = "button";
+    cancelButton.textContent = "キャンセル";
+    cancelButton.addEventListener("click", exitMoveMode);
+    bar.append(label, cancelButton);
+    document.body.append(bar);
+  }
+  bar.querySelector(".move-mode-label").textContent = pokemon
+    ? `移動中: ${pokemon.name}`
+    : "移動モード: 次のポケモンをタップ";
+  bar.hidden = false;
+}
+
+function updateMoveModeVisuals() {
+  document.body.classList.toggle("move-mode-active", isMoveModeActive);
+  document.querySelectorAll(".pokemon-card").forEach(card => {
+    card.classList.toggle("is-move-selected", card.dataset.pokemonId === moveModePokemonId);
+  });
+  document.querySelectorAll(".tier-dropzone").forEach(dropzone => {
+    dropzone.classList.toggle("is-move-target", isMoveModeActive);
+  });
 }
 
 function setImageSource(img, pokemon, index) {
@@ -2664,6 +2995,28 @@ function dropStatusPokemon(event, status, targetTierId) {
   event.currentTarget.classList.remove("drop-hover");
   const pokemonId = event.dataTransfer.getData("text/plain") || activePokemonId;
   movePokemonToStatus(pokemonId, status, targetTierId);
+}
+
+function tapMoveSelectedPokemon(event, status, targetTierId) {
+  if (!isMoveModeActive || !moveModePokemonId || !isMobileDragDisabled()) return;
+  event.preventDefault();
+  event.stopPropagation();
+  const pokemonId = moveModePokemonId;
+  clearMoveModeSelection();
+  if (status === "unfinished") movePokemon(pokemonId, targetTierId);
+  else movePokemonToStatus(pokemonId, status, targetTierId);
+}
+
+function tapMoveSelectedPokemonToCard(currentTierId, beforePokemonId) {
+  if (!isMoveModeActive || !moveModePokemonId || moveModePokemonId === beforePokemonId || !currentTierId) return;
+  const pokemonId = moveModePokemonId;
+  const currentStatus = parseStatusTierId(currentTierId);
+  clearMoveModeSelection();
+  if (currentStatus) {
+    movePokemonToStatus(pokemonId, currentStatus.status, currentStatus.tierId, beforePokemonId);
+  } else {
+    movePokemon(pokemonId, currentTierId, beforePokemonId);
+  }
 }
 
 function setDetailTab(tabName) {
@@ -3125,6 +3478,7 @@ function appendSelectOption(parent, value, text) {
   option.value = value;
   option.textContent = text;
   parent.append(option);
+  return option;
 }
 
 function getNatureEffect(nature) {

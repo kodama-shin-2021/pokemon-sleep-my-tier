@@ -785,17 +785,18 @@ button:active {
   font-size: 12px;
 }
 
-@media (max-width: 1180px) {
-  .tier-filter-bar {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
 .pokemon-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
   gap: 8px;
   padding: 12px;
+}
+
+@media (max-width: 860px) {
+  .tier-filter-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
 }
 
 .compact-board {
@@ -1746,10 +1747,6 @@ dialog h2 {
     top: auto;
     max-height: none;
     overflow: visible;
-  }
-
-  .tier-filter-bar {
-    grid-template-columns: 1fr;
   }
 
   .snack-preset-field {

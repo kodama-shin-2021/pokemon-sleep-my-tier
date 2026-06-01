@@ -198,14 +198,27 @@ button:active {
   font-size: 15px;
 }
 
-.shared-adopt-button {
+.shared-title-actions {
   margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.shared-open-button,
+.shared-adopt-button {
   min-height: 30px;
   padding: 0 10px;
   border-color: var(--accent);
   background: var(--accent-soft);
   color: var(--accent-strong);
   font-size: 12px;
+}
+
+.shared-adopt-button {
+  border-color: #d18d47;
+  background: #d8893c;
+  color: #ffffff;
 }
 
 .header-actions {
@@ -533,13 +546,18 @@ button:active {
 
 .tier-table-header {
   display: grid;
-  grid-template-columns: var(--tier-label-width) repeat(4, minmax(190px, 1fr)) 36px;
+  grid-template-columns: var(--tier-label-width) repeat(4, minmax(190px, 1fr));
   min-height: 42px;
   border-bottom: 1px solid var(--line);
   background: var(--table-head-bg);
   color: var(--table-head-ink);
   font-size: 12px;
   font-weight: 800;
+}
+
+.tier-table-header.simple-tier-header,
+.simple-tier-row {
+  grid-template-columns: var(--tier-label-width) minmax(0, 1fr);
 }
 
 .tier-table-header div {
@@ -673,13 +691,17 @@ button:active {
 
 .tier-row {
   display: grid;
-  grid-template-columns: var(--tier-label-width) repeat(4, minmax(190px, 1fr)) 36px;
+  grid-template-columns: var(--tier-label-width) repeat(4, minmax(190px, 1fr));
   min-height: 104px;
   border: 1px solid var(--line);
   border-width: 0 0 1px;
   border-radius: 0;
   overflow: hidden;
   background: var(--surface);
+}
+
+.tier-row.simple-tier-row {
+  grid-template-columns: var(--tier-label-width) minmax(0, 1fr);
 }
 
 .tier-row:nth-child(even) {
@@ -720,18 +742,8 @@ button:active {
   background: var(--snack-cell-color, var(--snack-empty));
 }
 
-.tier-actions {
-  display: grid;
-  align-content: center;
-  gap: 4px;
-  padding: 6px;
-  background: var(--surface-2);
-}
-
-.tier-actions button {
-  min-height: 32px;
-  width: 30px;
-  padding: 0;
+.simple-tier-dropzone {
+  min-height: 116px;
 }
 
 .panel-head {
@@ -1778,8 +1790,12 @@ dialog h2 {
   }
 
   .tier-table-header {
-    grid-template-columns: var(--tier-label-width) repeat(4, minmax(72px, 1fr)) 22px;
+    grid-template-columns: var(--tier-label-width) repeat(4, minmax(72px, 1fr));
     min-height: 30px;
+  }
+
+  .tier-table-header.simple-tier-header {
+    grid-template-columns: var(--tier-label-width) minmax(0, 1fr);
   }
 
   .tier-table-header div {
@@ -1793,8 +1809,12 @@ dialog h2 {
   }
 
   .tier-row {
-    grid-template-columns: var(--tier-label-width) repeat(4, minmax(72px, 1fr)) 22px;
+    grid-template-columns: var(--tier-label-width) repeat(4, minmax(72px, 1fr));
     min-height: 42px;
+  }
+
+  .tier-row.simple-tier-row {
+    grid-template-columns: var(--tier-label-width) minmax(0, 1fr);
   }
 
   .tier-label {
@@ -1811,17 +1831,6 @@ dialog h2 {
     min-height: 42px;
     gap: 2px;
     padding: 2px;
-  }
-
-  .tier-actions {
-    gap: 2px;
-    padding: 2px;
-  }
-
-  .tier-actions button {
-    width: 18px;
-    min-height: 20px;
-    font-size: 11px;
   }
 
   .pokemon-grid {

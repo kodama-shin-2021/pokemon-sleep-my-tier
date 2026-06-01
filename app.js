@@ -1,5 +1,8 @@
 const STORAGE_KEY = "pokesuri-tier-maker-state";
-const STORAGE_SCHEMA_VERSION = 7;
+const STORAGE_SCHEMA_VERSION = 9;
+const DEFAULT_POKEMON_MIGRATIONS = {
+  9: ["drampa"],
+};
 const LEGACY_STORAGE_KEYS = [
   "pokesuri-tier-maker-state-v6",
   "pokesuri-tier-maker-state-v5",
@@ -78,6 +81,7 @@ const finalPokemon = [
   ["vikavolt", "クワガノン", 738, "食材", "むし"], ["ribombee", "アブリボン", 743, "食材", "フェアリー"],
   ["bewear", "キテルグマ", 760, "食材", "かくとう"], ["comfey", "キュワワー", 764, "食材", "フェアリー"],
   ["togedemaru", "トゲデマル", 777, "スキル", "はがね"], ["mimikyu", "ミミッキュ", 778, "スキル", "ゴースト"],
+  ["drampa", "ジジーロン", 780, "食材", "ドラゴン"],
   ["cramorant", "ウッウ", 845, "食材", "ひこう"], ["toxtricity-low", "ストリンダー(ロー)", 849, "スキル", "どく"],
   ["toxtricity-amped", "ストリンダー(ハイ)", 849, "スキル", "どく"], ["meowscarada", "マスカーニャ", 908, "食材", "あく"],
   ["skeledirge", "ラウドボーン", 911, "食材", "ゴースト"], ["quaquaval", "ウェーニバル", 914, "食材", "かくとう"],
@@ -109,7 +113,7 @@ const defaultTiers = [
     id: createId(),
     name: "A",
     color: "#b8d98b",
-    pokemonIds: ids("sylveon glaceon toxicroak swalot houndoom flareon golem primeape dugtrio wigglytuff arbok mr-mime abomasnow quagsire mimikyu braviary darkrai plusle crustle spheal-holiday ribombee latias sandslash onix"),
+    pokemonIds: ids("sylveon glaceon toxicroak swalot houndoom flareon golem primeape dugtrio wigglytuff arbok mr-mime abomasnow quagsire mimikyu braviary darkrai plusle crustle spheal-holiday ribombee drampa latias sandslash onix"),
   },
   {
     id: createId(),
@@ -1939,6 +1943,20 @@ const pokemonDetailData = {
             "ワカクサ本島EX"
         ]
     },
+    "drampa": {
+        "ingredients": [
+            "ワカクサ大豆",
+            "つやつやアボカド",
+            "マメミート"
+        ],
+        "mainSkill": "料理チャンスS",
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
+        ]
+    },
     "togedemaru": {
         "ingredients": [
             "モーモーミルク",
@@ -1981,6 +1999,8 @@ let isMoveModeActive = false;
 let moveModePokemonId = null;
 let suppressCardClickUntil = 0;
 const LONG_PRESS_MOVE_MS = 480;
+const VIEW_MODE_KEY = "pokesuri-tier-maker-view-mode";
+let isSimpleTierView = localStorage.getItem(VIEW_MODE_KEY) === "simple";
 
 const tierBoard = document.querySelector("#tierBoard");
 const sharedTitleBanner = document.querySelector("#sharedTitleBanner");
@@ -2004,6 +2024,7 @@ const filterPanel = document.querySelector(".filter-panel");
 const filterPanelBody = document.querySelector("#filterPanelBody");
 const filterToggleButton = document.querySelector("#filterToggleButton");
 const filterToggleLabel = document.querySelector(".filter-toggle-label");
+const viewModeButton = document.querySelector("#viewModeButton");
 const moveDialog = document.querySelector("#moveDialog");
 const moveTargets = document.querySelector("#moveTargets");
 const candidatePanel = document.querySelector("#candidatePanel");
@@ -2023,6 +2044,7 @@ document.querySelector("#shareUrlButton").addEventListener("click", shareUrl);
 document.querySelector("#exportDataButton").addEventListener("click", exportJson);
 document.querySelector("#importDataButton").addEventListener("click", () => document.querySelector("#importDataInput").click());
 document.querySelector("#importDataInput").addEventListener("change", importJson);
+viewModeButton.addEventListener("click", toggleViewMode);
 filterToggleButton.addEventListener("click", toggleFilterPanel);
 detailTabButtons.forEach(button => {
   button.addEventListener("click", () => setDetailTab(button.dataset.detailTab));
@@ -2077,11 +2099,17 @@ function saveState() {
 
 function adoptSharedState() {
   if (!isSharedView) return;
-  if (!confirm("共有された厳選状況を、この端末の自分の管理票として保存しますか？現在の管理票は上書きされます。")) return;
+  if (!confirm("共有された厳選状況を、この端末の自分の厳選ノートとして保存しますか？現在の厳選ノートは上書きされます。")) return;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(serializeState(state)));
   const url = new URL(window.location.href);
   url.hash = "";
   window.location.href = url.href;
+}
+
+function openOwnState() {
+  const url = new URL(window.location.href);
+  url.hash = "";
+  window.open(url.href, "_blank", "noopener");
 }
 
 function loadSharedStateFromUrl() {
@@ -2297,6 +2325,7 @@ function setFilterPanelOpen(isOpen) {
 function render() {
   renderSharedTitleBanner();
   renderSnackRulePanel();
+  updateViewModeButton();
   renderTiers();
   renderPool();
   renderActiveFilters();
@@ -2320,27 +2349,37 @@ function renderSharedTitleBanner() {
   title.textContent = sharedTitle || "タイトルなし";
   sharedTitleBanner.append(label, title);
   if (isSharedView) {
+    const actions = document.createElement("div");
+    actions.className = "shared-title-actions";
+    const openButton = document.createElement("button");
+    openButton.type = "button";
+    openButton.className = "shared-open-button";
+    openButton.textContent = "自分の厳選ノートを開く";
+    openButton.addEventListener("click", openOwnState);
     const adoptButton = document.createElement("button");
     adoptButton.type = "button";
     adoptButton.className = "shared-adopt-button";
-    adoptButton.textContent = "自分の管理票に保存";
+    adoptButton.textContent = "自分の厳選ノートとして保存";
     adoptButton.addEventListener("click", adoptSharedState);
-    sharedTitleBanner.append(adoptButton);
+    actions.append(adoptButton, openButton);
+    sharedTitleBanner.append(actions);
   }
 }
 
 function renderTiers() {
   tierBoard.innerHTML = "";
   const header = document.createElement("div");
-  header.className = "tier-table-header";
-  [
-    ["Tier", "Tier"],
-    ["厳選未完了", "未完了"],
-    ["妥協個体あり", "妥協中"],
-    ["育成中", "育成中"],
-    ["育成完了", "完了"],
-    ["操作", "-"],
-  ].forEach(([text, shortText]) => {
+  header.className = `tier-table-header${isSimpleTierView ? " simple-tier-header" : ""}`;
+  const headers = isSimpleTierView
+    ? [["Tier", "Tier"], ["ポケモン", "ポケモン"]]
+    : [
+      ["Tier", "Tier"],
+      ["厳選未完了", "未完了"],
+      ["妥協個体あり", "妥協中"],
+      ["育成中", "育成中"],
+      ["育成完了", "完了"],
+    ];
+  headers.forEach(([text, shortText]) => {
     const cell = document.createElement("div");
     cell.textContent = text;
     cell.dataset.short = shortText;
@@ -2380,6 +2419,14 @@ function renderTiers() {
     });
     label.append(input);
 
+    if (isSimpleTierView) {
+      const simpleDropzone = createSimpleTierDropzone(index);
+      row.classList.add("simple-tier-row");
+      row.append(label, simpleDropzone);
+      tierBoard.append(row);
+      return;
+    }
+
     const unfinishedDropzone = document.createElement("div");
     unfinishedDropzone.className = "tier-dropzone";
     unfinishedDropzone.dataset.snackStatus = "unfinished";
@@ -2400,17 +2447,61 @@ function renderTiers() {
     const trainingDropzone = createStatusDropzone("training", trainingTier);
     const trainedDropzone = createStatusDropzone("trained", trainedTier);
 
-    const actions = document.createElement("div");
-    actions.className = "tier-actions";
-    actions.append(
-      iconButton("↑", () => moveTier(index, -1), "上へ"),
-      iconButton("↓", () => moveTier(index, 1), "下へ"),
-      iconButton("×", () => removeTier(tier.id), "削除"),
-    );
-
-    row.append(label, unfinishedDropzone, compromiseDropzone, trainingDropzone, trainedDropzone, actions);
+    row.append(label, unfinishedDropzone, compromiseDropzone, trainingDropzone, trainedDropzone);
     tierBoard.append(row);
   });
+}
+
+function toggleViewMode() {
+  isSimpleTierView = !isSimpleTierView;
+  localStorage.setItem(VIEW_MODE_KEY, isSimpleTierView ? "simple" : "managed");
+  render();
+}
+
+function updateViewModeButton() {
+  viewModeButton.textContent = isSimpleTierView ? "厳選管理票モード" : "Tier表モード";
+  viewModeButton.setAttribute("aria-pressed", String(isSimpleTierView));
+}
+
+function createSimpleTierDropzone(tierIndex) {
+  const dropzone = document.createElement("div");
+  const tier = state.tiers[tierIndex];
+  dropzone.className = "tier-dropzone simple-tier-dropzone";
+  dropzone.dataset.snackStatus = "unfinished";
+  dropzone.dataset.snackTier = tier.name;
+  dropzone.dataset.targetTierIndex = String(tierIndex);
+  dropzone.style.setProperty("--snack-cell-color", getSnackCellColor("unfinished", tier.name));
+  dropzone.addEventListener("dragover", allowDrop);
+  dropzone.addEventListener("dragleave", clearDropHover);
+  dropzone.addEventListener("drop", event => dropPokemonKeepingStatus(event, tierIndex));
+  dropzone.addEventListener("click", event => tapMoveSelectedPokemonKeepingStatus(event, tierIndex));
+  getSimpleTierPokemonEntries(tierIndex).forEach(entry => {
+    const pokemon = getPokemon(entry.pokemonId);
+    if (pokemon && matchesCurrentFilters(pokemon)) {
+      dropzone.append(createPokemonCard(pokemon, entry.currentTierId, { simpleTierIndex: tierIndex }));
+    }
+  });
+  return dropzone;
+}
+
+function getTierPokemonEntries(tierIndex) {
+  const entries = [];
+  const unfinishedTier = state.tiers[tierIndex];
+  unfinishedTier?.pokemonIds.forEach(pokemonId => entries.push({ pokemonId, currentTierId: unfinishedTier.id }));
+  STATUS_TYPES.forEach(status => {
+    const tier = getStatusTiers(status)[tierIndex];
+    tier?.pokemonIds.forEach(pokemonId => entries.push({ pokemonId, currentTierId: `${status}:${tier.id}` }));
+  });
+  return entries;
+}
+
+function getSimpleTierPokemonEntries(tierIndex) {
+  const entriesByPokemonId = new Map(getTierPokemonEntries(tierIndex).map(entry => [entry.pokemonId, entry]));
+  const simpleIds = state.simpleTierPokemonIds?.[tierIndex] || [];
+  const orderedEntries = simpleIds.map(pokemonId => entriesByPokemonId.get(pokemonId)).filter(Boolean);
+  const orderedIds = new Set(orderedEntries.map(entry => entry.pokemonId));
+  const missingEntries = [...entriesByPokemonId.values()].filter(entry => !orderedIds.has(entry.pokemonId));
+  return [...orderedEntries, ...missingEntries];
 }
 
 function renderSnackRulePanel() {
@@ -2768,19 +2859,23 @@ function initializeIngredientFilter() {
   });
 }
 
-function createPokemonCard(pokemon, currentTierId = null) {
+function createPokemonCard(pokemon, currentTierId = null, options = {}) {
   const card = document.createElement("button");
   card.className = "pokemon-card";
   if (newPokemonIds.has(pokemon.id)) card.classList.add("new-pokemon");
   card.type = "button";
   card.draggable = !isMobileDragDisabled();
   card.dataset.pokemonId = pokemon.id;
+  if (Number.isInteger(options.simpleTierIndex)) card.dataset.simpleTierIndex = String(options.simpleTierIndex);
   card.title = `${pokemon.name} / ${pokemon.specialty} / ${pokemon.type}`;
   card.addEventListener("click", event => {
     if (isMoveModeActive) {
       event.preventDefault();
       event.stopPropagation();
-      if (moveModePokemonId) tapMoveSelectedPokemonToCard(currentTierId, pokemon.id);
+      if (moveModePokemonId) {
+        if (Number.isInteger(options.simpleTierIndex)) tapMoveSelectedPokemonKeepingStatusToCard(options.simpleTierIndex, pokemon.id);
+        else tapMoveSelectedPokemonToCard(currentTierId, pokemon.id);
+      }
       else selectMoveModePokemon(pokemon.id);
       return;
     }
@@ -2814,6 +2909,10 @@ function createPokemonCard(pokemon, currentTierId = null) {
     event.stopPropagation();
     card.classList.remove("drop-hover");
     const pokemonId = event.dataTransfer.getData("text/plain") || activePokemonId;
+    if (Number.isInteger(options.simpleTierIndex)) {
+      movePokemonKeepingStatusToTierIndex(pokemonId, options.simpleTierIndex, pokemon.id);
+      return;
+    }
     const currentStatus = parseStatusTierId(currentTierId);
     if (currentStatus) {
       movePokemonToStatus(pokemonId, currentStatus.status, currentStatus.tierId, pokemon.id);
@@ -3003,6 +3102,14 @@ function dropStatusPokemon(event, status, targetTierId) {
   movePokemonToStatus(pokemonId, status, targetTierId);
 }
 
+function dropPokemonKeepingStatus(event, targetTierIndex) {
+  if (isMobileDragDisabled()) return;
+  event.preventDefault();
+  event.currentTarget.classList.remove("drop-hover");
+  const pokemonId = event.dataTransfer.getData("text/plain") || activePokemonId;
+  movePokemonKeepingStatusToTierIndex(pokemonId, targetTierIndex);
+}
+
 function tapMoveSelectedPokemon(event, status, targetTierId) {
   if (!isMoveModeActive || !moveModePokemonId || !isMobileDragDisabled()) return;
   event.preventDefault();
@@ -3011,6 +3118,15 @@ function tapMoveSelectedPokemon(event, status, targetTierId) {
   clearMoveModeSelection();
   if (status === "unfinished") movePokemon(pokemonId, targetTierId);
   else movePokemonToStatus(pokemonId, status, targetTierId);
+}
+
+function tapMoveSelectedPokemonKeepingStatus(event, targetTierIndex) {
+  if (!isMoveModeActive || !moveModePokemonId || !isMobileDragDisabled()) return;
+  event.preventDefault();
+  event.stopPropagation();
+  const pokemonId = moveModePokemonId;
+  clearMoveModeSelection();
+  movePokemonKeepingStatusToTierIndex(pokemonId, targetTierIndex);
 }
 
 function tapMoveSelectedPokemonToCard(currentTierId, beforePokemonId) {
@@ -3023,6 +3139,13 @@ function tapMoveSelectedPokemonToCard(currentTierId, beforePokemonId) {
   } else {
     movePokemon(pokemonId, currentTierId, beforePokemonId);
   }
+}
+
+function tapMoveSelectedPokemonKeepingStatusToCard(targetTierIndex, beforePokemonId) {
+  if (!isMoveModeActive || !moveModePokemonId || moveModePokemonId === beforePokemonId) return;
+  const pokemonId = moveModePokemonId;
+  clearMoveModeSelection();
+  movePokemonKeepingStatusToTierIndex(pokemonId, targetTierIndex, beforePokemonId);
 }
 
 function setDetailTab(tabName) {
@@ -3764,20 +3887,52 @@ function openPokemonSearch(pokemon) {
   window.open(`https://www.google.com/search?q=${query}`, "_blank", "noopener");
 }
 
-function movePokemon(pokemonId, targetTierId, beforePokemonId = null) {
+function movePokemon(pokemonId, targetTierId, beforePokemonId = null, { syncSimpleTier = true } = {}) {
   if (!pokemonId) return;
+  const targetTierIndex = state.tiers.findIndex(item => item.id === targetTierId);
+  if (syncSimpleTier) movePokemonInSimpleTierState(pokemonId, targetTierIndex);
   removePokemonFromAllLists(pokemonId);
   const tier = state.tiers.find(item => item.id === targetTierId);
   insertPokemonIntoTier(tier, pokemonId, beforePokemonId);
   render();
 }
 
-function movePokemonToStatus(pokemonId, status, targetTierId, beforePokemonId = null) {
+function movePokemonToStatus(pokemonId, status, targetTierId, beforePokemonId = null, { syncSimpleTier = true } = {}) {
   if (!pokemonId) return;
+  const targetTierIndex = getStatusTiers(status).findIndex(item => item.id === targetTierId);
+  if (syncSimpleTier) movePokemonInSimpleTierState(pokemonId, targetTierIndex);
   removePokemonFromAllLists(pokemonId);
   const tier = getStatusTiers(status).find(item => item.id === targetTierId);
   insertPokemonIntoTier(tier, pokemonId, beforePokemonId);
   render();
+}
+
+function movePokemonKeepingStatusToTierIndex(pokemonId, targetTierIndex, beforePokemonId = null) {
+  if (!pokemonId) return;
+  const location = findPokemonLocation(pokemonId);
+  const status = location?.status || "unfinished";
+  movePokemonInSimpleTierState(pokemonId, targetTierIndex, beforePokemonId);
+  if (location?.tierIndex === targetTierIndex) {
+    render();
+    return;
+  }
+  if (status === "unfinished") {
+    const tier = state.tiers[targetTierIndex];
+    if (tier) movePokemon(pokemonId, tier.id, null, { syncSimpleTier: false });
+    return;
+  }
+  const tier = getStatusTiers(status)[targetTierIndex];
+  if (tier) movePokemonToStatus(pokemonId, status, tier.id, null, { syncSimpleTier: false });
+}
+
+function findPokemonLocation(pokemonId) {
+  const unfinishedIndex = state.tiers.findIndex(tier => tier.pokemonIds.includes(pokemonId));
+  if (unfinishedIndex >= 0) return { status: "unfinished", tierIndex: unfinishedIndex };
+  for (const status of STATUS_TYPES) {
+    const tierIndex = getStatusTiers(status).findIndex(tier => tier.pokemonIds.includes(pokemonId));
+    if (tierIndex >= 0) return { status, tierIndex };
+  }
+  return null;
 }
 
 function insertPokemonIntoTier(tier, pokemonId, beforePokemonId = null) {
@@ -3785,6 +3940,25 @@ function insertPokemonIntoTier(tier, pokemonId, beforePokemonId = null) {
   const beforeIndex = tier.pokemonIds.indexOf(beforePokemonId);
   if (beforeIndex >= 0) tier.pokemonIds.splice(beforeIndex, 0, pokemonId);
   else tier.pokemonIds.push(pokemonId);
+}
+
+function movePokemonInSimpleTierState(pokemonId, targetTierIndex, beforePokemonId = null) {
+  if (!Array.isArray(state.simpleTierPokemonIds) || targetTierIndex < 0 || targetTierIndex >= state.tiers.length) return;
+  state.simpleTierPokemonIds = normalizeSimpleTierPokemonIds({
+    ...state,
+    simpleTierPokemonIds: state.simpleTierPokemonIds,
+  });
+  const currentTierIndex = state.simpleTierPokemonIds.findIndex(ids => ids.includes(pokemonId));
+  if (currentTierIndex === targetTierIndex && !beforePokemonId) return;
+  state.simpleTierPokemonIds.forEach(ids => {
+    const index = ids.indexOf(pokemonId);
+    if (index >= 0) ids.splice(index, 1);
+  });
+  const targetIds = state.simpleTierPokemonIds[targetTierIndex];
+  if (!targetIds) return;
+  const beforeIndex = targetIds.indexOf(beforePokemonId);
+  if (beforeIndex >= 0) targetIds.splice(beforeIndex, 0, pokemonId);
+  else targetIds.push(pokemonId);
 }
 
 function removePokemonFromAllLists(pokemonId) {
@@ -3822,9 +3996,11 @@ function parseStatusTierId(value) {
 
 function moveTier(index, direction) {
   const nextIndex = index + direction;
-  if (nextIndex < 0 || nextIndex >= state.tiers.length) return;
+  if (nextIndex === index || nextIndex < 0 || nextIndex >= state.tiers.length) return;
   const [tier] = state.tiers.splice(index, 1);
   state.tiers.splice(nextIndex, 0, tier);
+  const [simpleIds] = state.simpleTierPokemonIds.splice(index, 1);
+  state.simpleTierPokemonIds.splice(nextIndex, 0, simpleIds);
   STATUS_TYPES.map(getStatusTiers).forEach(statusTiers => {
     const [statusTier] = statusTiers.splice(index, 1);
     statusTiers.splice(nextIndex, 0, statusTier);
@@ -3835,7 +4011,9 @@ function moveTier(index, direction) {
 function removeTier(tierId) {
   if (state.tiers.length <= 1) return;
   const tier = state.tiers.find(item => item.id === tierId);
+  const tierIndex = state.tiers.findIndex(item => item.id === tierId);
   state.tiers = state.tiers.filter(tier => tier.id !== tierId);
+  if (tierIndex >= 0) state.simpleTierPokemonIds.splice(tierIndex, 1);
   if (tier) {
     STATUS_TYPES.forEach(status => {
       const config = statusTierConfig[status];
@@ -3854,6 +4032,8 @@ function addTier() {
     color: tierColor,
     pokemonIds: [],
   });
+  if (!Array.isArray(state.simpleTierPokemonIds)) state.simpleTierPokemonIds = [];
+  state.simpleTierPokemonIds.push([]);
   STATUS_TYPES.forEach(status => {
     state[statusTierConfig[status].stateKey].push({
       id: createId(),
@@ -4123,6 +4303,7 @@ function createDefaultState() {
     compromiseTiers: clone(defaultCompromiseTiers),
     trainingTiers: clone(defaultTrainingTiers),
     trainedTiers: clone(defaultTrainedTiers),
+    simpleTierPokemonIds: defaultTiers.map(tier => [...tier.pokemonIds]),
     snackRulePreset: DEFAULT_SNACK_RULE_PRESET,
     snackCellRules: clone(SNACK_RULE_PRESETS[DEFAULT_SNACK_RULE_PRESET].rules),
     candidateNotes: {},
@@ -4142,6 +4323,7 @@ function serializeState(value) {
     compromiseTiers: normalizeStatusTiers(value, "compromise"),
     trainingTiers: normalizeStatusTiers(value, "training"),
     trainedTiers: normalizeStatusTiers(value, "trained"),
+    simpleTierPokemonIds: normalizeSimpleTierPokemonIds(value),
     snackRulePreset: normalizeSnackRulePreset(value.snackRulePreset),
     snackCellRules: normalizeSnackCellRules(value.snackCellRules),
     candidateNotes: normalizeCandidateNotes(value.candidateNotes),
@@ -4150,16 +4332,19 @@ function serializeState(value) {
 
 function migrateState(parsed) {
   if (!parsed || !Array.isArray(parsed.tiers)) throw new Error("Invalid saved state");
-  return {
+  const migrated = {
     schemaVersion: STORAGE_SCHEMA_VERSION,
     tiers: normalizeTiers(parsed.tiers),
     compromiseTiers: normalizeStatusTiers(parsed, "compromise"),
     trainingTiers: normalizeStatusTiers(parsed, "training"),
     trainedTiers: normalizeStatusTiers(parsed, "trained"),
+    simpleTierPokemonIds: normalizeSimpleTierPokemonIds(parsed),
     snackRulePreset: normalizeSnackRulePreset(parsed.snackRulePreset),
     snackCellRules: normalizeSnackCellRules(parsed.snackCellRules),
     candidateNotes: normalizeCandidateNotes(parsed.candidateNotes),
   };
+  addNewDefaultPokemonToMigratedState(migrated);
+  return migrated;
 }
 
 function normalizeTiers(tiers) {
@@ -4187,6 +4372,62 @@ function normalizeStatusTiers(parsed, status) {
       pokemonIds: uniqueKnownIds(saved?.pokemonIds, knownIds),
     };
   });
+}
+
+function normalizeSimpleTierPokemonIds(parsed) {
+  const knownIds = getKnownPokemonIds();
+  const savedRows = Array.isArray(parsed.simpleTierPokemonIds) ? parsed.simpleTierPokemonIds : [];
+  const usedIds = new Set();
+  return parsed.tiers.map((tier, tierIndex) => {
+    const managedIds = getManagedTierPokemonIds(parsed, tierIndex, knownIds);
+    const managedSet = new Set(managedIds);
+    const savedIds = uniqueKnownIds(savedRows[tierIndex], knownIds).filter(id => managedSet.has(id));
+    const mergedIds = [...savedIds, ...managedIds.filter(id => !savedIds.includes(id))].filter(id => {
+      if (usedIds.has(id)) return false;
+      usedIds.add(id);
+      return true;
+    });
+    return mergedIds;
+  });
+}
+
+function getManagedTierPokemonIds(parsed, tierIndex, knownIds) {
+  const ids = [];
+  const addIds = idsValue => {
+    uniqueKnownIds(idsValue, knownIds).forEach(id => {
+      if (!ids.includes(id)) ids.push(id);
+    });
+  };
+  addIds(parsed.tiers?.[tierIndex]?.pokemonIds);
+  STATUS_TYPES.forEach(status => {
+    const config = statusTierConfig[status];
+    addIds(parsed[config.stateKey]?.[tierIndex]?.pokemonIds);
+  });
+  return ids;
+}
+
+function addNewDefaultPokemonToMigratedState(migrated) {
+  Object.values(DEFAULT_POKEMON_MIGRATIONS).forEach(pokemonIds => {
+    pokemonIds.forEach(pokemonId => addDefaultPokemonIfMissing(migrated, pokemonId));
+  });
+}
+
+function addDefaultPokemonIfMissing(migrated, pokemonId) {
+  const alreadyManaged = [
+    ...migrated.tiers,
+    ...migrated.compromiseTiers,
+    ...migrated.trainingTiers,
+    ...migrated.trainedTiers,
+  ].some(tier => tier.pokemonIds.includes(pokemonId));
+  if (alreadyManaged) return;
+
+  const defaultTierIndex = defaultTiers.findIndex(tier => tier.pokemonIds.includes(pokemonId));
+  if (defaultTierIndex < 0 || !migrated.tiers[defaultTierIndex]) return;
+  migrated.tiers[defaultTierIndex].pokemonIds.push(pokemonId);
+  if (!Array.isArray(migrated.simpleTierPokemonIds[defaultTierIndex])) migrated.simpleTierPokemonIds[defaultTierIndex] = [];
+  if (!migrated.simpleTierPokemonIds[defaultTierIndex].includes(pokemonId)) {
+    migrated.simpleTierPokemonIds[defaultTierIndex].push(pokemonId);
+  }
 }
 
 function normalizeCandidateNotes(candidateNotes) {
@@ -4270,7 +4511,25 @@ function clone(value) {
 
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
+  if (isLocalhost()) {
+    navigator.serviceWorker.getRegistrations?.().then(registrations => {
+      registrations.forEach(registration => registration.unregister());
+    }).catch(() => {});
+    return;
+  }
+  let isRefreshing = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (isRefreshing) return;
+    isRefreshing = true;
+    window.location.reload();
   });
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js")
+      .then(registration => registration.update())
+      .catch(() => {});
+  });
+}
+
+function isLocalhost() {
+  return ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
 }

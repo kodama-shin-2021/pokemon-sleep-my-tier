@@ -167,47 +167,20 @@ const statusTierConfig = {
 };
 const DEFAULT_SNACK_RULE_PRESET = "free";
 const SNACK_RULE_OPTIONS = {
-  limit: { label: "スパサブ・ハイサブも投げる", color: "var(--snack-limit)", lightColor: "#ffffff", darkColor: "#f7fbfa", lightText: "#433f38", darkText: "#18211f" },
-  poke: { label: "ポケサブまで", color: "var(--snack-poke)", lightColor: "#f7f8f8", darkColor: "#dfe8e5", lightText: "#433f38", darkText: "#18211f" },
-  bonus: { label: "ボナサブのみ", color: "var(--snack-bonus)", lightColor: "#eef0f1", darkColor: "#bfcfca", lightText: "#433f38", darkText: "#18211f" },
-  chance: { label: "チャンスがつけば", color: "var(--snack-chance)", lightColor: "#d9dde0", darkColor: "#879992", lightText: "#433f38", darkText: "#eef5f2" },
-  none: { label: "投げない", color: "var(--snack-none)", lightColor: "#c8d0d5", darkColor: "#43504b", lightText: "#433f38", darkText: "#eef5f2" },
+  1: { color: "var(--snack-priority-1)", lightColor: "#ffffff", darkColor: "#f7fbfa" },
+  2: { color: "var(--snack-priority-2)", lightColor: "#f7f8f8", darkColor: "#dfe8e5" },
+  3: { color: "var(--snack-priority-3)", lightColor: "#eef0f1", darkColor: "#bfcfca" },
+  4: { color: "var(--snack-priority-4)", lightColor: "#d9dde0", darkColor: "#879992" },
+  5: { color: "var(--snack-priority-5)", lightColor: "#c8d0d5", darkColor: "#63726c" },
+  6: { color: "var(--snack-priority-6)", lightColor: "#b8bec3", darkColor: "#43504b" },
 };
 const SNACK_RULE_PRESETS = {
   free: {
-    label: "無課金",
     rules: {
-      unfinished: { SS: "limit", S: "poke", A: "bonus", B: "chance", C: "none", default: "none" },
-      compromise: { SS: "poke", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
-      training: { SS: "bonus", S: "chance", A: "none", B: "none", C: "none", default: "none" },
-      trained: { SS: "chance", S: "none", A: "none", B: "none", C: "none", default: "none" },
-    },
-  },
-  light: {
-    label: "微課金",
-    rules: {
-      unfinished: { SS: "limit", S: "limit", A: "poke", B: "bonus", C: "none", default: "none" },
-      compromise: { SS: "limit", S: "poke", A: "chance", B: "chance", C: "none", default: "none" },
-      training: { SS: "poke", S: "bonus", A: "none", B: "none", C: "none", default: "none" },
-      trained: { SS: "bonus", S: "chance", A: "none", B: "none", C: "none", default: "none" },
-    },
-  },
-  heavy: {
-    label: "重課金",
-    rules: {
-      unfinished: { SS: "limit", S: "limit", A: "limit", B: "poke", C: "bonus", default: "none" },
-      compromise: { SS: "limit", S: "limit", A: "poke", B: "bonus", C: "chance", default: "none" },
-      training: { SS: "limit", S: "poke", A: "bonus", B: "chance", C: "none", default: "none" },
-      trained: { SS: "poke", S: "bonus", A: "chance", B: "none", C: "none", default: "none" },
-    },
-  },
-  whale: {
-    label: "廃課金",
-    rules: {
-      unfinished: { SS: "limit", S: "limit", A: "limit", B: "limit", C: "poke", default: "none" },
-      compromise: { SS: "limit", S: "limit", A: "limit", B: "poke", C: "bonus", default: "none" },
-      training: { SS: "limit", S: "limit", A: "poke", B: "bonus", C: "chance", default: "none" },
-      trained: { SS: "limit", S: "poke", A: "bonus", B: "chance", C: "none", default: "none" },
+      unfinished: { SS: "1", S: "2", A: "3", B: "4", C: "5", default: "6" },
+      compromise: { SS: "2", S: "3", A: "4", B: "5", C: "6", default: "6" },
+      training: { SS: "3", S: "4", A: "5", B: "6", C: "6", default: "6" },
+      trained: { SS: "4", S: "5", A: "6", B: "6", C: "6", default: "6" },
     },
   },
 };
@@ -2000,7 +1973,7 @@ let moveModePokemonId = null;
 let suppressCardClickUntil = 0;
 const LONG_PRESS_MOVE_MS = 480;
 const VIEW_MODE_KEY = "pokesuri-tier-maker-view-mode";
-let isSimpleTierView = localStorage.getItem(VIEW_MODE_KEY) === "simple";
+let isSimpleTierView = getInitialViewMode() === "simple";
 
 const tierBoard = document.querySelector("#tierBoard");
 const sharedTitleBanner = document.querySelector("#sharedTitleBanner");
@@ -2121,11 +2094,13 @@ function loadSharedStateFromUrl() {
     if (parsed?.state) {
       return {
         title: typeof parsed.title === "string" ? parsed.title : "",
+        viewMode: normalizeShareViewMode(parsed.viewMode),
         state: migrateState(parsed.state),
       };
     }
     return {
       title: "",
+      viewMode: "managed",
       state: migrateState(parsed),
     };
   } catch {
@@ -2137,12 +2112,13 @@ function loadSharedStateFromUrl() {
 }
 
 async function shareUrl() {
-  const title = await requestShareTitle();
-  if (!title) return;
-  sharedTitle = title;
+  const shareOptions = await requestShareOptions();
+  if (!shareOptions) return;
+  sharedTitle = shareOptions.title;
   renderSharedTitleBanner();
   const shareValue = encodeBase64Url(JSON.stringify({
     title: sharedTitle,
+    viewMode: shareOptions.viewMode,
     state: serializeState(state),
   }));
   const url = new URL(window.location.href);
@@ -2156,7 +2132,7 @@ async function shareUrl() {
   }
 }
 
-function requestShareTitle() {
+function requestShareOptions() {
   return new Promise(resolve => {
     const timestamp = formatShareTimestamp(new Date());
     const overlay = document.createElement("div");
@@ -2191,7 +2167,36 @@ function requestShareTitle() {
     input.addEventListener("input", updatePreview);
     updatePreview();
     field.append(label, input, previewLabel, preview);
-    body.append(field);
+
+    const modeField = document.createElement("fieldset");
+    modeField.className = "share-mode-field";
+    const modeLegend = document.createElement("legend");
+    modeLegend.textContent = "共有URLを開いたときの初期表示";
+    const modeChoices = document.createElement("div");
+    modeChoices.className = "share-mode-options";
+    const currentViewMode = isSimpleTierView ? "simple" : "managed";
+    [
+      ["managed", "厳選状況モード", "厳選未完了・妥協個体あり・育成中・育成完了を分けて表示"],
+      ["simple", "Tier表モード", "状態をまとめてTierごとに表示"],
+    ].forEach(([value, titleText, description]) => {
+      const option = document.createElement("label");
+      option.className = "share-mode-option";
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "shareViewMode";
+      radio.value = value;
+      radio.checked = value === currentViewMode;
+      const text = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = titleText;
+      const detail = document.createElement("small");
+      detail.textContent = description;
+      text.append(title, detail);
+      option.append(radio, text);
+      modeChoices.append(option);
+    });
+    modeField.append(modeLegend, modeChoices);
+    body.append(field, modeField);
 
     const footer = document.createElement("div");
     footer.className = "choice-panel-footer";
@@ -2209,7 +2214,11 @@ function requestShareTitle() {
     };
     const submit = () => {
       const baseTitle = input.value.trim() || "xxx厳選状況メモ";
-      close(`${baseTitle} ${timestamp}`);
+      const selectedMode = dialog.querySelector("input[name='shareViewMode']:checked")?.value;
+      close({
+        title: `${baseTitle} ${timestamp}`,
+        viewMode: normalizeShareViewMode(selectedMode),
+      });
     };
     const handleKeydown = event => {
       if (event.key === "Escape") close(null);
@@ -2228,6 +2237,19 @@ function requestShareTitle() {
     input.focus();
     input.select();
   });
+}
+
+function getInitialViewMode() {
+  if (isShareViewMode(sharedPayload?.viewMode)) return sharedPayload.viewMode;
+  return localStorage.getItem(VIEW_MODE_KEY) === "simple" ? "simple" : "managed";
+}
+
+function normalizeShareViewMode(value) {
+  return isShareViewMode(value) ? value : "managed";
+}
+
+function isShareViewMode(value) {
+  return value === "simple" || value === "managed";
 }
 
 function formatShareTimestamp(date) {
@@ -2406,7 +2428,6 @@ function renderTiers() {
       const previousName = tier.name;
       tier.name = input.value || " ";
       tier.color = getTierLabelColor(tier.name);
-      renameSnackCellRuleTier(previousName, tier.name);
       STATUS_TYPES.map(getStatusTiers).forEach(statusTiers => {
         const statusTier = statusTiers.find(item => item.name === previousName);
         if (statusTier) {
@@ -2507,7 +2528,10 @@ function getSimpleTierPokemonEntries(tierIndex) {
 function renderSnackRulePanel() {
   if (!snackRulePanel) return;
   snackRulePanel.innerHTML = "";
-  snackRulePanel.append(createSnackLegend());
+  snackRulePanel.hidden = false;
+  const note = document.createElement("p");
+  note.textContent = "※セル色はサブレを投げる優先度の目安です";
+  snackRulePanel.append(note);
 }
 
 function createStatusDropzone(status, tier) {
@@ -2532,128 +2556,13 @@ function createStatusDropzone(status, tier) {
   return dropzone;
 }
 
-function createSnackLegend() {
-  const legend = document.createElement("div");
-  legend.className = "snack-legend";
-  const text = document.createElement("span");
-  text.textContent = "セル色はサブレを投げる優先度の目安です";
-  legend.append(text);
-  Object.entries(SNACK_RULE_OPTIONS).forEach(([key, item]) => {
-    const chip = document.createElement("span");
-    chip.className = "snack-legend-chip";
-    chip.style.setProperty("--legend-color", item.color);
-    chip.dataset.snackRule = key;
-    chip.textContent = item.label;
-    legend.append(chip);
-  });
-  const presetLabel = document.createElement("label");
-  presetLabel.className = "snack-preset-field";
-  const presetText = document.createElement("span");
-  presetText.textContent = "プリセット";
-  const presetSelect = document.createElement("select");
-  Object.entries(SNACK_RULE_PRESETS).forEach(([value, preset]) => {
-    appendSelectOption(presetSelect, value, preset.label);
-  });
-  appendSelectOption(presetSelect, "custom", "カスタム");
-  presetSelect.value = state.snackRulePreset || "custom";
-  presetSelect.addEventListener("change", () => {
-    state.snackRulePreset = presetSelect.value;
-    if (SNACK_RULE_PRESETS[presetSelect.value]) {
-      state.snackCellRules = clone(SNACK_RULE_PRESETS[presetSelect.value].rules);
-    }
-    render();
-  });
-  presetLabel.append(presetText, presetSelect);
-  legend.append(presetLabel, createSnackRuleEditor());
-  return legend;
-}
-
 function getSnackCellColor(status, tierName) {
-  return SNACK_RULE_OPTIONS[getSnackCellRule(status, tierName)]?.color || SNACK_RULE_OPTIONS.none.color;
+  return SNACK_RULE_OPTIONS[getSnackCellRule(status, tierName)]?.color || SNACK_RULE_OPTIONS[6].color;
 }
 
 function getSnackCellRule(status, tierName) {
-  const rules = state.snackCellRules?.[status] || SNACK_RULE_PRESETS[DEFAULT_SNACK_RULE_PRESET].rules[status];
-  return rules?.[tierName] || rules?.default || "none";
-}
-
-function createSnackRuleEditor() {
-  const details = document.createElement("details");
-  details.className = "snack-rule-editor";
-  const summary = document.createElement("summary");
-  summary.textContent = "サブレ優先度の編集";
-  const grid = document.createElement("div");
-  grid.className = "snack-rule-grid";
-  ["Tier", ...SNACK_RULE_STATUSES.map(status => SNACK_RULE_STATUS_LABELS[status])].forEach(text => {
-    const header = document.createElement("span");
-    header.className = "snack-rule-grid-head";
-    header.textContent = text;
-    grid.append(header);
-  });
-  state.tiers.forEach(tier => {
-    const tierLabel = document.createElement("strong");
-    tierLabel.textContent = tier.name;
-    grid.append(tierLabel);
-    SNACK_RULE_STATUSES.forEach(status => {
-      const select = document.createElement("select");
-      select.ariaLabel = `${SNACK_RULE_STATUS_LABELS[status]} ${tier.name} のサブレ基準`;
-      Object.entries(SNACK_RULE_OPTIONS).forEach(([value, option]) => {
-        const choice = appendSelectOption(select, value, option.label);
-        choice.style.backgroundColor = getSnackRuleEditorColor(option);
-        choice.style.color = getSnackRuleEditorTextColor(option);
-      });
-      select.value = getSnackCellRule(status, tier.name);
-      updateSnackRuleSelectStyle(select);
-      select.addEventListener("change", () => {
-        setSnackCellRule(status, tier.name, select.value);
-        updateSnackRuleSelectStyle(select);
-      });
-      grid.append(select);
-    });
-  });
-  details.append(summary, grid);
-  return details;
-}
-
-function setSnackCellRule(status, tierName, rule) {
-  if (!SNACK_RULE_OPTIONS[rule]) return;
-  if (!state.snackCellRules) state.snackCellRules = clone(SNACK_RULE_PRESETS[DEFAULT_SNACK_RULE_PRESET].rules);
-  if (!state.snackCellRules[status]) state.snackCellRules[status] = {};
-  state.snackCellRules[status][tierName] = rule;
-  state.snackRulePreset = "custom";
-  saveState();
-  document.querySelector(".snack-preset-field select").value = "custom";
-  document.querySelectorAll("[data-snack-status]").forEach(dropzone => {
-    if (dropzone.dataset.snackStatus === status && dropzone.dataset.snackTier === tierName) {
-      dropzone.style.setProperty("--snack-cell-color", getSnackCellColor(status, tierName));
-    }
-  });
-}
-
-function updateSnackRuleSelectStyle(select) {
-  const option = SNACK_RULE_OPTIONS[select.value] || SNACK_RULE_OPTIONS.none;
-  select.style.setProperty("--selected-snack-rule-color", option.color);
-  select.style.backgroundColor = getSnackRuleEditorColor(option);
-  select.style.color = getSnackRuleEditorTextColor(option);
-}
-
-function getSnackRuleEditorColor(option) {
-  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
-  return prefersDark ? option.darkColor : option.lightColor;
-}
-
-function getSnackRuleEditorTextColor(option) {
-  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
-  return prefersDark ? option.darkText : option.lightText;
-}
-
-function renameSnackCellRuleTier(previousName, nextName) {
-  if (!state.snackCellRules || previousName === nextName) return;
-  SNACK_RULE_STATUSES.forEach(status => {
-    if (!state.snackCellRules[status] || !Object.prototype.hasOwnProperty.call(state.snackCellRules[status], previousName)) return;
-    state.snackCellRules[status][nextName] = state.snackCellRules[status][previousName];
-    delete state.snackCellRules[status][previousName];
-  });
+  const rules = SNACK_RULE_PRESETS[DEFAULT_SNACK_RULE_PRESET].rules[status];
+  return rules?.[tierName] || rules?.default || "6";
 }
 
 function renderPool() {
@@ -4065,7 +3974,6 @@ async function exportPng() {
   const tableX = 20;
   const tableWidth = width - tableX * 2;
   const statusColumnWidth = Math.floor((tableWidth - labelWidth) / 4);
-  const legendHeight = 44;
   const headerHeight = 44;
   const cardsPerLine = Math.max(1, Math.floor((statusColumnWidth - gap * 2) / (cardWidth + gap)));
   const rowHeights = state.tiers.map((tier, index) => {
@@ -4081,7 +3989,7 @@ async function exportPng() {
     );
     return 24 + maxLineCount * cardHeight + (maxLineCount - 1) * 6;
   });
-  const height = 74 + legendHeight + headerHeight + rowHeights.reduce((total, rowHeight) => total + rowHeight, 0) + 24;
+  const height = 74 + headerHeight + rowHeights.reduce((total, rowHeight) => total + rowHeight, 0) + 24;
   const canvas = document.createElement("canvas");
   canvas.width = width * scale;
   canvas.height = height * scale;
@@ -4099,8 +4007,6 @@ async function exportPng() {
   ctx.fillText(new Date().toLocaleDateString("ja-JP"), 24, 64);
 
   let y = 74;
-  drawExportSnackLegend(ctx, 24, y + 12);
-  y += legendHeight;
   const headers = ["Tier", "厳選未完了", "妥協個体あり", "育成中", "育成完了"];
   const headerWidths = [labelWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth];
   let headerX = tableX;
@@ -4151,29 +4057,6 @@ async function exportPng() {
   link.download = "pokesuri-tier.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
-}
-
-function drawExportSnackLegend(ctx, x, y) {
-  ctx.fillStyle = "#5d6977";
-  ctx.font = "800 14px system-ui, sans-serif";
-  ctx.textAlign = "left";
-  ctx.fillText("セル色はサブレを投げる優先度の目安です", x, y + 14);
-  let chipX = x + 300;
-  getSnackLegendItems().forEach(item => {
-    ctx.fillStyle = item.color;
-    roundedRect(ctx, chipX, y - 2, 20, 20, 4);
-    ctx.fill();
-    ctx.strokeStyle = "#b8c9c5";
-    ctx.stroke();
-    ctx.fillStyle = "#433f38";
-    ctx.font = "800 13px system-ui, sans-serif";
-    ctx.fillText(item.label, chipX + 28, y + 14);
-    chipX += ctx.measureText(item.label).width + 68;
-  });
-}
-
-function getSnackLegendItems() {
-  return Object.values(SNACK_RULE_OPTIONS);
 }
 
 function drawExportSnackCell(ctx, status, tierName, x, y, width, height) {
@@ -4464,8 +4347,7 @@ function normalizeCandidateIngredients(ingredients) {
 }
 
 function normalizeSnackRulePreset(preset) {
-  if (!preset) return DEFAULT_SNACK_RULE_PRESET;
-  return SNACK_RULE_PRESETS[preset] ? preset : "custom";
+  return DEFAULT_SNACK_RULE_PRESET;
 }
 
 function normalizeSnackCellRules(rules) {

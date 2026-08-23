@@ -1,5 +1,5 @@
 const STORAGE_KEY = "pokesuri-tier-maker-state";
-const STORAGE_SCHEMA_VERSION = 13;
+const STORAGE_SCHEMA_VERSION = 14;
 const DEFAULT_POKEMON_MIGRATIONS = {
   9: ["drampa"],
   12: ["latios"],
@@ -4219,6 +4219,7 @@ function migrateState(parsed) {
     candidateNotes: normalizeCandidateNotes(parsed.candidateNotes),
   };
   addNewDefaultPokemonToMigratedState(migrated);
+  if ((parsed.schemaVersion || 0) < 14) moveMigratedDefaultPokemonToUnselected(migrated);
   return migrated;
 }
 
@@ -4322,10 +4323,32 @@ function addDefaultPokemonIfMissing(migrated, pokemonId) {
 
   const defaultTierIndex = defaultTiers.findIndex(tier => tier.pokemonIds.includes(pokemonId));
   if (defaultTierIndex < 0) return;
-  const defaultTier = defaultTiers[defaultTierIndex];
-  const managedTiers = shouldDefaultToSelecting(defaultTier.name) ? migrated.compromiseTiers : migrated.tiers;
+  const managedTiers = migrated.tiers;
   if (!managedTiers?.[defaultTierIndex]) return;
   managedTiers[defaultTierIndex].pokemonIds.push(pokemonId);
+  if (!Array.isArray(migrated.simpleTierPokemonIds[defaultTierIndex])) migrated.simpleTierPokemonIds[defaultTierIndex] = [];
+  if (!migrated.simpleTierPokemonIds[defaultTierIndex].includes(pokemonId)) {
+    migrated.simpleTierPokemonIds[defaultTierIndex].push(pokemonId);
+  }
+}
+
+function moveMigratedDefaultPokemonToUnselected(migrated) {
+  const migrationPokemonIds = new Set(Object.values(DEFAULT_POKEMON_MIGRATIONS).flat());
+  migrated.compromiseTiers.forEach(tier => {
+    tier.pokemonIds = tier.pokemonIds.filter(pokemonId => {
+      if (!migrationPokemonIds.has(pokemonId)) return true;
+      addDefaultPokemonIfMissingToUnselected(migrated, pokemonId);
+      return false;
+    });
+  });
+}
+
+function addDefaultPokemonIfMissingToUnselected(migrated, pokemonId) {
+  const defaultTierIndex = defaultTiers.findIndex(tier => tier.pokemonIds.includes(pokemonId));
+  if (defaultTierIndex < 0 || !migrated.tiers?.[defaultTierIndex]) return;
+  if (!migrated.tiers[defaultTierIndex].pokemonIds.includes(pokemonId)) {
+    migrated.tiers[defaultTierIndex].pokemonIds.push(pokemonId);
+  }
   if (!Array.isArray(migrated.simpleTierPokemonIds[defaultTierIndex])) migrated.simpleTierPokemonIds[defaultTierIndex] = [];
   if (!migrated.simpleTierPokemonIds[defaultTierIndex].includes(pokemonId)) {
     migrated.simpleTierPokemonIds[defaultTierIndex].push(pokemonId);

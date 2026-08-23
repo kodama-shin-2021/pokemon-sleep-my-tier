@@ -1,7 +1,9 @@
 const STORAGE_KEY = "pokesuri-tier-maker-state";
-const STORAGE_SCHEMA_VERSION = 9;
+const STORAGE_SCHEMA_VERSION = 13;
 const DEFAULT_POKEMON_MIGRATIONS = {
   9: ["drampa"],
+  12: ["latios"],
+  13: ["torterra", "infernape", "empoleon", "hawlucha"],
 };
 const LEGACY_STORAGE_KEYS = [
   "pokesuri-tier-maker-state-v6",
@@ -14,13 +16,13 @@ const LEGACY_STORAGE_KEYS = [
 const STATUS_TYPES = ["compromise", "training", "trained"];
 const SNACK_RULE_STATUSES = ["unfinished", "compromise", "training", "trained"];
 const SNACK_RULE_STATUS_LABELS = {
-  unfinished: "厳選未完了",
-  compromise: "妥協個体あり",
+  unfinished: "厳選しない",
+  compromise: "厳選中",
   training: "育成中",
   trained: "育成完了",
 };
-const CANDIDATE_LEVELS = ["10", "25", "50", "75", "100"];
-const CANDIDATE_SUMMARY_LEVELS = ["50", "75", "100"];
+const CANDIDATE_LEVELS = ["10", "25", "50", "70", "80"];
+const CANDIDATE_SUMMARY_LEVELS = ["50", "70", "80"];
 const CANDIDATE_STATUSES = ["育成済み", "育成中", "育成候補", "保留", "除外"];
 const DEFAULT_CANDIDATE_STATUS = "育成候補";
 const CANDIDATE_INGREDIENT_INDEXES = [0, 1, 2];
@@ -66,7 +68,9 @@ const finalPokemon = [
   ["flygon", "フライゴン", 330, "食材", "じめん"], ["altaria", "チルタリス", 334, "きのみ", "ドラゴン"],
   ["banette", "ジュペッタ", 354, "きのみ", "ゴースト"], ["absol", "アブソル", 359, "食材", "あく"],
   ["walrein", "トドゼルガ", 365, "きのみ", "こおり"], ["salamence", "ボーマンダ", 373, "きのみ", "ドラゴン"],
-  ["latias", "ラティアス", 380, "スキル", "ドラゴン"],
+  ["latias", "ラティアス", 380, "スキル", "ドラゴン"], ["latios", "ラティオス", 381, "スキル", "ドラゴン"],
+  ["torterra", "ドダイトス", 389, "スキル", "じめん"], ["infernape", "ゴウカザル", 392, "スキル", "かくとう"],
+  ["empoleon", "エンペルト", 395, "きのみ", "はがね"],
   ["luxray", "レントラー", 405, "食材", "でんき"], ["drifblim", "フワライド", 426, "スキル", "ゴースト"],
   ["honchkrow", "ドンカラス", 430, "スキル", "あく"], ["spiritomb", "ミカルゲ", 442, "食材", "あく"],
   ["lucario", "ルカリオ", 448, "スキル", "かくとう"], ["toxicroak", "ドクロッグ", 454, "食材", "どく"],
@@ -76,7 +80,8 @@ const finalPokemon = [
   ["cresselia", "クレセリア", 488, "スキル", "エスパー"], ["darkrai", "ダークライ", 491, "オール", "あく"],
   ["musharna", "ムシャーナ", 518, "きのみ", "エスパー"], ["crustle", "イワパレス", 558, "スキル", "むし"],
   ["braviary", "ウォーグル", 628, "スキル", "ひこう"], ["tyrantrum", "ガチゴラス", 697, "きのみ", "いわ"],
-  ["sylveon", "ニンフィア", 700, "スキル", "フェアリー"], ["dedenne", "デデンネ", 702, "スキル", "でんき"],
+  ["sylveon", "ニンフィア", 700, "スキル", "フェアリー"], ["hawlucha", "ルチャブル", 701, "スキル", "ひこう"],
+  ["dedenne", "デデンネ", 702, "スキル", "でんき"],
   ["gourgeist", "パンプジン", 711, "食材", "ゴースト"], ["noivern", "オンバーン", 715, "スキル", "ドラゴン"],
   ["vikavolt", "クワガノン", 738, "食材", "むし"], ["ribombee", "アブリボン", 743, "食材", "フェアリー"],
   ["bewear", "キテルグマ", 760, "食材", "かくとう"], ["comfey", "キュワワー", 764, "食材", "フェアリー"],
@@ -101,13 +106,13 @@ const defaultTiers = [
     id: createId(),
     name: "SS",
     color: "#f6b1a4",
-    pokemonIds: ids("walrein feraligatr typhlosion meganium raichu blastoise venusaur steelix gardevoir dragonite raikou entei suicune vikavolt aggron weavile ninetales-alola pawmot blissey swampert blaziken sceptile gourgeist salamence flygon shuckle"),
+    pokemonIds: ids("walrein feraligatr typhlosion meganium raichu blastoise venusaur steelix gardevoir dragonite raikou entei suicune vikavolt aggron weavile ninetales-alola pawmot blissey swampert blaziken sceptile gourgeist salamence latios torterra infernape flygon shuckle"),
   },
   {
     id: createId(),
     name: "S",
     color: "#f4d27e",
-    pokemonIds: ids("magnezone altaria tyranitar espeon ampharos gengar dodrio victreebel golduck butterfree charizard banette delibird bewear dedenne ninetales cramorant quaquaval skeledirge meowscarada luxray clodsire cresselia mawile farfetchd xatu cetitan noivern tyrantrum"),
+    pokemonIds: ids("magnezone altaria tyranitar espeon ampharos gengar dodrio victreebel golduck butterfree charizard banette delibird bewear dedenne ninetales cramorant quaquaval skeledirge meowscarada empoleon luxray clodsire cresselia mawile farfetchd xatu cetitan noivern tyrantrum"),
   },
   {
     id: createId(),
@@ -119,7 +124,7 @@ const defaultTiers = [
     id: createId(),
     name: "B",
     color: "#91cbd3",
-    pokemonIds: ids("lucario absol heracross vaporeon ditto pinsir kangaskhan marowak raticate clefable pikachu-halloween comfey eevee-holiday musharna minun toxtricity-low toxtricity-amped eevee-halloween spiritomb togedemaru mew"),
+    pokemonIds: ids("lucario absol heracross vaporeon ditto pinsir kangaskhan marowak raticate clefable pikachu-halloween comfey eevee-holiday musharna minun toxtricity-low toxtricity-amped eevee-halloween spiritomb togedemaru hawlucha mew"),
   },
   {
     id: createId(),
@@ -129,6 +134,12 @@ const defaultTiers = [
   },
 ];
 
+const DEFAULT_SELECTING_TIER_NAMES = new Set(["SS", "S"]);
+const shouldDefaultToSelecting = tierName => DEFAULT_SELECTING_TIER_NAMES.has(tierName);
+const defaultUnselectedTiers = defaultTiers.map(tier => ({
+  ...tier,
+  pokemonIds: shouldDefaultToSelecting(tier.name) ? [] : [...tier.pokemonIds],
+}));
 const defaultTrainingTiers = defaultTiers.map(tier => ({
   id: createId(),
   name: tier.name,
@@ -148,7 +159,7 @@ const defaultCompromiseTiers = defaultTiers.map(tier => ({
   id: createId(),
   name: tier.name,
   color: tier.color,
-  pokemonIds: [],
+  pokemonIds: shouldDefaultToSelecting(tier.name) ? [...tier.pokemonIds] : [],
 }));
 const defaultCompromiseTierByName = new Map(defaultCompromiseTiers.map(tier => [tier.name, tier]));
 const statusTierConfig = {
@@ -177,8 +188,8 @@ const SNACK_RULE_OPTIONS = {
 const SNACK_RULE_PRESETS = {
   free: {
     rules: {
-      unfinished: { SS: "1", S: "2", A: "3", B: "4", C: "5", default: "6" },
-      compromise: { SS: "2", S: "3", A: "4", B: "5", C: "6", default: "6" },
+      unfinished: { SS: "6", S: "6", A: "6", B: "6", C: "6", default: "6" },
+      compromise: { SS: "1", S: "2", A: "3", B: "4", C: "5", default: "6" },
       training: { SS: "3", S: "4", A: "5", B: "6", C: "6", default: "6" },
       trained: { SS: "4", S: "5", A: "6", B: "6", C: "6", default: "6" },
     },
@@ -273,7 +284,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -289,7 +299,6 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "ゴールド旧発電所",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -303,8 +312,6 @@ const pokemonDetailData = {
         "baseGauge": "12",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "トープ洞窟",
             "ウノハナ雪原"
         ]
     },
@@ -318,10 +325,6 @@ const pokemonDetailData = {
         "baseGauge": "12",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "トープ洞窟",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "アンバー渓谷"
         ]
     },
@@ -355,7 +358,6 @@ const pokemonDetailData = {
         "baseGauge": "7",
         "fields": [
             "ワカクサ本島",
-            "ラピスラズリ湖畔",
             "ゴールド旧発電所",
             "ワカクサ本島EX"
         ]
@@ -389,9 +391,7 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "トープ洞窟",
-            "ラピスラズリ湖畔"
+            "シアンの砂浜"
         ]
     },
     "dugtrio": {
@@ -404,9 +404,7 @@ const pokemonDetailData = {
         "baseGauge": "12",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "トープ洞窟",
-            "ゴールド旧発電所"
+            "トープ洞窟"
         ]
     },
     "persian": {
@@ -432,9 +430,7 @@ const pokemonDetailData = {
         "baseGauge": "12",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔"
+            "シアンの砂浜"
         ]
     },
     "primeape": {
@@ -447,9 +443,7 @@ const pokemonDetailData = {
         "baseGauge": "12",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔"
+            "ウノハナ雪原"
         ]
     },
     "arcanine": {
@@ -462,7 +456,6 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
             "トープ洞窟",
             "ワカクサ本島EX"
         ]
@@ -478,7 +471,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ウノハナ雪原",
             "ラピスラズリ湖畔"
         ]
     },
@@ -492,9 +484,7 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ゴールド旧発電所"
+            "トープ洞窟"
         ]
     },
     "slowbro": {
@@ -507,9 +497,7 @@ const pokemonDetailData = {
         "baseGauge": "12",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔"
+            "シアンの砂浜"
         ]
     },
     "farfetchd": {
@@ -552,7 +540,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ウノハナ雪原",
             "ゴールド旧発電所"
         ]
     },
@@ -579,7 +566,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ウノハナ雪原",
             "ワカクサ本島EX"
         ]
     },
@@ -594,7 +580,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -607,8 +592,7 @@ const pokemonDetailData = {
         ],
         "baseGauge": "12",
         "fields": [
-            "シアンの砂浜",
-            "ゴールド旧発電所"
+            "シアンの砂浜"
         ]
     },
     "pinsir": {
@@ -656,10 +640,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
         ]
@@ -675,10 +655,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
         ]
@@ -694,10 +670,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
         ]
@@ -724,7 +696,6 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
             "ラピスラズリ湖畔",
             "ワカクサ本島EX"
         ]
@@ -781,7 +752,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ウノハナ雪原",
-            "ゴールド旧発電所",
             "ワカクサ本島EX"
         ]
     },
@@ -810,10 +780,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
         ]
@@ -829,10 +795,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
         ]
@@ -847,9 +809,7 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔"
+            "シアンの砂浜"
         ]
     },
     "wobbuffet": {
@@ -862,8 +822,6 @@ const pokemonDetailData = {
         "baseGauge": "7",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟",
-            "ウノハナ雪原",
             "ラピスラズリ湖畔"
         ]
     },
@@ -892,7 +850,6 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "トープ洞窟",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -1033,9 +990,7 @@ const pokemonDetailData = {
         "baseGauge": "20",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟",
             "ラピスラズリ湖畔",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -1049,9 +1004,7 @@ const pokemonDetailData = {
         "baseGauge": "20",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
             "トープ洞窟",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -1108,7 +1061,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟",
             "ウノハナ雪原"
         ]
     },
@@ -1151,8 +1103,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -1166,7 +1116,6 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟",
             "ゴールド旧発電所",
             "ワカクサ本島EX"
         ]
@@ -1195,7 +1144,6 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
             "ウノハナ雪原",
             "ワカクサ本島EX"
         ]
@@ -1264,7 +1212,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ウノハナ雪原",
-            "ラピスラズリ湖畔",
             "アンバー渓谷",
             "ワカクサ本島EX"
         ]
@@ -1280,8 +1227,7 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔"
+            "ウノハナ雪原"
         ]
     },
     "toxicroak": {
@@ -1293,9 +1239,7 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原"
+            "シアンの砂浜"
         ]
     },
     "abomasnow": {
@@ -1334,8 +1278,6 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟",
-            "ウノハナ雪原",
             "ラピスラズリ湖畔"
         ]
     },
@@ -1386,8 +1328,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -1414,7 +1354,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ウノハナ雪原",
             "アンバー渓谷",
             "ワカクサ本島EX"
         ]
@@ -1430,12 +1369,24 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
+        ]
+    },
+    "hawlucha": {
+        "ingredients": [
+            "げきからハーブ",
+            "あったかジンジャー",
+            "マメミート"
+        ],
+        "mainSkill": "食材セレクトS",
+        "baseGauge": "16",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "dedenne": {
@@ -1464,7 +1415,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ゴールド旧発電所",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -1503,7 +1453,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ラピスラズリ湖畔",
             "ワカクサ本島EX"
         ]
     },
@@ -1577,7 +1526,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "ワカクサ本島EX"
         ]
     },
@@ -1593,7 +1541,6 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "トープ洞窟",
-            "ゴールド旧発電所",
             "ワカクサ本島EX"
         ]
     },
@@ -1607,9 +1554,7 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
             "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "ワカクサ本島EX"
         ]
     },
@@ -1639,7 +1584,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -1654,7 +1598,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ラピスラズリ湖畔",
             "ワカクサ本島EX"
         ]
     },
@@ -1739,9 +1682,7 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
-            "トープ洞窟",
-            "ゴールド旧発電所"
+            "シアンの砂浜"
         ]
     },
     "blissey": {
@@ -1754,7 +1695,6 @@ const pokemonDetailData = {
         "baseGauge": "5",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜",
             "ウノハナ雪原",
             "アンバー渓谷",
             "ワカクサ本島EX"
@@ -1771,7 +1711,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -1811,7 +1750,6 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "トープ洞窟",
             "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
@@ -1832,6 +1770,66 @@ const pokemonDetailData = {
             "ワカクサ本島EX"
         ]
     },
+    "latios": {
+        "ingredients": [
+            "あんみんトマト",
+            "とくせんエッグ",
+            "モーモーミルク"
+        ],
+        "mainSkill": "りゅうせいぐん(きのみバースト)",
+        "baseGauge": "30",
+        "fields": [
+            "ワカクサ本島",
+            "ラピスラズリ湖畔",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
+        ]
+    },
+    "torterra": {
+        "ingredients": [
+            "あじわいキノコ",
+            "ほっこりポテト",
+            "あったかジンジャー"
+        ],
+        "mainSkill": "げんきオールS",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "ラピスラズリ湖畔",
+            "ワカクサ本島EX"
+        ]
+    },
+    "infernape": {
+        "ingredients": [
+            "げきからハーブ",
+            "あったかジンジャー",
+            "めざましコーヒー"
+        ],
+        "mainSkill": "きのみバースト",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "トープ洞窟",
+            "アンバー渓谷",
+            "ワカクサ本島EX"
+        ]
+    },
+    "empoleon": {
+        "ingredients": [
+            "とくせんエッグ",
+            "ふといながねぎ"
+        ],
+        "mainSkill": "おてつだいサポートS",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ウノハナ雪原",
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
+        ]
+    },
     "leafeon": {
         "ingredients": [
             "モーモーミルク",
@@ -1843,10 +1841,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
         ]
@@ -1862,10 +1856,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "トープ洞窟",
-            "ウノハナ雪原",
-            "ラピスラズリ湖畔",
-            "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
         ]
@@ -1911,8 +1901,6 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ラピスラズリ湖畔",
-            "アンバー渓谷",
             "ワカクサ本島EX"
         ]
     },
@@ -1926,6 +1914,7 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
+            "ラピスラズリ湖畔",
             "アンバー渓谷",
             "ワカクサ本島EX"
         ]
@@ -1940,7 +1929,6 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "ウノハナ雪原",
             "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
@@ -2176,7 +2164,7 @@ function requestShareOptions() {
     modeChoices.className = "share-mode-options";
     const currentViewMode = isSimpleTierView ? "simple" : "managed";
     [
-      ["managed", "厳選状況モード", "厳選未完了・妥協個体あり・育成中・育成完了を分けて表示"],
+      ["managed", "厳選状況モード", "厳選しない・厳選中・育成中・育成完了を分けて表示"],
       ["simple", "Tier表モード", "状態をまとめてTierごとに表示"],
     ].forEach(([value, titleText, description]) => {
       const option = document.createElement("label");
@@ -2396,8 +2384,8 @@ function renderTiers() {
     ? [["Tier", "Tier"], ["ポケモン", "ポケモン"]]
     : [
       ["Tier", "Tier"],
-      ["厳選未完了", "未完了"],
-      ["妥協個体あり", "妥協中"],
+      ["厳選しない", "しない"],
+      ["厳選中", "厳選中"],
       ["育成中", "育成中"],
       ["育成完了", "完了"],
     ];
@@ -2741,6 +2729,7 @@ function initializeFieldFilter() {
     "ゴールド旧発電所",
     "アンバー渓谷",
     "ワカクサ本島EX",
+    "シアンの砂浜EX",
   ];
   const fieldRank = new Map(fieldOrder.map((field, index) => [field, index]));
   const fields = [...new Set(
@@ -3094,7 +3083,7 @@ function appendStatusChangeActions(pokemonId, currentTierId, currentStatus, curr
   if (currentStatus) {
     const restoreTier = state.tiers.find(tier => tier.name === currentStatusTier?.name) || state.tiers[0];
     if (restoreTier) {
-      appendMoveAction("厳選未完了に戻す", () => {
+      appendMoveAction("厳選しないに戻す", () => {
         movePokemon(pokemonId, restoreTier.id);
       });
     }
@@ -3118,7 +3107,7 @@ function appendStatusChangeActions(pokemonId, currentTierId, currentStatus, curr
     });
 
     if (!hasLinkedStatusTier) {
-      appendStatusMoveButtons(pokemonId, "compromise", "妥協");
+      appendStatusMoveButtons(pokemonId, "compromise", "厳選中");
       appendStatusMoveButtons(pokemonId, "training", "育成中");
       appendStatusMoveButtons(pokemonId, "trained", "育成完了");
     }
@@ -3541,7 +3530,7 @@ function createCandidateTotals(candidate) {
   return box;
 }
 
-function calculateCandidateTotals(candidate, maxLevel = 100) {
+function calculateCandidateTotals(candidate, maxLevel = 80) {
   const nature = getNatureMultipliers(candidate.nature);
   const subSkills = Object.entries(candidate.subSkills || {})
     .filter(([level]) => Number(level) <= maxLevel)
@@ -3709,7 +3698,7 @@ function addCandidate(pokemonId) {
     label: `候補${candidates.length + 1}`,
     ingredients: Array.isArray(detail.ingredients) ? detail.ingredients.slice(0, 3) : ["", "", ""],
     nature: "",
-    subSkills: { 10: "", 25: "", 50: "", 75: "", 100: "" },
+    subSkills: Object.fromEntries(CANDIDATE_LEVELS.map(level => [level, ""])),
     status: DEFAULT_CANDIDATE_STATUS,
     memo: "",
   });
@@ -4007,7 +3996,7 @@ async function exportPng() {
   ctx.fillText(new Date().toLocaleDateString("ja-JP"), 24, 64);
 
   let y = 74;
-  const headers = ["Tier", "厳選未完了", "妥協個体あり", "育成中", "育成完了"];
+  const headers = ["Tier", "厳選しない", "厳選中", "育成中", "育成完了"];
   const headerWidths = [labelWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth, statusColumnWidth];
   let headerX = tableX;
   ctx.fillStyle = "#5d5850";
@@ -4182,7 +4171,7 @@ function createId() {
 function createDefaultState() {
   return {
     schemaVersion: STORAGE_SCHEMA_VERSION,
-    tiers: clone(defaultTiers),
+    tiers: clone(defaultUnselectedTiers),
     compromiseTiers: clone(defaultCompromiseTiers),
     trainingTiers: clone(defaultTrainingTiers),
     trainedTiers: clone(defaultTrainedTiers),
@@ -4215,6 +4204,9 @@ function serializeState(value) {
 
 function migrateState(parsed) {
   if (!parsed || !Array.isArray(parsed.tiers)) throw new Error("Invalid saved state");
+  if ((parsed.schemaVersion || 0) < 11 && isLegacyDefaultManagedState(parsed)) {
+    return createDefaultState();
+  }
   const migrated = {
     schemaVersion: STORAGE_SCHEMA_VERSION,
     tiers: normalizeTiers(parsed.tiers),
@@ -4238,6 +4230,30 @@ function normalizeTiers(tiers) {
     color: getTierLabelColor(tier.name),
     pokemonIds: uniqueKnownIds(tier.pokemonIds, knownIds),
   }));
+}
+
+function isLegacyDefaultManagedState(parsed) {
+  if (!tiersHaveSamePokemonIds(parsed.tiers, defaultTiers)) return false;
+  if (["compromiseTiers", "trainingTiers", "trainedTiers"].some(key => hasAnyPokemonIds(parsed[key]))) return false;
+  return true;
+}
+
+function tiersHaveSamePokemonIds(leftTiers, rightTiers) {
+  if (!Array.isArray(leftTiers) || leftTiers.length !== rightTiers.length) return false;
+  return rightTiers.every((rightTier, index) => {
+    const leftIds = Array.isArray(leftTiers[index]?.pokemonIds) ? leftTiers[index].pokemonIds : [];
+    return samePokemonIdSet(leftIds, rightTier.pokemonIds);
+  });
+}
+
+function hasAnyPokemonIds(tiers) {
+  return Array.isArray(tiers) && tiers.some(tier => Array.isArray(tier?.pokemonIds) && tier.pokemonIds.length > 0);
+}
+
+function samePokemonIdSet(leftIds, rightIds) {
+  if (leftIds.length !== rightIds.length) return false;
+  const leftSet = new Set(leftIds);
+  return rightIds.every(id => leftSet.has(id));
 }
 
 function normalizeStatusTiers(parsed, status) {
@@ -4305,8 +4321,11 @@ function addDefaultPokemonIfMissing(migrated, pokemonId) {
   if (alreadyManaged) return;
 
   const defaultTierIndex = defaultTiers.findIndex(tier => tier.pokemonIds.includes(pokemonId));
-  if (defaultTierIndex < 0 || !migrated.tiers[defaultTierIndex]) return;
-  migrated.tiers[defaultTierIndex].pokemonIds.push(pokemonId);
+  if (defaultTierIndex < 0) return;
+  const defaultTier = defaultTiers[defaultTierIndex];
+  const managedTiers = shouldDefaultToSelecting(defaultTier.name) ? migrated.compromiseTiers : migrated.tiers;
+  if (!managedTiers?.[defaultTierIndex]) return;
+  managedTiers[defaultTierIndex].pokemonIds.push(pokemonId);
   if (!Array.isArray(migrated.simpleTierPokemonIds[defaultTierIndex])) migrated.simpleTierPokemonIds[defaultTierIndex] = [];
   if (!migrated.simpleTierPokemonIds[defaultTierIndex].includes(pokemonId)) {
     migrated.simpleTierPokemonIds[defaultTierIndex].push(pokemonId);
@@ -4329,15 +4348,26 @@ function normalizeCandidateNotes(candidateNotes) {
 
 function normalizeCandidate(candidate) {
   if (!candidate || typeof candidate !== "object") return null;
-  const subSkills = candidate.subSkills && typeof candidate.subSkills === "object" ? candidate.subSkills : {};
+  const subSkills = normalizeCandidateSubSkills(candidate.subSkills);
   return {
     id: candidate.id || createId(),
     label: candidate.label || "候補",
     ingredients: normalizeCandidateIngredients(candidate.ingredients),
     nature: candidate.nature || "",
-    subSkills: Object.fromEntries(CANDIDATE_LEVELS.map(level => [level, subSkills[level] || ""])),
+    subSkills,
     status: CANDIDATE_STATUSES.includes(candidate.status) ? candidate.status : DEFAULT_CANDIDATE_STATUS,
     memo: candidate.memo || "",
+  };
+}
+
+function normalizeCandidateSubSkills(subSkills) {
+  const source = subSkills && typeof subSkills === "object" ? subSkills : {};
+  return {
+    10: source[10] || "",
+    25: source[25] || "",
+    50: source[50] || "",
+    70: source[70] || source[75] || "",
+    80: source[80] || source[100] || "",
   };
 }
 

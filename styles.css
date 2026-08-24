@@ -573,6 +573,27 @@ button:active {
   color: var(--accent);
 }
 
+.board-mode-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  margin: -4px 0 8px;
+  min-width: 0;
+}
+
+.board-mode-button {
+  min-height: 34px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.field-ranking-button {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
 .tier-row {
   display: grid;
   grid-template-columns: var(--tier-label-width) repeat(4, minmax(190px, 1fr));
@@ -669,7 +690,8 @@ button:active {
 #specialtyFilter,
 #fieldFilter,
 #ingredientFilter,
-#ingredientScopeFilter {
+#ingredientScopeFilter,
+#fieldRankingEventSelect {
   min-height: 34px;
   width: 100%;
   border: 1px solid var(--line);
@@ -980,6 +1002,180 @@ dialog h2 {
 
 .dialog-tab-panel[hidden] {
   display: none;
+}
+
+.field-ranking-dialog form {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.field-ranking-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: 12px;
+  min-height: 0;
+}
+
+.field-ranking-controls,
+.field-ranking-results {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.field-ranking-controls {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 12px;
+}
+
+.field-ranking-control {
+  display: grid;
+  gap: 6px;
+}
+
+.field-ranking-control span,
+.field-ranking-contributors > span,
+.field-ranking-meta dt {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.field-ranking-event-summary {
+  display: grid;
+  gap: 10px;
+  max-height: 520px;
+  overflow: auto;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.field-ranking-event-summary p {
+  margin: 0;
+}
+
+.field-ranking-event-pickups {
+  display: grid;
+  gap: 6px;
+}
+
+.field-ranking-event-pickups div {
+  display: grid;
+  gap: 3px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-3);
+}
+
+.field-ranking-event-pickups strong {
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.field-ranking-event-pickups span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.field-ranking-results {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 12px;
+}
+
+.field-ranking-item {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-3);
+}
+
+.field-ranking-item-head {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.field-ranking-rank {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.field-ranking-item h3 {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.field-ranking-item-head strong {
+  color: var(--accent-strong);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.field-ranking-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 0;
+}
+
+.field-ranking-meta dt,
+.field-ranking-meta dd {
+  margin: 0;
+}
+
+.field-ranking-meta dd {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.field-ranking-contributors {
+  display: grid;
+  gap: 6px;
+}
+
+.field-ranking-contributors div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.field-ranking-contributors div span {
+  min-width: 0;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.field-ranking-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .detail-layout {
@@ -1684,6 +1880,12 @@ dialog h2 {
     justify-content: stretch;
   }
 
+  .board-mode-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0 0 8px;
+  }
+
   .workspace {
     display: block;
   }
@@ -1792,8 +1994,22 @@ dialog h2 {
 
   .dialog-tabs,
   .detail-layout,
+  .field-ranking-layout,
   .pokemon-info-fields {
     grid-template-columns: 1fr;
+  }
+
+  .field-ranking-event-summary {
+    max-height: 180px;
+  }
+
+  .field-ranking-item-head {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .field-ranking-item-head strong {
+    grid-column: 2;
+    font-size: 18px;
   }
 
   .move-targets {

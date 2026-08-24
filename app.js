@@ -1,5 +1,5 @@
 const STORAGE_KEY = "pokesuri-tier-maker-state";
-const STORAGE_SCHEMA_VERSION = 14;
+const STORAGE_SCHEMA_VERSION = 16;
 const DEFAULT_POKEMON_MIGRATIONS = {
   9: ["drampa"],
   12: ["latios"],
@@ -21,6 +21,65 @@ const SNACK_RULE_STATUS_LABELS = {
   training: "育成中",
   trained: "育成完了",
 };
+const FIELD_RANKING_STATUS_POINTS = {
+  compromise: 10,
+  training: 2,
+};
+const FIELD_RANKING_TIER_MULTIPLIERS = {
+  SS: 10,
+  S: 5,
+  A: 3,
+  B: 2,
+};
+const FIELD_RANKING_PICKUP_MULTIPLIERS = {
+  default: 1,
+  small: 1.5,
+  medium: 3,
+};
+const FIELD_RANKING_EVENTS = [
+  {
+    id: "default",
+    name: "デフォルト",
+    description: "ピックアップ補正なし",
+    fields: {},
+  },
+  {
+    id: "anipoke-collab-week",
+    name: "アニポケコラボウィーク",
+    description: "Game8のイベント記事をもとに、アプリ内に登録済みのピックアップ対象だけを反映",
+    sourceUrl: "https://game8.jp/pokemonsleep/799874",
+    fields: {
+      "ゴールド旧発電所": {
+        medium: ids("farfetchd vikavolt"),
+      },
+      "ワカクサ本島": {
+        small: ids("blissey quagsire meowscarada"),
+      },
+      "シアンの砂浜EX": {
+        small: ids("dragonite"),
+      },
+      "シアンの砂浜": {
+        small: ids("quagsire skeledirge"),
+      },
+      "ラピスラズリ湖畔": {
+        medium: ids("gardevoir"),
+        small: ids("dragonite"),
+      },
+      "ウノハナ雪原": {
+        medium: ids("lucario"),
+        small: ids("ninetales-alola pawmot weavile"),
+      },
+      "トープ洞窟": {
+        medium: ids("charizard skeledirge"),
+        small: ids("typhlosion onix steelix"),
+      },
+      "アンバー渓谷": {
+        medium: ids("blissey"),
+        small: ids("salamence flygon"),
+      },
+    },
+  },
+];
 const CANDIDATE_LEVELS = ["10", "25", "50", "70", "80"];
 const CANDIDATE_SUMMARY_LEVELS = ["50", "70", "80"];
 const CANDIDATE_STATUSES = ["育成済み", "育成中", "育成候補", "保留", "除外"];
@@ -1986,6 +2045,11 @@ const filterPanelBody = document.querySelector("#filterPanelBody");
 const filterToggleButton = document.querySelector("#filterToggleButton");
 const filterToggleLabel = document.querySelector(".filter-toggle-label");
 const viewModeButton = document.querySelector("#viewModeButton");
+const fieldRankingButton = document.querySelector("#fieldRankingButton");
+const fieldRankingDialog = document.querySelector("#fieldRankingDialog");
+const fieldRankingEventSelect = document.querySelector("#fieldRankingEventSelect");
+const fieldRankingEventSummary = document.querySelector("#fieldRankingEventSummary");
+const fieldRankingResults = document.querySelector("#fieldRankingResults");
 const moveDialog = document.querySelector("#moveDialog");
 const moveTargets = document.querySelector("#moveTargets");
 const candidatePanel = document.querySelector("#candidatePanel");
@@ -2007,6 +2071,8 @@ document.querySelector("#importDataButton").addEventListener("click", () => docu
 document.querySelector("#importDataInput").addEventListener("change", importJson);
 viewModeButton.addEventListener("click", toggleViewMode);
 filterToggleButton.addEventListener("click", toggleFilterPanel);
+fieldRankingButton.addEventListener("click", openFieldRankingDialog);
+fieldRankingEventSelect.addEventListener("change", renderFieldRankingDialog);
 detailTabButtons.forEach(button => {
   button.addEventListener("click", () => setDetailTab(button.dataset.detailTab));
 });
@@ -2032,6 +2098,7 @@ if (typeof mobileDragQuery.addEventListener === "function") {
 initializeTypeFilter();
 initializeFieldFilter();
 initializeIngredientFilter();
+initializeFieldRankingEvents();
 initializeFilterPanel();
 render();
 registerServiceWorker();
@@ -2339,6 +2406,7 @@ function render() {
   renderTiers();
   renderPool();
   renderActiveFilters();
+  if (fieldRankingDialog.open) renderFieldRankingDialog();
   syncTierRowHeights();
   updateMoveModeVisuals();
   saveState();
@@ -2680,6 +2748,194 @@ function renderActiveFilters() {
   activeFilters.append(clearButton);
 }
 
+function openFieldRankingDialog() {
+  renderFieldRankingDialog();
+  fieldRankingDialog.showModal();
+}
+
+function renderFieldRankingDialog() {
+  if (!fieldRankingResults) return;
+  renderFieldRankingEventSummary();
+  const rankings = calculateFieldRankings();
+  fieldRankingResults.innerHTML = "";
+  if (!rankings.length) {
+    const empty = document.createElement("p");
+    empty.className = "field-ranking-empty";
+    empty.textContent = "出現フィールドが登録されているポケモンがいません。";
+    fieldRankingResults.append(empty);
+    return;
+  }
+
+  rankings.forEach((ranking, index) => {
+    const item = document.createElement("article");
+    item.className = "field-ranking-item";
+
+    const head = document.createElement("div");
+    head.className = "field-ranking-item-head";
+    const rank = document.createElement("span");
+    rank.className = "field-ranking-rank";
+    rank.textContent = `${index + 1}`;
+    const title = document.createElement("h3");
+    title.textContent = ranking.field;
+    const score = document.createElement("strong");
+    score.textContent = formatFieldRankingNumber(ranking.score);
+    head.append(rank, title, score);
+
+    const meta = document.createElement("dl");
+    meta.className = "field-ranking-meta";
+    appendFieldRankingMeta(meta, "分子", formatFieldRankingNumber(ranking.numerator));
+    appendFieldRankingMeta(meta, "分母", formatFieldRankingNumber(ranking.denominator));
+    appendFieldRankingMeta(meta, "出現", `${ranking.appearances.length}種類`);
+
+    const contributors = document.createElement("div");
+    contributors.className = "field-ranking-contributors";
+    const label = document.createElement("span");
+    label.textContent = "主な加点";
+    const list = document.createElement("div");
+    const topContributors = ranking.contributors.slice(0, 5);
+    if (topContributors.length) {
+      topContributors.forEach(contributor => {
+        const chip = document.createElement("span");
+        chip.textContent = `${contributor.name} +${formatFieldRankingNumber(contributor.points)}`;
+        list.append(chip);
+      });
+    } else {
+      const chip = document.createElement("span");
+      chip.textContent = "加点なし";
+      list.append(chip);
+    }
+    contributors.append(label, list);
+
+    item.append(head, meta, contributors);
+    fieldRankingResults.append(item);
+  });
+}
+
+function appendFieldRankingMeta(parent, label, value) {
+  const term = document.createElement("dt");
+  term.textContent = label;
+  const description = document.createElement("dd");
+  description.textContent = value;
+  parent.append(term, description);
+}
+
+function initializeFieldRankingEvents() {
+  if (!fieldRankingEventSelect) return;
+  const existingOptions = new Set([...fieldRankingEventSelect.options].map(option => option.value));
+  FIELD_RANKING_EVENTS.forEach(event => {
+    if (existingOptions.has(event.id)) return;
+    appendSelectOption(fieldRankingEventSelect, event.id, event.name);
+  });
+}
+
+function renderFieldRankingEventSummary() {
+  if (!fieldRankingEventSummary) return;
+  fieldRankingEventSummary.innerHTML = "";
+  const event = getSelectedFieldRankingEvent();
+  const description = document.createElement("p");
+  description.textContent = event.description;
+  fieldRankingEventSummary.append(description);
+
+  const pickupEntries = getFieldRankingEventPickupEntries(event);
+  if (!pickupEntries.length) return;
+
+  const list = document.createElement("div");
+  list.className = "field-ranking-event-pickups";
+  pickupEntries.forEach(entry => {
+    const row = document.createElement("div");
+    const field = document.createElement("strong");
+    field.textContent = entry.field;
+    const details = document.createElement("span");
+    details.textContent = entry.details.join(" / ");
+    row.append(field, details);
+    list.append(row);
+  });
+  fieldRankingEventSummary.append(list);
+}
+
+function getFieldRankingEventPickupEntries(event) {
+  return Object.entries(event.fields || {}).map(([field, pickups]) => {
+    const details = [];
+    const mediumNames = getPokemonNames(pickups.medium);
+    const smallNames = getPokemonNames(pickups.small);
+    if (mediumNames.length) details.push(`中: ${mediumNames.join("、")}`);
+    if (smallNames.length) details.push(`小: ${smallNames.join("、")}`);
+    return { field, details };
+  }).filter(entry => entry.details.length);
+}
+
+function getPokemonNames(pokemonIds) {
+  return (pokemonIds || []).map(getPokemon).filter(Boolean).map(pokemon => pokemon.name);
+}
+
+function calculateFieldRankings() {
+  const selectedEvent = getSelectedFieldRankingEvent();
+  return getOrderedFields().map(field => {
+    const appearances = finalPokemon.filter(pokemon => {
+      const fields = pokemonDetailData[pokemon.id]?.fields;
+      return Array.isArray(fields) && fields.includes(field);
+    });
+    let numerator = 0;
+    let denominator = 0;
+    const contributors = [];
+    appearances.forEach(pokemon => {
+      const multiplier = getFieldRankingPickupMultiplier(selectedEvent, field, pokemon.id);
+      const status = getPokemonRankingStatus(pokemon.id);
+      const statusPoints = FIELD_RANKING_STATUS_POINTS[status.status] || 0;
+      const tierMultiplier = getFieldRankingTierMultiplier(status.tierName);
+      const points = statusPoints * tierMultiplier * multiplier;
+      numerator += points;
+      denominator += multiplier;
+      if (points > 0) contributors.push({ name: pokemon.name, points });
+    });
+    contributors.sort((a, b) => b.points - a.points || a.name.localeCompare(b.name, "ja"));
+    return {
+      field,
+      appearances,
+      numerator,
+      denominator,
+      score: denominator ? numerator / denominator : 0,
+      contributors,
+    };
+  }).filter(ranking => ranking.denominator > 0)
+    .sort((a, b) => b.score - a.score || b.numerator - a.numerator || a.field.localeCompare(b.field, "ja"));
+}
+
+function getSelectedFieldRankingEvent() {
+  const selectedId = fieldRankingEventSelect?.value || "default";
+  return FIELD_RANKING_EVENTS.find(event => event.id === selectedId) || FIELD_RANKING_EVENTS[0];
+}
+
+function getFieldRankingPickupMultiplier(event, field, pokemonId) {
+  const pickupConfig = event.fields?.[field];
+  if (!pickupConfig) return FIELD_RANKING_PICKUP_MULTIPLIERS.default;
+  if (pickupConfig.medium?.includes(pokemonId)) return FIELD_RANKING_PICKUP_MULTIPLIERS.medium;
+  if (pickupConfig.small?.includes(pokemonId)) return FIELD_RANKING_PICKUP_MULTIPLIERS.small;
+  return FIELD_RANKING_PICKUP_MULTIPLIERS.default;
+}
+
+function getPokemonRankingStatus(pokemonId) {
+  const location = findPokemonLocation(pokemonId);
+  if (!location) return { status: "pool", tierName: "" };
+  const tiers = location.status === "unfinished" ? state.tiers : getStatusTiers(location.status);
+  return {
+    status: location.status,
+    tierName: tiers[location.tierIndex]?.name || "",
+  };
+}
+
+function getFieldRankingTierMultiplier(tierName) {
+  return FIELD_RANKING_TIER_MULTIPLIERS[normalizeFieldRankingTierName(tierName)] || 1;
+}
+
+function normalizeFieldRankingTierName(tierName) {
+  return String(tierName || "").trim().toUpperCase().replace(/\s+/g, "");
+}
+
+function formatFieldRankingNumber(value) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+}
+
 function getActiveFilterItems() {
   const items = [];
   if (specialtyFilter.value !== "all") {
@@ -2720,6 +2976,15 @@ function initializeTypeFilter() {
 }
 
 function initializeFieldFilter() {
+  getOrderedFields().forEach(field => {
+    const option = document.createElement("option");
+    option.value = field;
+    option.textContent = field;
+    fieldFilter.append(option);
+  });
+}
+
+function getOrderedFields() {
   const fieldOrder = [
     "ワカクサ本島",
     "シアンの砂浜",
@@ -2736,12 +3001,7 @@ function initializeFieldFilter() {
     Object.values(pokemonDetailData)
       .flatMap(detail => Array.isArray(detail.fields) ? detail.fields : []),
   )].sort((a, b) => (fieldRank.get(a) ?? Number.MAX_SAFE_INTEGER) - (fieldRank.get(b) ?? Number.MAX_SAFE_INTEGER) || a.localeCompare(b, "ja"));
-  fields.forEach(field => {
-    const option = document.createElement("option");
-    option.value = field;
-    option.textContent = field;
-    fieldFilter.append(option);
-  });
+  return fields;
 }
 
 function initializeIngredientFilter() {
@@ -4219,7 +4479,7 @@ function migrateState(parsed) {
     candidateNotes: normalizeCandidateNotes(parsed.candidateNotes),
   };
   addNewDefaultPokemonToMigratedState(migrated);
-  if ((parsed.schemaVersion || 0) < 14) moveMigratedDefaultPokemonToUnselected(migrated);
+  if ((parsed.schemaVersion || 0) < 16) moveDefaultSelectingPokemonToSelecting(migrated);
   return migrated;
 }
 
@@ -4323,7 +4583,8 @@ function addDefaultPokemonIfMissing(migrated, pokemonId) {
 
   const defaultTierIndex = defaultTiers.findIndex(tier => tier.pokemonIds.includes(pokemonId));
   if (defaultTierIndex < 0) return;
-  const managedTiers = migrated.tiers;
+  const defaultTier = defaultTiers[defaultTierIndex];
+  const managedTiers = shouldDefaultToSelecting(defaultTier.name) ? migrated.compromiseTiers : migrated.tiers;
   if (!managedTiers?.[defaultTierIndex]) return;
   managedTiers[defaultTierIndex].pokemonIds.push(pokemonId);
   if (!Array.isArray(migrated.simpleTierPokemonIds[defaultTierIndex])) migrated.simpleTierPokemonIds[defaultTierIndex] = [];
@@ -4332,27 +4593,23 @@ function addDefaultPokemonIfMissing(migrated, pokemonId) {
   }
 }
 
-function moveMigratedDefaultPokemonToUnselected(migrated) {
-  const migrationPokemonIds = new Set(Object.values(DEFAULT_POKEMON_MIGRATIONS).flat());
-  migrated.compromiseTiers.forEach(tier => {
-    tier.pokemonIds = tier.pokemonIds.filter(pokemonId => {
-      if (!migrationPokemonIds.has(pokemonId)) return true;
-      addDefaultPokemonIfMissingToUnselected(migrated, pokemonId);
-      return false;
-    });
-  });
-}
+function moveDefaultSelectingPokemonToSelecting(migrated) {
+  Object.values(DEFAULT_POKEMON_MIGRATIONS).flat().forEach(pokemonId => {
+    const defaultTierIndex = defaultTiers.findIndex(tier => tier.pokemonIds.includes(pokemonId));
+    const defaultTier = defaultTiers[defaultTierIndex];
+    if (!defaultTier || !shouldDefaultToSelecting(defaultTier.name)) return;
 
-function addDefaultPokemonIfMissingToUnselected(migrated, pokemonId) {
-  const defaultTierIndex = defaultTiers.findIndex(tier => tier.pokemonIds.includes(pokemonId));
-  if (defaultTierIndex < 0 || !migrated.tiers?.[defaultTierIndex]) return;
-  if (!migrated.tiers[defaultTierIndex].pokemonIds.includes(pokemonId)) {
-    migrated.tiers[defaultTierIndex].pokemonIds.push(pokemonId);
-  }
-  if (!Array.isArray(migrated.simpleTierPokemonIds[defaultTierIndex])) migrated.simpleTierPokemonIds[defaultTierIndex] = [];
-  if (!migrated.simpleTierPokemonIds[defaultTierIndex].includes(pokemonId)) {
-    migrated.simpleTierPokemonIds[defaultTierIndex].push(pokemonId);
-  }
+    const wasUnselected = migrated.tiers.some(tier => {
+      const index = tier.pokemonIds.indexOf(pokemonId);
+      if (index < 0) return false;
+      tier.pokemonIds.splice(index, 1);
+      return true;
+    });
+    if (!wasUnselected || !migrated.compromiseTiers?.[defaultTierIndex]) return;
+    if (!migrated.compromiseTiers[defaultTierIndex].pokemonIds.includes(pokemonId)) {
+      migrated.compromiseTiers[defaultTierIndex].pokemonIds.push(pokemonId);
+    }
+  });
 }
 
 function normalizeCandidateNotes(candidateNotes) {

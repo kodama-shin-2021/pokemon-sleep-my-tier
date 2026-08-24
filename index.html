@@ -9,7 +9,7 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="manifest.webmanifest" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2435857317231554" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="styles.css?v=20260601-14" />
+    <link rel="stylesheet" href="styles.css?v=20260824-6" />
   </head>
   <body>
     <div class="app-shell">
@@ -72,6 +72,11 @@
         </div>
       </section>
 
+      <div class="board-mode-actions" aria-label="表示・ランキング操作">
+        <button id="fieldRankingButton" class="board-mode-button field-ranking-button" type="button">フィールドランキング</button>
+        <button id="viewModeButton" class="board-mode-button" type="button" aria-pressed="false">Tier表モード</button>
+      </div>
+
       <section id="snackRulePanel" class="snack-rule-panel" aria-label="セル色の基準"></section>
       <main class="workspace">
         <div class="board-column">
@@ -126,7 +131,6 @@
       <div class="page-actions">
         <button id="shareUrlButton" class="share-button" type="button">厳選状況を共有</button>
         <button id="exportButton" class="primary-button" type="button">画像保存</button>
-        <button id="viewModeButton" type="button" aria-pressed="false">Tier表モード</button>
         <button id="exportDataButton" type="button">JSON保存</button>
         <button id="importDataButton" type="button">JSON復元</button>
         <input id="importDataInput" type="file" accept="application/json,.json" hidden />
@@ -233,6 +237,30 @@
       </form>
     </dialog>
 
-    <script src="app.js?v=20260824-2"></script>
+    <dialog id="fieldRankingDialog" class="field-ranking-dialog">
+      <form method="dialog">
+        <div class="dialog-title-row">
+          <h2>フィールドランキング</h2>
+          <button class="dialog-close-button" value="cancel" type="submit" aria-label="閉じる">×</button>
+        </div>
+        <section class="field-ranking-layout" aria-label="フィールドランキング設定と結果">
+          <aside class="field-ranking-controls" aria-label="ピックアップ設定">
+            <label class="field-ranking-control">
+              <span>イベント</span>
+              <select id="fieldRankingEventSelect">
+                <option value="default">デフォルト</option>
+              </select>
+            </label>
+            <div id="fieldRankingEventSummary" class="field-ranking-event-summary" aria-live="polite"></div>
+          </aside>
+          <div id="fieldRankingResults" class="field-ranking-results" aria-live="polite"></div>
+        </section>
+        <div class="dialog-footer">
+          <button value="cancel" type="submit">閉じる</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="app.js?v=20260824-6"></script>
   </body>
 </html>

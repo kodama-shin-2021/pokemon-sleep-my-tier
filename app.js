@@ -1,9 +1,10 @@
 const STORAGE_KEY = "pokesuri-tier-maker-state";
-const STORAGE_SCHEMA_VERSION = 16;
+const STORAGE_SCHEMA_VERSION = 17;
 const DEFAULT_POKEMON_MIGRATIONS = {
   9: ["drampa"],
   12: ["latios"],
   13: ["torterra", "infernape", "empoleon", "hawlucha"],
+  17: ["tinkaton"],
 };
 const LEGACY_STORAGE_KEYS = [
   "pokesuri-tier-maker-state-v6",
@@ -149,7 +150,8 @@ const finalPokemon = [
   ["cramorant", "ウッウ", 845, "食材", "ひこう"], ["toxtricity-low", "ストリンダー(ロー)", 849, "スキル", "どく"],
   ["toxtricity-amped", "ストリンダー(ハイ)", 849, "スキル", "どく"], ["meowscarada", "マスカーニャ", 908, "食材", "あく"],
   ["skeledirge", "ラウドボーン", 911, "食材", "ゴースト"], ["quaquaval", "ウェーニバル", 914, "食材", "かくとう"],
-  ["pawmot", "パーモット", 923, "スキル", "でんき"], ["cetitan", "ハルクジラ", 975, "食材", "こおり"],
+  ["pawmot", "パーモット", 923, "スキル", "でんき"], ["tinkaton", "デカヌチャン", 959, "きのみ", "フェアリー"],
+  ["cetitan", "ハルクジラ", 975, "食材", "こおり"],
   ["clodsire", "ドオー", 980, "食材", "どく"],
 ].map(([id, name, dexNo, specialty, type]) => ({
   id,
@@ -165,7 +167,7 @@ const defaultTiers = [
     id: createId(),
     name: "SS",
     color: "#f6b1a4",
-    pokemonIds: ids("walrein feraligatr typhlosion meganium raichu blastoise venusaur steelix gardevoir dragonite raikou entei suicune vikavolt aggron weavile ninetales-alola pawmot blissey swampert blaziken sceptile gourgeist salamence latios torterra infernape flygon shuckle"),
+    pokemonIds: ids("walrein feraligatr typhlosion meganium raichu blastoise venusaur steelix gardevoir dragonite raikou entei suicune vikavolt aggron weavile ninetales-alola pawmot tinkaton blissey swampert blaziken sceptile gourgeist salamence latios torterra infernape flygon shuckle"),
   },
   {
     id: createId(),
@@ -437,7 +439,8 @@ const pokemonDetailData = {
             "ラピスラズリ湖畔",
             "ゴールド旧発電所",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "wigglytuff": {
@@ -450,7 +453,8 @@ const pokemonDetailData = {
         "baseGauge": "16",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜"
+            "シアンの砂浜",
+            "シアンの砂浜EX"
         ]
     },
     "dugtrio": {
@@ -489,7 +493,8 @@ const pokemonDetailData = {
         "baseGauge": "12",
         "fields": [
             "ワカクサ本島",
-            "シアンの砂浜"
+            "シアンの砂浜",
+            "シアンの砂浜EX"
         ]
     },
     "primeape": {
@@ -571,7 +576,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "ゴールド旧発電所",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "dodrio": {
@@ -666,7 +672,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "eevee-holiday": {
@@ -700,7 +707,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "jolteon": {
@@ -715,7 +723,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "flareon": {
@@ -730,7 +739,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "dragonite": {
@@ -783,7 +793,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "xatu": {
@@ -840,7 +851,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "umbreon": {
@@ -855,7 +867,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "slowking": {
@@ -909,7 +922,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "トープ洞窟",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "heracross": {
@@ -924,7 +938,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "weavile": {
@@ -1010,7 +1025,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "ラピスラズリ湖畔",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "spheal-holiday": {
@@ -1036,7 +1052,8 @@ const pokemonDetailData = {
             "シアンの砂浜",
             "ラピスラズリ湖畔",
             "ゴールド旧発電所",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "blaziken": {
@@ -1064,7 +1081,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "トープ洞窟",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "slaking": {
@@ -1414,7 +1432,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "sylveon": {
@@ -1429,7 +1448,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "hawlucha": {
@@ -1486,7 +1506,8 @@ const pokemonDetailData = {
         ],
         "baseGauge": "5",
         "fields": [
-            "ゴールド旧発電所"
+            "ゴールド旧発電所",
+            "シアンの砂浜EX"
         ]
     },
     "bewear": {
@@ -1512,7 +1533,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "mimikyu": {
@@ -1657,7 +1679,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "sandslash": {
@@ -1719,7 +1742,8 @@ const pokemonDetailData = {
             "ラピスラズリ湖畔",
             "ゴールド旧発電所",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "mew": {
@@ -1756,7 +1780,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "ウノハナ雪原",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "tyranitar": {
@@ -1901,7 +1926,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "glaceon": {
@@ -1916,7 +1942,8 @@ const pokemonDetailData = {
             "ワカクサ本島",
             "シアンの砂浜",
             "アンバー渓谷",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "tyrantrum": {
@@ -1960,7 +1987,8 @@ const pokemonDetailData = {
         "fields": [
             "ワカクサ本島",
             "シアンの砂浜",
-            "ワカクサ本島EX"
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "drampa": {
@@ -1991,6 +2019,22 @@ const pokemonDetailData = {
             "ゴールド旧発電所",
             "アンバー渓谷",
             "ワカクサ本島EX"
+        ]
+    },
+    "tinkaton": {
+        "ingredients": [
+            "あんみんトマト",
+            "リラックスカカオ",
+            "ほっこりポテト"
+        ],
+        "mainSkill": "エナジーチャージM",
+        "baseGauge": "5",
+        "fields": [
+            "ワカクサ本島",
+            "シアンの砂浜",
+            "ゴールド旧発電所",
+            "ワカクサ本島EX",
+            "シアンの砂浜EX"
         ]
     },
     "cetitan": {
